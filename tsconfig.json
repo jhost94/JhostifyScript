@@ -1,0 +1,33 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES6",
+    "module": "AMD",
+    "outFile": "./dist/index.js",
+    "lib": [
+      "es2018",
+      "ES5",
+      "ES6",
+      "dom"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/require.js"
+  ],
+  "exclude": [
+    "dist",
+    "dist/*"
+  ]
+}
