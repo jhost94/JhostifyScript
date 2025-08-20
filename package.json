@@ -12,6 +12,7 @@
     "dev": "npm run dev-run",
     "test": "test"
   },
+  "files": ["dist"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jhost94/JhostifyScript.git"
