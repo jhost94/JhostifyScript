@@ -1,6 +1,6 @@
 {
   "name": "@jhub-center/jhostify-script",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The frontend framework to reduce the use of HTML to none, and be able to use configuration to build the whole website. Made for the JHub project",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,9 @@
     "dev": "npm run dev-run",
     "test": "test"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jhost94/JhostifyScript.git"
