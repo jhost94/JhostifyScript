@@ -29,7 +29,7 @@ class TestPage extends Page {
 
         private test(): void {
             //setTimeout(() => {Initializer.render(Initializer.config().defaultPageName)}, 2000);
-            setTimeout(() => {Context.router().navigate({ type:  })}, 2000);
+            // setTimeout(() => {Context.router().navigate({ type:  })}, 2000);
         }
 }
 
