@@ -88,7 +88,6 @@ jobs:
         git tag "v$VERSION"
         git push origin "v$VERSION"
 
-    - uses: actions/checkout@v1
     - name: Package to NPM
       if: success()
       run: |
