@@ -4,10 +4,10 @@
   "description": "The frontend framework to reduce the use of HTML to none, and be able to use configuration to build the whole website. Made for the JHub project",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf ./dist && rm -rf ./framework && rm -rf utils",
+    "clean": "rm -rf ./dist && rm -rf ./framework && rm -rf ./utils",
     "pre_build": "tsc",
-    "prepare": "cp -r ./dist/framework ./framework && cp -r ./dist/utils ./utils",
-    "build": "npm run clean && npm run pre_build && npm run prepare",
+    "adjust": "mv ./dist/framework ./framework && mv ./dist/utils ./utils",
+    "build": "npm run clean && npm run pre_build && npm run adjust",
     "dev-run": "npm run build && http-server-spa ./dist/",
     "dev": "npm run dev-run",
     "test": "test"
