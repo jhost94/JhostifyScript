@@ -91,6 +91,8 @@ jobs:
     - uses: actions/checkout@v1
     - name: Package to NPM
       if: success()
-      run: npm publish --access public
+      run: |
+        ls
+        npm publish --access public
       env:
         NPM_PIPELINE_TOKEN: ${{ secrets.NPM_PIPELINE_TOKEN }}
