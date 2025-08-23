@@ -57,6 +57,7 @@ jobs:
 
     - name: Bump version if already published
       if: success()
+      needs: "npm install, build and test"
       run: |
         PKG_NAME=$(node -p "require('./package.json').name")
         PKG_VERSION=$(node -p "require('./package.json').version")
