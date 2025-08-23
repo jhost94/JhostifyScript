@@ -6,7 +6,6 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "pre_build": "tsc",
-    "copy-files": "cp ./src/index.html ./dist/index.html && cp ./src/require.js ./dist/require.js && cp ./node_modules/tslib/tslib.js ./dist/tslib.js",
     "build": "npm run clean && npm run pre_build",
     "dev-run": "npm run build && http-server-spa ./dist/",
     "dev": "npm run dev-run",
