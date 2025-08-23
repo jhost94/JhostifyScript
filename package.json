@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf ./dist && rm -rf ./framework && rm -rf ./utils",
     "pre_build": "tsc",
-    "adjust": "mv ./dist/framework ./framework && mv ./dist/utils ./utils",
+    "adjust": "ls ./dist && mv ./dist/framework ./framework && mv ./dist/utils ./utils",
     "build": "npm run clean && npm run pre_build && npm run adjust",
     "dev-run": "npm run build && http-server-spa ./dist/",
     "dev": "npm run dev-run",
