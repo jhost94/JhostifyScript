@@ -64,10 +64,10 @@ jobs:
         echo "Checking if $PKG_NAME@$PKG_VERSION exists on npm..."
 
         if npm view $PKG_NAME@$PKG_VERSION version >/dev/null 2>&1; then
+          echo "Version does not exist. Keeping $PKG_VERSION"
+        else
           echo "Version already exists. Bumping patch..."
           npm version patch --no-git-tag-version
-        else
-          echo "Version does not exist. Keeping $PKG_VERSION"
         fi
       env:
         NPM_PIPELINE_TOKEN: ${{ secrets.NPM_PIPELINE_TOKEN }}
