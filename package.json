@@ -1,37 +1,47 @@
 {
-  "name": "jhub_frontend",
-  "version": "0.0.1",
-  "description": "The frontend of the JHub project",
+  "name": "@jhub-center/jhostify-script",
+  "version": "0.1.1",
+  "description": "The frontend framework to reduce the use of HTML to none, and be able to use configuration to build the whole website. Made for the JHub project",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf ./dist",
+    "clean": "rm -rf ./dist && rm -rf ./framework && rm -rf ./utils",
     "pre_build": "tsc",
-    "copy-files": "cp ./src/index.html ./dist/index.html && cp ./src/require.js ./dist/require.js && cp ./node_modules/tslib/tslib.js ./dist/tslib.js",
-    "build": "npm run clean && npm run pre_build && npm run copy-files",
+    "adjust": "ls ./dist && mv ./dist/framework ./framework && mv ./dist/utils ./utils && ls",
+    "build": "npm run clean && npm run pre_build && npm run adjust",
     "dev-run": "npm run build && http-server-spa ./dist/",
     "dev": "npm run dev-run",
     "test": "test"
   },
+  "files": [
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "index.js",
+    "framework",
+    "utils"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jhost94/JHub_Frontend.git"
+    "url": "git+https://github.com/jhost94/JhostifyScript.git"
   },
   "keywords": [
     "JHub",
     "jhub",
-    "frontend",
-    "microservice",
-    "micro-service",
     "learning",
     "from",
-    "scratch"
+    "scratch",
+    "framework",
+    "nohtml",
+    "jsonly",
+    "typescript-only",
+    "be-only"
   ],
   "author": "Jhost",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jhost94/JHub_Frontend/issues"
+    "url": "https://github.com/jhost94/JhostifyScript/issues"
   },
-  "homepage": "https://github.com/jhost94/JHub_Frontend#readme",
+  "homepage": "https://github.com/jhost94/JhostifyScript#readme",
   "dependencies": {
     "http-server": "^14.1.1",
     "http-server-spa": "^1.3.0",

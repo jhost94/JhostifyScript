@@ -1,0 +1,93 @@
+on:
+  push:
+    branches:
+    - master
+
+permissions:
+  contents: write
+  packages: write
+    
+jobs:
+  setup:
+    name: Workflow setup
+    runs-on: ${{ matrix.os }}
+    outputs:
+      branch: ${{ steps.extract_branch.outputs.branch }}
+    strategy:
+      matrix:
+        node_version: ['18']
+        os: [ubuntu-latest]
+        build_dir: ['./dist']
+        package_name: ['build.zip']
+
+    steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+       
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    needs: setup
+    strategy:
+      matrix:
+        node_version: ['18']
+        os: [ubuntu-latest]
+        build_dir: ['./dist']
+        package_name: ['build.zip']
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node_version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node_version }}
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: npm install, build and test
+      run: |
+        npm install
+        npm install -g typescript
+        npm run build
+
+    - name: Bump version if already published
+      if: success()
+      run: |
+        PKG_NAME=$(node -p "require('./package.json').name")
+        PKG_VERSION=$(node -p "require('./package.json').version")
+
+        echo "Checking if $PKG_NAME@$PKG_VERSION exists on npm..."
+
+        if npm view $PKG_NAME@$PKG_VERSION version >/dev/null 2>&1; then
+          echo "Version does not exist. Keeping $PKG_VERSION"
+        else
+          echo "Version already exists. Bumping patch..."
+          npm version patch --no-git-tag-version
+        fi
+      env:
+        NPM_PIPELINE_TOKEN: ${{ secrets.NPM_PIPELINE_TOKEN }}
+
+    - name: Commit and push version bump
+      if: success()
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add package.json package-lock.json
+        git commit -m "ci: bump version [skip ci]" || echo "No changes to commit"
+        git push
+
+    - name: Create Git tag
+      if: success()
+      run: |
+        VERSION=$(node -p "require('./package.json').version")
+        git tag "v$VERSION"
+        git push origin "v$VERSION"
+
+    - name: Package to NPM
+      if: success()
+      run: |
+        ls
+        npm publish --access public
+      env:
+        NPM_PIPELINE_TOKEN: ${{ secrets.NPM_PIPELINE_TOKEN }}

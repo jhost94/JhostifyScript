@@ -1,3 +1,3 @@
-# CoreFrontend
+# JhostifyScript
 
-JHub front end.
+A FE framework for Jhub.center
