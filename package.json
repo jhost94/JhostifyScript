@@ -19,15 +19,19 @@
     "test": "test"
   },
   "files": [
+    "cjs",
+    "esm",
+    "framework",
+    "utils",
+    "index.js",
+    "index.d.ts",
+    "index.umd.js",
+    "index.umd.js.map",
+    "index.cjs.js",
+    "index.esm.js",
     "LICENSE",
     "package.json",
-    "README.md",
-    "index.js",
-    "esm",
-    "index.d.ts",
-    "index.esm.js",
-    "index.cjs.js",
-    "cjs"
+    "README.md"
   ],
   "exports": {
     ".": {
