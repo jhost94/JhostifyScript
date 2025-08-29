@@ -4,12 +4,13 @@
   "description": "The frontend framework to reduce the use of HTML to none, and be able to use configuration to build the whole website. Made for the JHub project",
   "main": "index.cjs.js",
   "module": "index.esm.js",
-  "browser": "index.browser.js",
   "types": "index.d.ts",
   "scripts": {
-    "clean": "rm -rf ./dist && rm -rf ./framework && rm -rf ./utils",
-    "pre_build": "tsc",
-    "adjust": "mv ./dist/framework ./framework && mv ./dist/utils ./utils",
+    "clean": "rm -rf ./dist && rm -rf ./cjs && rm -rf ./esm",
+    "pre_build_esm": "tsc -p tsconfig.esm.json ",
+    "pre_build_cjs": "tsc -p tsconfig.cjs.json",
+    "pre_build": "npm run pre_build_esm && npm run pre_build_cjs",
+    "adjust": "mv ./dist/cjs ./cjs && mv ./dist/esm ./esm",
     "build": "npm run clean && npm run pre_build && npm run adjust",
     "dev-run": "npm run build && http-server-spa ./dist/",
     "dev": "npm run dev-run",
@@ -20,11 +21,11 @@
     "package.json",
     "README.md",
     "index.js",
-    "framework",
+    "esm",
     "index.d.ts",
     "index.esm.js",
     "index.cjs.js",
-    "utils"
+    "cjs"
   ],
   "exports": {
     ".": {
