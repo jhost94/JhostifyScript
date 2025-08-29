@@ -8,6 +8,8 @@ import InternalPage from "./components/internal/InternalPage.js";
 import Logger from "./debug/Logger.js";
 import Context from "./Context.js";
 import ElementRenderer from "./renderers/ElementRenderer.js";
+import GenericException from "./exceptions/GenericException.js";
+import ExceptionConstants from "./exceptions/ExceptionConstants.js";
 
 class Initializer {
     private static configuration: InitialConfiguration;

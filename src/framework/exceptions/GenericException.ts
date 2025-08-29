@@ -4,3 +4,5 @@ class GenericException {
         
     }
 }
+
+export default GenericException;

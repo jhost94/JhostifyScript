@@ -3,3 +3,5 @@ class ExceptionConstants {
         BASE: "00000001"
     }
 }
+
+export default ExceptionConstants;
