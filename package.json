@@ -1,6 +1,6 @@
 {
   "name": "@jhub-center/jhostify-script",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "The frontend framework to reduce the use of HTML to none, and be able to use configuration to build the whole website. Made for the JHub project",
   "main": "index.cjs.js",
   "module": "index.esm.js",
