@@ -12,10 +12,9 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2017",
-    "module": "ESNext",
-    "declarationDir": "./dist",
-    "outDir": "./dist",
+    "target": "ES6",
+    "module": "AMD",
+    "outFile": "./dist/jhostifyScript.js",
     "lib": [
       "es2018",
       "ES5",
@@ -24,9 +23,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "src/require.js",
-    "src/jhostifyScript.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "dist",

@@ -1,76 +1,87 @@
 {
-  "name": "@jhub-center/jhostify-script",
-  "version": "0.1.5",
-  "description": "The frontend framework to reduce the use of HTML to none, and be able to use configuration to build the whole website. Made for the JHub project",
-  "main": "index.cjs.js",
-  "module": "index.esm.js",
-  "browser": "./dist/index.umd.js",
-  "types": "index.d.ts",
-  "scripts": {
-    "clean": "rm -rf ./dist",
-    "pre_build_esm": "tsc -p tsconfig.esm.json ",
-    "pre_build_cjs": "tsc -p tsconfig.cjs.json",
-    "pre_build_umd": "rollup -c --bundleConfigAsCjs",
-    "pre_build": "npm run pre_build_esm && npm run pre_build_cjs && npm run pre_build_umd",
-    "adjust": "cp package.json ./dist/ && cp .npmrc ./dist/ && cp README.md ./dist/ && cp LICENSE ./dist/",
-    "build": "npm run clean && npm run pre_build && npm run adjust",
-    "dev-run": "npm run build && http-server-spa ./dist/",
-    "dev": "npm run dev-run",
-    "test": "test"
-  },
-  "files": [
-    "cjs",
-    "esm",
-    "framework",
-    "utils",
-    "index.js",
-    "index.d.ts",
-    "index.umd.js",
-    "index.umd.js.map",
-    "index.cjs.js",
-    "index.esm.js",
-    "LICENSE",
-    "package.json",
-    "README.md"
-  ],
-  "exports": {
-    ".": {
-      "import": "./index.esm.js",
-      "require": "./index.cjs.js",
-      "browser": "./index.umd.js"
+    "name": "@jhub-center/jhostify-script",
+    "version": "0.1.5",
+    "description": "The frontend framework to reduce the use of HTML to none, and be able to use configuration to build the whole website. Made for the JHub project",
+    "main": "index.cjs.js",
+    "module": "index.esm.js",
+    "browser": "./dist/index.umd.js",
+    "types": "index.d.ts",
+    "scripts": {
+        "clean": "rm -rf ./dist",
+        "pre_build_esm": "tsc -p tsconfig.esm.json ",
+        "pre_build_cjs": "tsc -p tsconfig.cjs.json",
+        "pre_build_umd": "rollup -c --bundleConfigAsCjs",
+        "pre_build_amd": "tsc -p tsconfigAMD.json",
+        "pre_build": "npm run pre_build_esm && npm run pre_build_cjs && npm run pre_build_umd && npm run pre_build_amd",
+        "adjust": "cp package.json ./dist/ && cp .npmrc ./dist/ && cp README.md ./dist/ && cp LICENSE ./dist/ && node cleanse-pkg.js",
+        "add_missing_files": "cp -r ./src/bin ./dist/ && cp -r ./src/scripts ./dist/",
+        "build": "npm run clean && npm run pre_build && npm run adjust && npm run add_missing_files",
+        "dev-run": "npm run build && http-server-spa ./dist/",
+        "dev": "npm run dev-run",
+        "test": "test"
+    },
+    "bin": {
+        "jhost": "bin/jhost.js"
+    },
+    "files": [
+        "cjs",
+        "esm",
+        "framework",
+        "utils",
+        "bin",
+        "scripts",
+        "index.js",
+        "index.d.ts",
+        "index.umd.js",
+        "index.umd.js.map",
+        "index.cjs.js",
+        "index.esm.js",
+        "jhostifyScript.js",
+        "jhostifyScript.js",
+        "jhostifyScript.d.ts",
+        "LICENSE",
+        "package.json",
+        "README.md"
+    ],
+    "exports": {
+        ".": {
+            "import": "./index.esm.js",
+            "require": "./index.cjs.js",
+            "browser": "./index.umd.js"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jhost94/JhostifyScript.git"
+    },
+    "keywords": [
+        "JHub",
+        "jhub",
+        "learning",
+        "from",
+        "scratch",
+        "framework",
+        "nohtml",
+        "jsonly",
+        "typescript-only",
+        "be-only"
+    ],
+    "author": "Jhost",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jhost94/JhostifyScript/issues"
+    },
+    "homepage": "https://github.com/jhost94/JhostifyScript#readme",
+    "dependencies": {
+        "requirejs": "^2.3.7",
+        "tslib": "^2.5.2"
+    },
+    "devDependencies": {
+        "@rollup/plugin-node-resolve": "^16.0.1",
+        "@rollup/plugin-typescript": "^12.1.4",
+        "@types/node": "^16.7.13",
+        "rollup": "^4.49.0",
+        "tslib": "^2.5.2",
+        "typescript": "^4.4.2"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jhost94/JhostifyScript.git"
-  },
-  "keywords": [
-    "JHub",
-    "jhub",
-    "learning",
-    "from",
-    "scratch",
-    "framework",
-    "nohtml",
-    "jsonly",
-    "typescript-only",
-    "be-only"
-  ],
-  "author": "Jhost",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jhost94/JhostifyScript/issues"
-  },
-  "homepage": "https://github.com/jhost94/JhostifyScript#readme",
-  "dependencies": {
-    "tslib": "^2.5.2"
-  },
-  "devDependencies": {
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-typescript": "^12.1.4",
-    "@types/node": "^16.7.13",
-    "rollup": "^4.49.0",
-    "tslib": "^2.5.2",
-    "typescript": "^4.4.2"
-  }
 }

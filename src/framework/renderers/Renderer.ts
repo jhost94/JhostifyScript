@@ -9,6 +9,7 @@ class Renderer {
     public static rerenderAt(element: Element, at: Element): void {
         this.refreshAt(at);
         this.renderAt(element, at);
+        console.log("attempting to render element at", element, at);
     }
 
     public static refreshAt(at: Element): void {

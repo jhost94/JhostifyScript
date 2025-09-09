@@ -6,9 +6,9 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
  * while still using tsc for ESM/CJS + type declarations.
  */
 export default {
-  input: "src/index.ts",
+  input: "src/jhostifyScript.ts",
   output: {
-    file: "dist/index.umd.js",
+    file: "dist/jhostifyScript.umd.js",
     format: "umd",
     name: "@jhub-center/jhostify-script",
     sourcemap: true
