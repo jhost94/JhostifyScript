@@ -9,7 +9,7 @@ class PageBuilder {
         const element: Element = this.elementBuilder.createElement(page.getName());
         const innerHTML = page.getTemplate(); //TODO: proccess the template into proper HTML
         element.innerHTML = innerHTML;
-        return new InternalPage(element, page.getName());
+        return new InternalPage(element, page.getName(), page.getOnRender());
     }
 }
 

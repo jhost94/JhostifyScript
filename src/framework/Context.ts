@@ -1,18 +1,24 @@
-import Initializer from "./Initializer";
-import Logger from "./debug/Logger";
+import ComponentBuilder from "./builders/ComponentBuilder";
+import PageBuilder from "./builders/PageBuilder";
+import EventConstants from "./constants/EventConstants";
 import ExceptionConstants from "./exceptions/ExceptionConstants";
 import GenericException from "./exceptions/GenericException";
 import ElementRenderer from "./renderers/ElementRenderer";
 import PageRenderer from "./renderers/PageRenderer";
-import Router from "./router/Router";
+import ElementVendor from "./requirements/ElementVendor";
+import Router, { NavigationType } from "./router/Router";
 
-class Context {
+export default class Context {
     private static isInitialized: boolean = false;
     private static contextRouter: Router;
     private static contextPageRenderer: PageRenderer;
     private static contextElementRenderer: ElementRenderer;
     private static contextSystem: ContextSystem;
-    private static timesLoaded = 0;
+    private static pageBuilder: PageBuilder;
+    private static componentBuilder: ComponentBuilder;
+    private static _elementBuilder: ElementVendor;
+    private static startUpActions: (() => void)[] = [];
+    private static defaultPageName: string;
 
 
     public static router(): Router {
@@ -35,8 +41,35 @@ class Context {
         return this.contextSystem;
     }
 
-    public static render(id: string): void {
-        Initializer.render(id);
+    public static render(id: string, force?: boolean): void {
+        if (force) PageRenderer.rerender(id);
+        else PageRenderer.render(id);
+    }
+
+    public static getPageBuilder(): PageBuilder {
+        return this.pageBuilder;
+    }
+    
+    public static getComponentBuilder(): ComponentBuilder {
+        return this.componentBuilder;
+    }
+
+    public static rootElement(): Element {
+        return PageRenderer.rootElement();
+    }
+
+    public static elementBuilder(): ElementVendor {
+        return this._elementBuilder;
+    }
+
+    //TODO: Temporary, create a proper solution
+    public static registerStartupAction(action: () => void): void {
+        this.startUpActions.push(action);
+    }
+
+    public static navigate(id: string, navigationType?: NavigationType) {
+        this.router().navigate({id, type: navigationType});
+        
     }
 
     /**
@@ -47,15 +80,19 @@ class Context {
      * @param router 
      */
     static init(config: ContextConfig): void {
-        // shouldn't be loading more than once, however it is.
-        // try figure out why
-        Logger.log('INFO', ["times inited context:", ++this.timesLoaded]);
         //if (this.isInitialized) throw new GenericException(ExceptionConstants.CODE.BASE, "Context already initialized, aborting");
         this.isInitialized = true;
         this.initSystem();
         this.contextRouter = config.router;
         this.contextPageRenderer = config.pageRenderer;
         this.contextElementRenderer = config.elementRenderer;
+        this._elementBuilder = config.elementBuilder;
+        this.pageBuilder = new PageBuilder(config.elementBuilder);
+        this.defaultPageName = config.defaultPageName;
+    }
+
+    public static runStartupActions(): void {
+        this.startUpActions.forEach(a => a());
     }
 
     private static initSystem(): void {
@@ -67,22 +104,41 @@ class Context {
                 return setTimeout(action, miliseconds);
             }
         };
+
+        this.rootElement().addEventListener(EventConstants.LOCATION_CHANGE, ev => {
+            this.renderCurrentPage(true)
+        });
     }
+
+    //TODO: FIX
+    //at the moment it's just adding to the current page. fix it, but keep the functionality for the future.
+    public static renderCurrentPage(force?: boolean): void {
+        const currentPath = this.router().getCurrentPageLocation().getPath();
+        const routeId = this.router().findRouteIdByPath(currentPath);
+        console.log("rendering current page", currentPath, routeId);
+        if (routeId) {
+            this.render(routeId, force);
+        } else {
+            this.render(this.defaultPageName);
+        }
+    } 
 
     private static isContextLoaded(): void {
         if (!this.isInitialized) throw new GenericException(ExceptionConstants.CODE.BASE, "Context not initialized");
     }
 }
 
-interface ContextConfig {
+export interface ContextConfig {
     router: Router;
     pageRenderer: PageRenderer;
     elementRenderer: ElementRenderer;
+    pageBuilder: PageBuilder;
+    componentBuilder: ComponentBuilder;
+    elementBuilder: ElementVendor;
+    defaultPageName: string;
 }
 
 interface ContextSystem {
     repeat: (miliseconds: number, action: () => void) => NodeJS.Timer;
     wait: (miliseconds: number, action: () => void) => NodeJS.Timer;
 }
-
-export default Context;

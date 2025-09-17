@@ -8,10 +8,9 @@ import ElementVendor from "./requirements/ElementVendor.js";
 class InitialConfiguration {
     private defaultConfiguration: Configuration;
     private config: Configuration;
-    private elementBuilder?: ElementVendor;
 
-    constructor(private defaultElementBuilder: ElementVendor, configOptions?: ConfigurationOptions) {
-        this.defaultConfiguration = this.buildDefaultConfig(this.defaultElementBuilder);
+    constructor(defaultElementBuilder: ElementVendor, configOptions?: ConfigurationOptions) {
+        this.defaultConfiguration = this.buildDefaultConfig(defaultElementBuilder);
         this.config = this.buildConfig(this.defaultConfiguration, configOptions);
     }
 
@@ -30,7 +29,7 @@ class InitialConfiguration {
     }
     
     public getElementBuilder(): ElementVendor {
-        return this.elementBuilder ?? this.defaultElementBuilder;
+        return this.getConfig().elementBuilder;
     }
 
 

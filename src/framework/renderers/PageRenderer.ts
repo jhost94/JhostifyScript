@@ -9,7 +9,11 @@ class PageRenderer {
     //The root element, the base for all the new elements to start from. Usually document.body, but could be reconfigured
     private static re: Element; 
 
-    public static rootElement(el: Element): Element {
+    public static rootElement(): Element {
+        return this.re;
+    }
+
+    public static setRootElement(el: Element): Element {
         this.re = el;
         return this.re;
     }
@@ -21,8 +25,10 @@ class PageRenderer {
 
     public static render(id: string = DefaultValues.DEFAULT_PAGE_ID): void {
         if (!this.pages.has(id)) throw "error";
-        Logger.log('DEBUG', this.pages.get(id)!.get());
-        Renderer.renderAt(this.pages.get(id)!.get(), this.re);
+        const page = this.pages.get(id);
+        Logger.log('DEBUG', ["Rendering: ", page?.get()]);
+        Renderer.renderAt(page!.get(), this.re);
+        page?.getOnRender().forEach(a => a());
     }
 
     public static refresh(): void {

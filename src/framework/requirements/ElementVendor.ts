@@ -1,5 +1,4 @@
-interface ElementVendor {
-    createElement(name: string, options?: any): Element
+export default interface ElementVendor {
+    createElement(name: string, options?: any): Element;
+    getElementById(elementId: string): HTMLElement | null;
 }
-
-export default ElementVendor;

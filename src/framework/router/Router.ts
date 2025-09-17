@@ -3,7 +3,7 @@ import PageLocation from "./PageLocation.js";
 import Route from "./Route.js";
 import Routes from "./Routes.js";
 
-class Router {
+export default class Router {
     private interval: number = 0;
 
     constructor(private navigation: History, 
@@ -11,12 +11,10 @@ class Router {
                 private location: Location, 
                 private internalRoutes: Routes = new Routes(), 
                 private externalRoutes: Routes = new Routes()) {
-        console.log(this.navigator);
-        console.log(this.location);
     }
 
     public navigate(navigationOption: NavigationOption): void {
-
+        if (!navigationOption.type) navigationOption.type = "INTERNAL";
         switch(navigationOption.type) {
             case "INTERNAL": 
                 this.navigateInternal(navigationOption.id);
@@ -64,7 +62,9 @@ class Router {
     }
     
     private navigateInternal(id: string): void {
-        this.internalRoutes.getRoutes().get(id)?.navigate(this.navigation);
+        const route = this.internalRoutes.getRoutes().get(id);
+        if (!route) throw "This route does not exist. TODO FIX EXCEPTION";
+        this.navigation.pushState({}, route?.getPage().getName(), route.url());
     }
 
     private navigateExternal(id: string): void {
@@ -114,12 +114,9 @@ class Router {
     }
 }
 
-interface NavigationOption {
-    type: NavigationType,
+export interface NavigationOption {
+    type: NavigationType | undefined,
     id: string
 }
 
-type NavigationType = "INTERNAL" | "EXTERNAL";
-
-export default Router;
-export { NavigationOption, NavigationType }
+export type NavigationType = "INTERNAL" | "EXTERNAL";

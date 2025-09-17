@@ -7,12 +7,10 @@ class Route {
 
     }
 
-    public navigate(navigatable: Navigatable): void {
-        let url = this.path.startsWith('/') ?
+    public url(): string {
+        return this.path.startsWith('/') ?
             this.path
             : '/' + this.path;
-        
-        navigatable.pushState({}, this.page.getName(), url);
     }
 
     public pathMatches(givenPath: string): boolean {

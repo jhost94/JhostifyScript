@@ -7,7 +7,6 @@ function buildFrontend() {
     
     console.log("Gathering config options");
     const configStr = cp.execSync(`tsc --showConfig`, { encoding: 'utf-8', stdio: "pipe" });
-    console.log(configStr);
 
     if (!configStr) {
         throw "No config found";
@@ -21,10 +20,6 @@ function buildFrontend() {
 
     const destDir = path.resolve(projDir, normalizePath(path.dirname(config.compilerOptions.outFile)));
     const destFile = path.resolve(destDir, normalizePath(path.basename(config.compilerOptions.outFile)));
-    
-    console.log(config);
-    console.log(projDir);
-    console.log(destDir);
 
     // 1. Compile frontend entry with tsc
     console.log("📦 Compiling TypeScript...");
@@ -52,7 +47,7 @@ function buildFrontend() {
     `;
 
     fs.writeFileSync(destFile, bundle);
-    console.log(`✅ Built bundle: ${destFile}`);
+    console.log("Compilation done!");
 }
 
 function getDirNAbove(filePath, count) {

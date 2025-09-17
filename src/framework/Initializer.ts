@@ -6,27 +6,25 @@ import PageBuilder from "./builders/PageBuilder.js";
 import ComponentBuilder from "./builders/ComponentBuilder.js";
 import InternalPage from "./components/internal/InternalPage.js";
 import Logger from "./debug/Logger.js";
-import Context from "./Context.js";
+import Context, { ContextConfig } from "./Context.js";
 import ElementRenderer from "./renderers/ElementRenderer.js";
 import GenericException from "./exceptions/GenericException.js";
 import ExceptionConstants from "./exceptions/ExceptionConstants.js";
 
-class Initializer {
+
+export default class Initializer {
     private static configuration: InitialConfiguration;
     private static isRunning: boolean = false;
     private static router: Router;
     private static currentPageBeingRendered: string | null = null;
-    private static pageBuilder: PageBuilder;
-    private static componentBuilder: ComponentBuilder;
+    
 
     public static configure(config: InitialConfiguration, router: Router, rootElement: Element): void {
+        Logger.init(config.getConfig().logLevel);
         if (Objects.nonNull(this.configuration)) throw new GenericException(ExceptionConstants.CODE.BASE, "Initial configuration already done.");
         this.configuration = config;
         this.router = router;
-        this.componentBuilder = new ComponentBuilder(config.getElementBuilder());
-        this.pageBuilder = new PageBuilder(config.getElementBuilder());
-        PageRenderer.rootElement(rootElement);
-        this.addPagesByRoutes();
+        PageRenderer.setRootElement(rootElement);
     }
 
     public static updateConfig(name: keyof Configuration, value: any): void {
@@ -44,8 +42,9 @@ class Initializer {
     public static init(): void {
         if (this.running()) throw new GenericException(ExceptionConstants.CODE.BASE, "Application already running");
         if (Objects.isNull(this.configuration)) throw new GenericException(ExceptionConstants.CODE.BASE, "Initial configuration not set");
-        Logger.init(this.config().logLevel);
-        Context.init({router: this.router, pageRenderer: PageRenderer, elementRenderer: ElementRenderer});
+        Context.init(this.buildContextConfig());
+        this.addPagesByRoutes();
+        Context.runStartupActions();
         this.renderCurrentPage();
     }
 
@@ -57,36 +56,26 @@ class Initializer {
         return this.configuration.getConfig();
     }
 
-    public static render(id: string): void {
-        PageRenderer.rerender(id);
-        this.currentPageBeingRendered = id;
-    }
-
-    public static getPageBuilder(): PageBuilder {
-        return this.pageBuilder;
-    }
-
-    public static getComponentBuilder(): ComponentBuilder {
-        return this.componentBuilder;
+    private static buildContextConfig(): ContextConfig {
+        return {
+            router: this.router, 
+            pageRenderer: PageRenderer, 
+            elementRenderer: ElementRenderer,
+            componentBuilder: new ComponentBuilder(this.configuration.getElementBuilder()),
+            pageBuilder: new PageBuilder(this.configuration.getElementBuilder()),
+            elementBuilder: this.configuration.getElementBuilder(),
+            defaultPageName:this.configuration.getConfig().defaultPageName
+        };
     }
 
     private static renderCurrentPage(): void {
-        const currentPath = Initializer.router.getCurrentPageLocation().getPath();
-        const routeId = Initializer.router.findRouteIdByPath(currentPath);
-        Logger.log('DEBUG', ["route id", routeId?.length])
-        if (routeId) {
-            this.render(routeId);
-        } else {
-            this.render(this.configuration.getConfig().defaultPageName);
-        }
+        Context.renderCurrentPage();
     } 
 
     private static addPagesByRoutes(): void {
         PageRenderer.page("/", this.configuration.get("defaultPage") as InternalPage);
         this.router.getInternalRoutes().getRoutes().forEach((v, k) => {
-            PageRenderer.page(k, Initializer.getPageBuilder().build(v.getPage()));
+            PageRenderer.page(k, Context.getPageBuilder().build(v.getPage()));
         });
     }
 }
-
-export default Initializer;

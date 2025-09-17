@@ -1,6 +1,7 @@
 import Component from "./Component.js";
 
 class Page {
+    protected doOnRender: (() => void)[] = [];
 
     constructor(protected name: string = '', protected template: string = '', protected components: Component[] = []) {
     }
@@ -15,6 +16,10 @@ class Page {
 
     public getName(): string {
         return this.name;
+    }
+
+    public getOnRender(): (() => void)[] {
+        return this.doOnRender;
     }
 }
 
