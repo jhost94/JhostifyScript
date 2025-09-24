@@ -1,7 +1,5 @@
-import InternalPage from "../components/internal/InternalPage";
 
-
-class Renderer {
+export default class Renderer {
     public static renderAt(element: Element, at: Element): void {
         at.appendChild(element);
     }
@@ -9,7 +7,6 @@ class Renderer {
     public static rerenderAt(element: Element, at: Element): void {
         this.refreshAt(at);
         this.renderAt(element, at);
-        console.log("attempting to render element at", element, at);
     }
 
     public static refreshAt(at: Element): void {
@@ -17,5 +14,3 @@ class Renderer {
         children.forEach(e => at.removeChild(e));
     }
 }
-
-export default Renderer;

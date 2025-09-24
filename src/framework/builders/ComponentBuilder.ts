@@ -1,4 +1,4 @@
-import Component from "../components/Component.js";
+import Component from "../components/external/Component.js";
 import InternalComponent from "../components/internal/InternalComponent.js";
 import ElementVendor from "../requirements/ElementVendor.js";
 
@@ -10,7 +10,7 @@ class ComponentBuilder {
         const element: Element = this.elementBuilder.createElement(component.getName());
         const innerHTML = component.getTemplate(); //TODO: proccess the template into proper HTML
         element.innerHTML = innerHTML;
-        return new InternalComponent(element, component.getName());
+        return new InternalComponent(element, component.getName(), component.getId());
     }
 }
 

@@ -1,11 +1,11 @@
 import Objects from "../utils/Objects.js";
-import Page from "./components/Page.js";
-import InternalPage from "./components/internal/InternalPage.js";
+import Page from "./page/external/Page.js";
+import InternalPage from "./page/internal/InternalPage.js";
 import DefaultValues from "./constants/DefaultValues.js";
 import { LOGGING_LEVEL } from "./debug/Logger.js";
 import ElementVendor from "./requirements/ElementVendor.js";
 
-class InitialConfiguration {
+export default class InitialConfiguration {
     private defaultConfiguration: Configuration;
     private config: Configuration;
 
@@ -37,8 +37,8 @@ class InitialConfiguration {
         const ele = defaultElementBuilder.createElement(DefaultValues.DEFAULT_PAGE_ID);
         const notFoundEle = defaultElementBuilder.createElement(DefaultValues.NOT_FOUND_PAGE_ID);
         return this.defaultConfiguration = { 
-            notFoundPage: new InternalPage(notFoundEle, DefaultValues.NOT_FOUND_PAGE_ID),
-            defaultPage: new InternalPage(ele, DefaultValues.DEFAULT_PAGE_ID),
+            notFoundPage: new InternalPage(notFoundEle, DefaultValues.NOT_FOUND_PAGE_ID, DefaultValues.DEFAULT_PAGE_ID),
+            defaultPage: new InternalPage(ele, DefaultValues.DEFAULT_PAGE_ID, DefaultValues.DEFAULT_PAGE_ID),
             defaultPageName: DefaultValues.DEFAULT_PAGE_ID,
             elementBuilder: defaultElementBuilder,
             logLevel: 'ERROR'
@@ -48,10 +48,10 @@ class InitialConfiguration {
     private buildConfig(defaultConfig: Configuration, configOptions?: ConfigurationOptions): Configuration {
         const eleBuilder = configOptions?.elementBuilder ?? defaultConfig.elementBuilder;
         const defaultPage = configOptions && configOptions.defaultPage ?  
-            new InternalPage(eleBuilder.createElement(configOptions?.defaultPage?.getName()), configOptions?.defaultPage?.getName()) 
+            new InternalPage(eleBuilder.createElement(configOptions?.defaultPage?.getName()), configOptions?.defaultPage?.getName(), configOptions?.defaultPage?.getName()) 
             : defaultConfig.defaultPage;
         const notFoundPage = configOptions && configOptions.defaultPage ?  
-            new InternalPage(eleBuilder.createElement(configOptions?.notFoundPage?.getName()), configOptions?.notFoundPage?.getName()) 
+            new InternalPage(eleBuilder.createElement(configOptions?.notFoundPage?.getName()), configOptions?.notFoundPage?.getName(), configOptions?.notFoundPage?.getName()) 
             : defaultConfig.defaultPage;
         
         if (configOptions?.defaultPage) {
@@ -68,7 +68,7 @@ class InitialConfiguration {
     }
 }
 
-interface Configuration {
+export interface Configuration {
     notFoundPage: InternalPage,
     defaultPage: InternalPage,
     defaultPageName: string,
@@ -76,13 +76,10 @@ interface Configuration {
     logLevel: LOGGING_LEVEL
 }
 
-interface ConfigurationOptions {
+export interface ConfigurationOptions {
     notFoundPage: Page,
     defaultPage?: Page,
     defaultPageName?: string,
     elementBuilder?: ElementVendor,
     logLevel?: LOGGING_LEVEL
 }
-
-export default InitialConfiguration;
-export { Configuration, ConfigurationOptions };

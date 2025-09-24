@@ -1,21 +1,33 @@
+import Component from "../components/external/Component";
+import Context from "../Context";
+import ID from "../meta/ID";
+import Page from "../page/external/Page";
 import Renderer from "./Renderer";
 
-
-class ElementRenderer {
+export default class ElementRenderer {
     private static re: Element;
 
-    // might change to internal element
-    public static render(element: Element, at: Element): void {
-        Renderer.renderAt(element, at);
+    public static render(element: Element, at?: Component | Page | ID): void {
+        console.log("at", at)
+        if (at) {
+            const el = Context.elementBuilder().getElementById(at.getId());
+            if (!el) throw `Component ${at} is given but not registered.`;
+            Renderer.renderAt(element, el);
+        } else {
+            Renderer.renderAt(element, this.re);
+        }
     }
 
-    public static refresh(at: Element): void {
-        Renderer.refreshAt(at);
+    public static refresh(): void {
+        Renderer.refreshAt(this.re);
     }
 
-    public static rerender(element: Element, at: Element): void {
-        Renderer.rerenderAt(element, at);
+    public static rerender(element: Element): void {
+        Renderer.rerenderAt(element, this.re);
+    }
+
+    public static setRootElement(el: Element): Element {
+        this.re = el;
+        return this.re;
     }
 }
-
-export default ElementRenderer;

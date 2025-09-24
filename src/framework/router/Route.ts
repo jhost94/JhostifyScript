@@ -1,4 +1,4 @@
-import Page from "../components/Page.js";
+import Page from "../page/external/Page.js";
 import { Navigatable } from "./Navigator.js";
 
 class Route {

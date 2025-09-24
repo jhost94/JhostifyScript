@@ -1,5 +1,5 @@
-import Page from "../components/Page.js";
-import InternalPage from "../components/internal/InternalPage.js";
+import Page from "../page/external/Page.js";
+import InternalPage from "../page/internal/InternalPage.js";
 import ElementVendor from "../requirements/ElementVendor.js";
 
 class PageBuilder {
@@ -9,7 +9,7 @@ class PageBuilder {
         const element: Element = this.elementBuilder.createElement(page.getName());
         const innerHTML = page.getTemplate(); //TODO: proccess the template into proper HTML
         element.innerHTML = innerHTML;
-        return new InternalPage(element, page.getName(), page.getOnRender());
+        return new InternalPage(element, page.getName(), page.getId(), page.getOnRender());
     }
 }
 

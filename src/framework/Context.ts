@@ -1,5 +1,6 @@
 import ComponentBuilder from "./builders/ComponentBuilder";
 import PageBuilder from "./builders/PageBuilder";
+import Component from "./components/external/Component";
 import EventConstants from "./constants/EventConstants";
 import ExceptionConstants from "./exceptions/ExceptionConstants";
 import GenericException from "./exceptions/GenericException";
@@ -7,6 +8,8 @@ import ElementRenderer from "./renderers/ElementRenderer";
 import PageRenderer from "./renderers/PageRenderer";
 import ElementVendor from "./requirements/ElementVendor";
 import Router, { NavigationType } from "./router/Router";
+import ID from "./meta/ID";
+import Page from "./page/external/Page";
 
 export default class Context {
     private static isInitialized: boolean = false;
@@ -44,6 +47,15 @@ export default class Context {
     public static render(id: string, force?: boolean): void {
         if (force) PageRenderer.rerender(id);
         else PageRenderer.render(id);
+    }
+
+    public static renderPage(id: string): void {
+        this.render(id, true);
+    }
+
+    public static renderComponent(component: Component, at?: Component | Page | ID): void {
+        const internalComponent = this.componentBuilder.build(component);
+        ElementRenderer.render(internalComponent.get(), at);
     }
 
     public static getPageBuilder(): PageBuilder {
@@ -88,6 +100,7 @@ export default class Context {
         this.contextElementRenderer = config.elementRenderer;
         this._elementBuilder = config.elementBuilder;
         this.pageBuilder = new PageBuilder(config.elementBuilder);
+        this.componentBuilder = new ComponentBuilder(config.elementBuilder);
         this.defaultPageName = config.defaultPageName;
     }
 
@@ -105,21 +118,19 @@ export default class Context {
             }
         };
 
-        this.rootElement().addEventListener(EventConstants.LOCATION_CHANGE, ev => {
-            this.renderCurrentPage(true)
-        });
+        this.rootElement().addEventListener(EventConstants.LOCATION_CHANGE, ev => this.renderCurrentPage());
     }
 
     //TODO: FIX
     //at the moment it's just adding to the current page. fix it, but keep the functionality for the future.
-    public static renderCurrentPage(force?: boolean): void {
+    public static renderCurrentPage(): void {
         const currentPath = this.router().getCurrentPageLocation().getPath();
         const routeId = this.router().findRouteIdByPath(currentPath);
         console.log("rendering current page", currentPath, routeId);
         if (routeId) {
-            this.render(routeId, force);
+            this.renderPage(routeId);
         } else {
-            this.render(this.defaultPageName);
+            this.renderPage(this.defaultPageName);
         }
     } 
 

@@ -4,7 +4,7 @@ import Router from "./router/Router.js";
 import PageRenderer from "./renderers/PageRenderer.js";
 import PageBuilder from "./builders/PageBuilder.js";
 import ComponentBuilder from "./builders/ComponentBuilder.js";
-import InternalPage from "./components/internal/InternalPage.js";
+import InternalPage from "./page/internal/InternalPage.js";
 import Logger from "./debug/Logger.js";
 import Context, { ContextConfig } from "./Context.js";
 import ElementRenderer from "./renderers/ElementRenderer.js";
@@ -25,6 +25,7 @@ export default class Initializer {
         this.configuration = config;
         this.router = router;
         PageRenderer.setRootElement(rootElement);
+        ElementRenderer.setRootElement(rootElement);
     }
 
     public static updateConfig(name: keyof Configuration, value: any): void {

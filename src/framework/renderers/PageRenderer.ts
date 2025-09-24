@@ -1,4 +1,4 @@
-import InternalPage from '../components/internal/InternalPage.js';
+import InternalPage from '../page/internal/InternalPage.js';
 import DefaultValues from '../constants/DefaultValues.js';
 import Logger from '../debug/Logger.js';
 import Renderer from './Renderer.js';
