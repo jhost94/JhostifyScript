@@ -42,7 +42,7 @@ function buildFrontend() {
     /* --- jhostifyScript.js --- */
     ${jhostifyScriptJs}
 
-    /* --- app code -- INSERT APP NAME HERE -- --- */
+    /* --- app code --- */
     ${entryCode}
     `;
 
