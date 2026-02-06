@@ -3,7 +3,7 @@ var path = require("path");
 var cp = require("child_process");
 
 function buildFrontend() {
-    const projDir = getDirNAbove(process.argv[1], 5);
+    const projDir = getProjectDir(process.argv[1]);
     
     console.log("Gathering config options");
     const configStr = cp.execSync(`tsc --showConfig`, { encoding: 'utf-8', stdio: "pipe" });
@@ -53,6 +53,12 @@ function buildFrontend() {
 function getDirNAbove(filePath, count) {
     if (count < 1) return filePath;
     return getDirNAbove(path.dirname(filePath), --count);
+}
+
+function getProjectDir(filePath) {
+    if (path.basename(filePath) === 'node_modules') 
+        return path.dirname(filePath);
+    return getProjectDir(path.dirname(filePath));
 }
 
 function normalizePath(path) {

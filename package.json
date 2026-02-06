@@ -12,7 +12,7 @@
         "adjust": "cp package.json ./dist/ && cp .npmrc ./dist/ && cp README.md ./dist/ && cp LICENSE ./dist/ && node cleanse-pkg.js",
         "add_missing_files": "cp -r ./src/bin ./dist/ && cp -r ./src/scripts ./dist/",
         "build": "npm run clean && npm run pre_build && npm run adjust && npm run add_missing_files",
-        "test": "npm run build && cd dist && npm pack && mv *.tgz ../../../delme/JHub_Frontend/ && cd .."
+        "test": "npm run build && cd dist && npm pack && mv *.tgz ../../../test/JHub_Frontend_test/ && cd .."
     },
     "bin": {
         "jhost": "bin/jhost.js"
