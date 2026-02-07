@@ -1,12 +1,28 @@
-var fs = require("fs");
-var path = require("path");
-var cp = require("child_process");
+const fs = require("fs");
+const path = require("path");
+const cp = require("child_process");
+
+const FILE_ENCODING = "utf8";
+const NOME_MODULES_FOLDER = "node_modules";
+const REQUIRE_JS_PATH = NOME_MODULES_FOLDER + "/requirejs/require.js";
+const TSLIB_PATH = NOME_MODULES_FOLDER + "/tslib/tslib.js";
+const FRAMEWORK_PATH = NOME_MODULES_FOLDER + "/@jhub-center/jhostify-script/jhostifyScript.js";
+const FAMEWORK_CONFIG_FILE = "jhostconfig.json";
+const NOT_ALLOWED_CHARACTERS = " ";
+const FRAMEWORK_CONFIG_FIELDS = [ 
+    [ "appName", "string" ],
+    [ "htmlEntry", "string" ]
+];
+const FRAMEWORK_DEFAULT_CONFIG = {
+    appName: "jhostify",
+    htmlEntry: "index.html"
+};
 
 function buildFrontend() {
     const projDir = getProjectDir(process.argv[1]);
     
     console.log("Gathering config options");
-    const configStr = cp.execSync(`tsc --showConfig`, { encoding: 'utf-8', stdio: "pipe" });
+    const configStr = cp.execSync(`tsc --showConfig`, { encoding: FILE_ENCODING, stdio: "pipe" });
 
     if (!configStr) {
         throw "No config found";
@@ -18,6 +34,19 @@ function buildFrontend() {
         throw "No outFile configured";
     }
 
+    const frameworkConfigStr = getFrameWorkConfig(projDir);
+    let frameworkConfig;
+    if (frameworkConfigStr) {
+        frameworkConfig = JSON.parse(frameworkConfigStr);
+    }
+
+    if (frameworkConfig) {
+        validateFrameworkConfig(frameworkConfig);
+        console.log("Config: ", frameworkConfig);
+        frameworkConfig = applyFrameworkConfigDefaults(frameworkConfig);
+        console.log("Config: ", frameworkConfig);
+    }
+
     const destDir = path.resolve(projDir, normalizePath(path.dirname(config.compilerOptions.outFile)));
     const destFile = path.resolve(destDir, normalizePath(path.basename(config.compilerOptions.outFile)));
 
@@ -26,10 +55,10 @@ function buildFrontend() {
     cp.execSync(`tsc`, { stdio: "inherit" });
 
     // 2. Collect required files
-    const requireJs = fs.readFileSync(path.resolve(projDir, "node_modules/requirejs/require.js"), "utf8");
-    const tslibJs = fs.readFileSync(path.resolve(projDir, "node_modules/tslib/tslib.js"), "utf8");
-    const jhostifyScriptJs = fs.readFileSync(path.resolve(projDir, "node_modules/@jhub-center/jhostify-script/jhostifyScript.js"), "utf8");
-    const entryCode = fs.readFileSync(destFile, "utf8");
+    const requireJs = fs.readFileSync(path.resolve(projDir, REQUIRE_JS_PATH), FILE_ENCODING);
+    const tslibJs = fs.readFileSync(path.resolve(projDir, TSLIB_PATH), FILE_ENCODING);
+    const jhostifyScriptJs = fs.readFileSync(path.resolve(projDir, FRAMEWORK_PATH), FILE_ENCODING);
+    const entryCode = fs.readFileSync(destFile, FILE_ENCODING);
 
     // 3. Concatenate
     const bundle = `
@@ -48,6 +77,27 @@ function buildFrontend() {
 
     fs.writeFileSync(destFile, bundle);
     console.log("Compilation done!");
+
+    if (frameworkConfig) {
+        console.log("Building App!");
+        const scriptInject = `<script>
+        require(['index'], function(main) {
+        main.render(); // assuming your frontend exports a start() function
+        });
+  </script>`;
+        const tag1 = `<${frameworkConfig.appName}/>`;
+        const tag2 = `<${frameworkConfig.appName}></${frameworkConfig.appName}>`;
+        let iHtml = fs.readFileSync(path.resolve(projDir, 'src', frameworkConfig.htmlEntry), FILE_ENCODING);
+        if (iHtml.includes(tag1)) {
+            iHtml = iHtml.replace(tag1, scriptInject);
+        } else if (iHtml.includes(tag2)) {
+            /**
+             * later fix this so it can find the tag despite it has any  white characters
+             */
+            iHtml = iHtml.replace(tag2, scriptInject);
+        }
+        fs.writeFileSync(path.resolve(destDir, frameworkConfig.htmlEntry), iHtml);
+    }
 }
 
 function getDirNAbove(filePath, count) {
@@ -55,8 +105,16 @@ function getDirNAbove(filePath, count) {
     return getDirNAbove(path.dirname(filePath), --count);
 }
 
+function getFrameWorkConfig(projDir) {
+    try {
+        return fs.readFileSync(path.resolve(projDir, FAMEWORK_CONFIG_FILE), FILE_ENCODING);
+    } catch {
+        return undefined;
+    }
+}
+
 function getProjectDir(filePath) {
-    if (path.basename(filePath) === 'node_modules') 
+    if (path.basename(filePath) === NOME_MODULES_FOLDER) 
         return path.dirname(filePath);
     return getProjectDir(path.dirname(filePath));
 }
@@ -66,6 +124,40 @@ function normalizePath(path) {
         return path.slice(2);
     }
     return path
+}
+
+function validateFrameworkConfig(config) {
+    if(config) {
+        FRAMEWORK_CONFIG_FIELDS.forEach(f => {
+           if (config[f[0]]) {
+            switch(f[1]) {
+                case 'string':
+                    validStringField(config[f[0]], f[0]);
+            }
+           }
+        });
+    }
+}
+
+function applyFrameworkConfigDefaults(config) {
+    if (config) {
+        FRAMEWORK_CONFIG_FIELDS.forEach(f => {
+           if (!config[f[0]]) {
+                config[f[0]] = FRAMEWORK_DEFAULT_CONFIG[f[0]];
+           }
+        });
+    }
+    return config;
+}
+
+function validStringField(field, fieldName) {
+    const invalidChars = field
+        .split()
+        .filter(c => NOT_ALLOWED_CHARACTERS.includes(c))
+        .join(', ');
+    if(invalidChars.length > 0) {
+            throw `Prohibited characters found in ${fieldName}. Characters: ${invalidChars}`;
+        }
 }
 
 module.exports = { buildFrontend };
