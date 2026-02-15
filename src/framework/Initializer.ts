@@ -37,7 +37,6 @@ export default class Initializer {
      * Init initializes the application and creates a context.
      * This context is used everywhere on the app.
      * TODO:
-     *      - Create said context.
      *      - Optimize context, it might be too heavy on bigger apps
      */
     public static init(): void {
@@ -58,12 +57,13 @@ export default class Initializer {
     }
 
     private static buildContextConfig(): ContextConfig {
+        const componentBuilder = new ComponentBuilder(this.configuration.getElementBuilder());
         return {
             router: this.router, 
             pageRenderer: PageRenderer, 
             elementRenderer: ElementRenderer,
-            componentBuilder: new ComponentBuilder(this.configuration.getElementBuilder()),
-            pageBuilder: new PageBuilder(this.configuration.getElementBuilder()),
+            componentBuilder,
+            pageBuilder: new PageBuilder(this.configuration.getElementBuilder(), componentBuilder),
             elementBuilder: this.configuration.getElementBuilder(),
             defaultPageName:this.configuration.getConfig().defaultPageName
         };

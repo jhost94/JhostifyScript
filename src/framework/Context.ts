@@ -99,8 +99,8 @@ export default class Context {
         this.contextPageRenderer = config.pageRenderer;
         this.contextElementRenderer = config.elementRenderer;
         this._elementBuilder = config.elementBuilder;
-        this.pageBuilder = new PageBuilder(config.elementBuilder);
         this.componentBuilder = new ComponentBuilder(config.elementBuilder);
+        this.pageBuilder = new PageBuilder(config.elementBuilder, this.componentBuilder);
         this.defaultPageName = config.defaultPageName;
     }
 

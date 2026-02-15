@@ -5,12 +5,8 @@ import Random from "../../../utils/Random.js";
 class Page implements ID {
     protected doOnRender: (() => void)[] = [];
 
-    constructor(protected name: string = '', protected template: string = '', protected components: Component[] = [], private id: string = Random.randomUUID()) {
+    constructor(protected name: string = '', protected components: Component[] = [], private id: string = Random.randomUUID()) {
         
-    }
-
-    public getTemplate(): string {
-        return this.template;
     }
 
     public getComponents(): Component[] {

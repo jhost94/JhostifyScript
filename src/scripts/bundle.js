@@ -18,10 +18,15 @@ const FRAMEWORK_DEFAULT_CONFIG = {
     htmlEntry: "index.html"
 };
 
+let options;
+
 function buildFrontend() {
     const projDir = getProjectDir(process.argv[1]);
+    options = getOptions(process.argv);
     
-    console.log("Gathering config options");
+    log({msg: "Running with Debug ON", level: 'DEBUG'});
+    
+    log({msg: "Gathering config options"});
     const configStr = cp.execSync(`tsc --showConfig`, { encoding: FILE_ENCODING, stdio: "pipe" });
 
     if (!configStr) {
@@ -42,9 +47,8 @@ function buildFrontend() {
 
     if (frameworkConfig) {
         validateFrameworkConfig(frameworkConfig);
-        console.log("Config: ", frameworkConfig);
         frameworkConfig = applyFrameworkConfigDefaults(frameworkConfig);
-        console.log("Config: ", frameworkConfig);
+        log({msg: ["Framework config: ", frameworkConfig], level: 'DEBUG'});
     }
 
     const destDir = path.resolve(projDir, normalizePath(path.dirname(config.compilerOptions.outFile)));
@@ -76,10 +80,10 @@ function buildFrontend() {
     `;
 
     fs.writeFileSync(destFile, bundle);
-    console.log("Compilation done!");
+    log({msg: "Compilation done!"});
 
     if (frameworkConfig) {
-        console.log("Building App!");
+        log({msg: "Building App!"});
         const scriptInject = `<script>
         require(['index'], function(main) {
         main.render(); // assuming your frontend exports a start() function
@@ -92,7 +96,7 @@ function buildFrontend() {
             iHtml = iHtml.replace(tag1, scriptInject);
         } else if (iHtml.includes(tag2)) {
             /**
-             * later fix this so it can find the tag despite it has any  white characters
+             * TODO: later fix this so it can find the tag despite it has any  white characters
              */
             iHtml = iHtml.replace(tag2, scriptInject);
         }
@@ -158,6 +162,37 @@ function validStringField(field, fieldName) {
     if(invalidChars.length > 0) {
             throw `Prohibited characters found in ${fieldName}. Characters: ${invalidChars}`;
         }
+}
+
+function getOptions(args) {
+    log({msg: ["Args: ", args]});
+    const debug = args.includes("--debug")
+    return {
+        runner: args[0],
+        path: args[1],
+        debug
+    }
+}
+
+function log(msg = {msg: undefined, level: 'INFO'}) {
+    if (!msg.level) msg.level = 'INFO';
+    
+    switch (msg.level) {
+        case 'INFO':
+            if (typeof msg.msg === "string") console.log(msg.msg);
+            else console.log(...msg.msg);
+            break;
+        case 'DEBUG':
+            if (options.debug) {
+                if (typeof msg.msg === "string") console.log(msg.msg);
+            else console.log(...msg.msg);
+            }
+           break;
+        default:
+            if (typeof msg.msg === "string") console.log(msg.msg);
+            else console.log(...msg.msg);
+            break;
+    }
 }
 
 module.exports = { buildFrontend };

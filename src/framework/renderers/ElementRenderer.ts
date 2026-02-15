@@ -8,7 +8,6 @@ export default class ElementRenderer {
     private static re: Element;
 
     public static render(element: Element, at?: Component | Page | ID): void {
-        console.log("at", at)
         if (at) {
             const el = Context.elementBuilder().getElementById(at.getId());
             if (!el) throw `Component ${at} is given but not registered.`;

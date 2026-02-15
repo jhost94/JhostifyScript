@@ -4,6 +4,7 @@ import InternalPage from "./page/internal/InternalPage.js";
 import DefaultValues from "./constants/DefaultValues.js";
 import { LOGGING_LEVEL } from "./debug/Logger.js";
 import ElementVendor from "./requirements/ElementVendor.js";
+import ComponentBuilder from "./builders/ComponentBuilder.js";
 
 export default class InitialConfiguration {
     private defaultConfiguration: Configuration;
@@ -34,11 +35,11 @@ export default class InitialConfiguration {
 
 
     private buildDefaultConfig(defaultElementBuilder: ElementVendor): Configuration {
-        const ele = defaultElementBuilder.createElement(DefaultValues.DEFAULT_PAGE_ID);
+        const ele = defaultElementBuilder.createElement(DefaultValues.DEFAULT_PAGE_ID); //TODO: GET APP NAME SOMEHOW?
         const notFoundEle = defaultElementBuilder.createElement(DefaultValues.NOT_FOUND_PAGE_ID);
         return this.defaultConfiguration = { 
-            notFoundPage: new InternalPage(notFoundEle, DefaultValues.NOT_FOUND_PAGE_ID, DefaultValues.DEFAULT_PAGE_ID),
-            defaultPage: new InternalPage(ele, DefaultValues.DEFAULT_PAGE_ID, DefaultValues.DEFAULT_PAGE_ID),
+            notFoundPage: new InternalPage(notFoundEle, DefaultValues.NOT_FOUND_PAGE_ID, [], DefaultValues.DEFAULT_PAGE_ID),
+            defaultPage: new InternalPage(ele, DefaultValues.DEFAULT_PAGE_ID, [], DefaultValues.DEFAULT_PAGE_ID),
             defaultPageName: DefaultValues.DEFAULT_PAGE_ID,
             elementBuilder: defaultElementBuilder,
             logLevel: 'ERROR'
@@ -47,15 +48,26 @@ export default class InitialConfiguration {
 
     private buildConfig(defaultConfig: Configuration, configOptions?: ConfigurationOptions): Configuration {
         const eleBuilder = configOptions?.elementBuilder ?? defaultConfig.elementBuilder;
+        const componentBuilder = new ComponentBuilder(eleBuilder); //TODO: check if best solution
         const defaultPage = configOptions && configOptions.defaultPage ?  
-            new InternalPage(eleBuilder.createElement(configOptions?.defaultPage?.getName()), configOptions?.defaultPage?.getName(), configOptions?.defaultPage?.getName()) 
+            new InternalPage(
+                eleBuilder.createElement(configOptions?.defaultPage?.getName()), 
+                configOptions?.defaultPage?.getName(), 
+                configOptions?.defaultPage?.getComponents().map(c => componentBuilder.build(c)), 
+                configOptions?.defaultPage?.getName()
+            ) 
             : defaultConfig.defaultPage;
         const notFoundPage = configOptions && configOptions.defaultPage ?  
-            new InternalPage(eleBuilder.createElement(configOptions?.notFoundPage?.getName()), configOptions?.notFoundPage?.getName(), configOptions?.notFoundPage?.getName()) 
+            new InternalPage(
+                eleBuilder.createElement(configOptions?.notFoundPage?.getName()), 
+                configOptions?.notFoundPage?.getName(),
+                configOptions?.notFoundPage?.getComponents().map(c => componentBuilder.build(c)),
+                configOptions?.notFoundPage?.getName()
+            )
             : defaultConfig.defaultPage;
         
         if (configOptions?.defaultPage) {
-            defaultPage.get().innerHTML = configOptions.defaultPage.getTemplate(); //TODO this is a quickfix, needs permanent solution~
+            defaultPage.get().innerHTML = "<test></test>"; //TODO this is a quickfix, needs permanent solution~
         }
 
         return {

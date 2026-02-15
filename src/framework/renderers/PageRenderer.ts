@@ -2,6 +2,7 @@ import InternalPage from '../page/internal/InternalPage.js';
 import DefaultValues from '../constants/DefaultValues.js';
 import Logger from '../debug/Logger.js';
 import Renderer from './Renderer.js';
+import ComponentRenderer from './ComponentRenderer.js';
 
 class PageRenderer {
     private static pages: Map<string, InternalPage> = new Map();
@@ -26,8 +27,9 @@ class PageRenderer {
     public static render(id: string = DefaultValues.DEFAULT_PAGE_ID): void {
         if (!this.pages.has(id)) throw "error";
         const page = this.pages.get(id);
-        Logger.log('DEBUG', ["Rendering: ", page?.get()]);
+        Logger.log('DEBUG', ["Rendering page: ", page]);
         Renderer.renderAt(page!.get(), this.re);
+        page?.getComponents().forEach(c => ComponentRenderer.render(c, page));
         page?.getOnRender().forEach(a => a());
     }
 
