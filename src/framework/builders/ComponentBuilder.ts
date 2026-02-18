@@ -13,7 +13,6 @@ export default class ComponentBuilder {
             components.push(...component.children().map(c => this.build(c)))
         }
         const content = component.content();
-        const css = component.css();
         const color = component.color();
         const backgroundColor = component.backgroundColor();
         
