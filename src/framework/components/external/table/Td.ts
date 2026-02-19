@@ -1,4 +1,7 @@
-import Component, { ATTR_COLSPAN } from "../Component";
+import Component, { 
+    ATTR_COLSPAN, 
+    ATTR_HEADERS 
+} from "../Component";
 
 export default class Td extends Component{
     
@@ -7,7 +10,10 @@ export default class Td extends Component{
     }
 
     public colspan(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_COLSPAN, attr);
-        return this._attributes.get(ATTR_COLSPAN);
+        return this.setAttrAndReturn(ATTR_COLSPAN, attr);
+    }
+
+    public headers(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_HEADERS, attr);
     }
 }

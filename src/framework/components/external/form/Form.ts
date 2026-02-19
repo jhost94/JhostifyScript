@@ -1,4 +1,4 @@
-import Component, { ATTR_AUTO_COMPLETE } from "../Component";
+import Component, { ATTR_AUTO_COMPLETE, ATTR_NAME } from "../Component";
 
 export default class Form extends Component{
     
@@ -7,21 +7,37 @@ export default class Form extends Component{
     }
 
     public acceptCharset(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_ACCEPT_CHARSET, attr);
-        return this._attributes.get(ATTR_ACCEPT_CHARSET);
+        return this.setAttrAndReturn(ATTR_ACCEPT_CHARSET, attr);
     }
 
     public action(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_ACTION, attr);
-        return this._attributes.get(ATTR_ACTION);
+        return this.setAttrAndReturn(ATTR_ACTION, attr);
     }
 
     public autoComplete(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_AUTO_COMPLETE, attr);
-        return this._attributes.get(ATTR_AUTO_COMPLETE);
+        return this.setAttrAndReturn(ATTR_AUTO_COMPLETE, attr);
+    }
+
+    public encType(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_ENC_TYPE, attr);
+    }
+
+    public method(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_METHOD, attr);
+    }
+
+    public name(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_NAME, attr);
+    }
+    
+    public noValidate(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_NO_VALIDATE, attr);
     }
 }
 
 
 export const ATTR_ACCEPT_CHARSET: string = "accept-charset";
 export const ATTR_ACTION: string = "action";
+export const ATTR_ENC_TYPE: string = "enctype";
+export const ATTR_METHOD: string = "method";
+export const ATTR_NO_VALIDATE: string = "novalidate";

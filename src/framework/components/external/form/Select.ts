@@ -1,4 +1,10 @@
-import Component, { ATTR_AUTO_FOCUS } from "../Component";
+import Component, { 
+    ATTR_AUTO_FOCUS, 
+    ATTR_DISASBLED, 
+    ATTR_FORM,
+    ATTR_MULTIPLE,
+    ATTR_NAME
+} from "../Component";
 
 export default class Select extends Component{
     
@@ -7,7 +13,22 @@ export default class Select extends Component{
     }
 
     public autoFocus(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_AUTO_FOCUS, attr);
-        return this._attributes.get(ATTR_AUTO_FOCUS);
+        return this.setAttrAndReturn(ATTR_AUTO_FOCUS, attr);
+    }
+
+    public disabled(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_DISASBLED, attr);
+    }
+
+    public form(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_FORM, attr);
+    }
+
+    public multiple(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_MULTIPLE, attr);
+    }
+
+    public name(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_NAME, attr);
     }
 }
