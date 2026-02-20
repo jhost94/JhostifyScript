@@ -1,8 +1,9 @@
-import Component, { 
+import { 
     ATTR_DISASBLED, 
-    ATTR_FORM,
-    ATTR_NAME
-} from "../Component";
+    ATTR_FORM, 
+    ATTR_NAME 
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class FieldSet extends Component{
     
@@ -11,8 +12,7 @@ export default class FieldSet extends Component{
     }
 
     public disabled(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_DISASBLED, attr);
-        return this._attributes.get(ATTR_DISASBLED);
+        return this.setAttrAndReturn(ATTR_DISASBLED, attr);
     }
 
     public form(attr?: string): string | undefined {

@@ -1,10 +1,15 @@
-import Component, { 
+import { 
     ATTR_AUTO_FOCUS, 
     ATTR_DISASBLED, 
-    ATTR_FORM,
-    ATTR_FORMACTION,
-    ATTR_NAME
-} from "../Component";
+    ATTR_FORM, 
+    ATTR_FORMACTION, 
+    ATTR_NAME, 
+    ATTR_POPOVER_TARGET,
+    ATTR_POPOVER_TARGET_ACTION,
+    ATTR_TYPE,
+    ATTR_VALUE
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class Button extends Component{
     
@@ -30,5 +35,21 @@ export default class Button extends Component{
     
     public name(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_NAME, attr);
+    }
+
+    public popoverTarget(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_POPOVER_TARGET, attr);
+    }
+
+    public popoverTargetAction(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_POPOVER_TARGET_ACTION, attr);
+    }
+
+    public type(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_TYPE, attr);
+    }
+
+    public value(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_VALUE, attr);
     }
 }

@@ -1,4 +1,5 @@
-import Component, { ATTR_CITE } from "../Component";
+import { ATTR_CITE } from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class BlockQuote extends Component{
     
@@ -7,7 +8,6 @@ export default class BlockQuote extends Component{
     }
 
     public cite(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_CITE, attr);
-        return this._attributes.get(ATTR_CITE);
+        return this.setAttrAndReturn(ATTR_CITE, attr);
     }
 }

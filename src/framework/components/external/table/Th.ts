@@ -1,4 +1,9 @@
-import Component, { ATTR_COLSPAN } from "../Component";
+import { 
+    ATTR_COLSPAN, 
+    ATTR_ROWSPAN,
+    ATTR_SCOPE
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class Th extends Component{
     
@@ -7,7 +12,14 @@ export default class Th extends Component{
     }
 
     public colspan(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_COLSPAN, attr);
-        return this._attributes.get(ATTR_COLSPAN);
+        return this.setAttrAndReturn(ATTR_COLSPAN, attr);
+    }
+
+    public rowspan(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_ROWSPAN, attr);
+    }
+
+    public scope(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_SCOPE, attr);
     }
 }

@@ -1,4 +1,11 @@
-import Component, { ATTR_LABEL } from "../Component";
+import { 
+    ATTR_DEFAULT, 
+    ATTR_KIND, 
+    ATTR_LABEL, 
+    ATTR_SRC,
+    ATTR_SRC_LANG
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class Track extends Component{
     
@@ -17,7 +24,12 @@ export default class Track extends Component{
     public label(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_LABEL, attr);
     }
-}
 
-export const ATTR_DEFAULT: string = "default";
-export const ATTR_KIND: string = "kind";
+    public src(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_SRC, attr);
+    }
+
+    public srcLang(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_SRC_LANG, attr);
+    }
+}

@@ -1,11 +1,16 @@
-import Component, { 
+import { EVENT_ON_ABORT } from "../../../constants/OnEvents";
+import { 
     ATTR_AUTO_PLAY, 
-    ATTR_CONTROLS, 
+    ATTR_CONTROLS,
     ATTR_HEIGHT,
     ATTR_LOOP,
     ATTR_MUTED,
-    ATTR_ON_ABORT
-} from "../Component";
+    ATTR_POSTER,
+    ATTR_PRELOAD,
+    ATTR_SRC,
+    ATTR_WIDTH
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class Video extends Component{
     
@@ -33,7 +38,19 @@ export default class Video extends Component{
         return this.setAttrAndReturn(ATTR_MUTED, attr);
     }
 
-    public onAbort(attr?: string): string | undefined {
-        return this.setAttrAndReturn(ATTR_ON_ABORT, attr);
+    public poster(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_POSTER, attr);
+    }
+    
+    public preload(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_PRELOAD, attr);
+    }
+
+    public src(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_SRC, attr);
+    }
+
+    public width(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_WIDTH, attr);
     }
 }

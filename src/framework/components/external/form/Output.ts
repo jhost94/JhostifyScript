@@ -1,8 +1,9 @@
-import Component, { 
+import { 
     ATTR_FOR, 
     ATTR_FORM, 
     ATTR_NAME
-} from "../Component";
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class Output extends Component{
     

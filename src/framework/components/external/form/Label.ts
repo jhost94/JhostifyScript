@@ -1,7 +1,8 @@
-import Component, { 
+import { 
     ATTR_FOR, 
     ATTR_FORM 
-} from "../Component";
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class Label extends Component{
     

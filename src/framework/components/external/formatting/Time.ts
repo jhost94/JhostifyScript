@@ -1,4 +1,5 @@
-import Component, { ATTR_DATE_TIME } from "../Component";
+import { ATTR_DATE_TIME } from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class Time extends Component{
     
@@ -7,7 +8,6 @@ export default class Time extends Component{
     }
 
     public dateTime(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_DATE_TIME, attr);
-        return this._attributes.get(ATTR_DATE_TIME);
+        return this.setAttrAndReturn(ATTR_DATE_TIME, attr);
     }
 }

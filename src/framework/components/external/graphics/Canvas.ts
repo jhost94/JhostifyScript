@@ -1,4 +1,5 @@
-import Component, { ATTR_HEIGHT } from "../Component";
+import { ATTR_HEIGHT, ATTR_WIDTH } from "src/framework/constants/Attributes";
+import Component from "../Component";
 
 export default class Canvas extends Component{
     
@@ -8,5 +9,9 @@ export default class Canvas extends Component{
 
     public height(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_HEIGHT, attr);
+    }
+    
+    public width(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_WIDTH, attr);
     }
 }

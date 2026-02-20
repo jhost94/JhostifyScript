@@ -1,4 +1,5 @@
-import Component, { ATTR_NAME } from "../Component";
+import { ATTR_NAME } from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class Map extends Component{
     

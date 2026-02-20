@@ -7,7 +7,8 @@ export default class ComponentBuilder {
     constructor(private elementBuilder: ElementVendor) {}
 
     public build(component: Component): InternalComponent {
-        const element = this.elementBuilder.createElement(component.getName());
+        const scriptElement = this.elementBuilder.getElementsByTagName("script")[0];
+        const element = component.build(this.elementBuilder.createElement(component.getName()), scriptElement);
         const components: InternalComponent[] = [];
         if (component.children() && component.children().length > 0) {
             components.push(...component.children().map(c => this.build(c)))

@@ -1,10 +1,32 @@
+import { 
+    ATTR_ACCESS_KEY,
+    ATTR_CLASS,
+    ATTR_CONTENT_EDITABLE,
+    ATTR_DIR,
+    ATTR_DRAGGABLE,
+    ATTR_ENTER_KEY_HINT,
+    ATTR_HIDDEN,
+    ATTR_INERT,
+    ATTR_INPUT_MODE, 
+    ATTR_LANG,
+    ATTR_POPOVER,
+    ATTR_SPELL_CHECK,
+    ATTR_STYLE,
+    ATTR_TAB_INDEX,
+    ATTR_TITLE,
+    ATTR_TRANSLATE
+} from "../../constants/Attributes";
 import ID from "../../../framework/meta/ID";
 import Random from "../../../utils/Random";
 import { Color } from "../style/Color";
 import Style from "../style/Style";
+import { 
+    EVENT_ON_BLUR 
+} from "../../constants/OnEvents";
 
 export default class Component implements ID {
     protected _attributes: Map<string, string>;
+    protected _onEvents: Map<string, (e: any) => void>;
     protected _children: Component[];
     protected _style: Style;
     protected _content?: string;
@@ -15,17 +37,50 @@ export default class Component implements ID {
             this._children = options.children ?? [];
             this._attributes = options.attributes ?? new Map();
             this._content = options.content;
-            this._style = options.style;
+            this._style = options.style ?? {};
+            this._onEvents = options.onEvents ?? new Map();
         } else {
             this._children = [];
             this._attributes = new Map();
             this._style = {};
+            this._onEvents = new Map();
         }
+    }
+
+    private setElementAttr(el: Element): Element {
+        this._attributes.forEach((v, k) => {
+            el.setAttribute(k, v);
+        });
+
+        return el;
+    }
+
+    //TODO: redo/fix this
+    private setElementEvent(el: Element, scriptElement: Element): Element {
+        // const se = (scriptElement as HTMLElement);
+        // let it = se.innerText;
+        // this._onEvents.forEach((v, k) => {
+        //     const fnName = k + this.getId();
+        //     el.setAttribute(k, `${fnName}(event)`);
+        //     it = `${it}
+        //     function ${fnName}(e) {
+        //         ${v}.call(this, e);
+        //     }`;
+        // });
+        // se.innerText = it;
+        // console.log(scriptElement)
+        return el;
     }
 
     protected setAttrAndReturn(key: string, attr?: string): string | undefined {
         if (attr) this._attributes.set(key, attr);
         return this._attributes.get(key);
+    }
+
+    public build(el: Element, scriptElement: Element): Element {
+        el = this.setElementAttr(el);
+        el = this.setElementEvent(el, scriptElement);
+        return el;
     }
 
     public content(content?: string): string | undefined {
@@ -88,8 +143,28 @@ export default class Component implements ID {
         return this.setAttrAndReturn(ATTR_LANG, attr);
     }
 
-    public onBlur(attr?: string): string | undefined {
-        return this.setAttrAndReturn(ATTR_ON_BLUR, attr);
+    public popover(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_POPOVER, attr);
+    }
+
+    public spellcheck(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_SPELL_CHECK, attr);
+    }
+
+    public style(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_STYLE, attr);
+    }
+
+    public tabIndex(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_TAB_INDEX, attr);
+    }
+
+    public title(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_TITLE, attr);
+    }
+
+    public translate(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_TRANSLATE, attr);
     }
     
     public getId(): string {
@@ -105,45 +180,6 @@ export interface ComponentOptions {
     content?: string;
     attributes?: Map<string, string>;
     children?: Component[];
-    style: Style
+    style?: Style;
+    onEvents: Map<string, (e: any) => void>
 }
-
-export const ATTR_ACCESS_KEY: string = "accesskey";
-export const ATTR_ALT: string = "alt";
-export const ATTR_AUTO_COMPLETE: string = "autocomplete";
-export const ATTR_AUTO_FOCUS: string = "autofocus";
-export const ATTR_AUTO_PLAY: string = "autoplay";
-export const ATTR_CITE: string = "cite";
-export const ATTR_CLASS: string = "class";
-export const ATTR_COLSPAN: string = "colspan";
-export const ATTR_CONTENT_EDITABLE: string = "contenteditable";
-export const ATTR_CONTROLS: string = "controls";
-export const ATTR_DATE_TIME: string = "datetime";
-export const ATTR_DIR: string = "dir";
-export const ATTR_DIR_NAME: string = "dirname";
-export const ATTR_DISASBLED: string = "disabled";
-export const ATTR_DOWNLOAD: string = "download";
-export const ATTR_DRAGGABLE: string = "draggable";
-export const ATTR_ENTER_KEY_HINT: string = "enterkeyhint";
-export const ATTR_FOR: string = "for";
-export const ATTR_FORM: string = "form";
-export const ATTR_FORMACTION: string = "formaction";
-export const ATTR_HEADERS: string = "headers";
-export const ATTR_HEIGHT: string = "height";
-export const ATTR_HIDDEN: string = "hidden";
-export const ATTR_HREF: string = "href";
-export const ATTR_HREF_LANG: string = "hreflang";
-export const ATTR_INERT: string = "inert";
-export const ATTR_INPUT_MODE: string = "inputmode";
-export const ATTR_LABEL: string = "label";
-export const ATTR_LANG: string = "lang";
-export const ATTR_LOOP: string = "loop";
-export const ATTR_MAX: string = "max";
-export const ATTR_MAX_LENGTH: string = "maxlength";
-export const ATTR_MEDIA: string = "media";
-export const ATTR_MIN: string = "min";
-export const ATTR_MULTIPLE: string = "multiple";
-export const ATTR_MUTED: string = "muted";
-export const ATTR_NAME: string = "name";
-export const ATTR_ON_ABORT: string = "onabort";
-export const ATTR_ON_BLUR: string = "onblur";

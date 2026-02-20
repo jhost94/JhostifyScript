@@ -1,4 +1,15 @@
-import Component, { ATTR_AUTO_COMPLETE, ATTR_NAME } from "../Component";
+import { 
+    ATTR_ACCEPT_CHARSET, 
+    ATTR_ACTION, 
+    ATTR_AUTO_COMPLETE,
+    ATTR_ENC_TYPE,
+    ATTR_METHOD,
+    ATTR_NAME,
+    ATTR_NO_VALIDATE,
+    ATTR_REL,
+    ATTR_TARGET
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class Form extends Component{
     
@@ -33,11 +44,12 @@ export default class Form extends Component{
     public noValidate(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_NO_VALIDATE, attr);
     }
+
+    public rel(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_REL, attr);
+    }
+
+    public target(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_TARGET, attr);
+    }
 }
-
-
-export const ATTR_ACCEPT_CHARSET: string = "accept-charset";
-export const ATTR_ACTION: string = "action";
-export const ATTR_ENC_TYPE: string = "enctype";
-export const ATTR_METHOD: string = "method";
-export const ATTR_NO_VALIDATE: string = "novalidate";

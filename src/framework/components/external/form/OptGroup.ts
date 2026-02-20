@@ -1,7 +1,8 @@
-import Component, { 
+import { 
     ATTR_DISASBLED, 
-    ATTR_LABEL
-} from "../Component";
+    ATTR_LABEL 
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
 export default class OptGroup extends Component{
     

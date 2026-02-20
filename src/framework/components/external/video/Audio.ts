@@ -1,25 +1,26 @@
-import Component, { 
+import { EVENT_ON_ABORT } from "../../../constants/OnEvents";
+import { 
     ATTR_AUTO_PLAY, 
-    ATTR_CONTROLS, 
-    ATTR_LOOP, 
+    ATTR_CONTROLS,
+    ATTR_LOOP,
     ATTR_MUTED,
-    ATTR_ON_ABORT
-} from "../Component";
+    ATTR_PRELOAD,
+    ATTR_SRC
+} from "../../../constants/Attributes";
+import Component from "../Component";
 
-export default class Source extends Component{
+export default class Audio extends Component{
     
     constructor() {
         super("audio");
     }
 
     public autoPlay(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_AUTO_PLAY, attr);
-        return this._attributes.get(ATTR_AUTO_PLAY);
+        return this.setAttrAndReturn(ATTR_AUTO_PLAY, attr);
     }
 
     public controls(attr?: string): string | undefined {
-        if (attr) this._attributes.set(ATTR_CONTROLS, attr);
-        return this._attributes.get(ATTR_CONTROLS);
+        return this.setAttrAndReturn(ATTR_CONTROLS, attr);
     }
     
     public loop(attr?: string): string | undefined {
@@ -30,7 +31,11 @@ export default class Source extends Component{
         return this.setAttrAndReturn(ATTR_MUTED, attr);
     }
 
-    public onAbort(attr?: string): string | undefined {
-        return this.setAttrAndReturn(ATTR_ON_ABORT, attr);
+    public preload(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_PRELOAD, attr);
+    }
+
+    public src(attr?: string): string | undefined {
+        return this.setAttrAndReturn(ATTR_SRC, attr);
     }
 }
