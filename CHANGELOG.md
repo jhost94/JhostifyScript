@@ -11,3 +11,10 @@
 ### 0.6.0
 - Added all (hopefully) component/HTML tags
 - Added all (hopefully) attributes, except on... events. Those need to be re-thinked and re-done.
+
+### 0.6.1
+- Added some missing Components:
+    - Header
+    - Footer
+    - Nav
+    - Sections
