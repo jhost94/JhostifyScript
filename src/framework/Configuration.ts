@@ -1,6 +1,7 @@
 import Objects from "../utils/Objects.js";
 import Page from "./page/external/Page.js";
 import InternalPage from "./page/internal/InternalPage.js";
+import InternalCss from "./components/internal/InternalCss.js";
 import DefaultValues from "./constants/DefaultValues.js";
 import { LOGGING_LEVEL } from "./debug/Logger.js";
 import ElementVendor from "./requirements/ElementVendor.js";
@@ -49,12 +50,18 @@ export default class InitialConfiguration {
     private buildConfig(defaultConfig: Configuration, configOptions?: ConfigurationOptions): Configuration {
         const eleBuilder = configOptions?.elementBuilder ?? defaultConfig.elementBuilder;
         const componentBuilder = new ComponentBuilder(eleBuilder); //TODO: check if best solution
+        const dCss = eleBuilder.createElement("style");
+        const nCss = eleBuilder.createElement("style");
+        (dCss as HTMLElement).innerText = configOptions?.defaultPage?.getCssParsed() ?? '';
+        (nCss as HTMLElement).innerText = configOptions?.notFoundPage?.getCssParsed() ?? '';
         const defaultPage = configOptions && configOptions.defaultPage ?  
             new InternalPage(
                 eleBuilder.createElement(configOptions?.defaultPage?.getName()), 
                 configOptions?.defaultPage?.getName(), 
                 configOptions?.defaultPage?.getComponents().map(c => componentBuilder.build(c)), 
-                configOptions?.defaultPage?.getName()
+                configOptions?.defaultPage?.getName(),
+                configOptions?.defaultPage?.getOnRender(),
+                new InternalCss(dCss)
             ) 
             : defaultConfig.defaultPage;
         const notFoundPage = configOptions && configOptions.defaultPage ?  
@@ -62,7 +69,9 @@ export default class InitialConfiguration {
                 eleBuilder.createElement(configOptions?.notFoundPage?.getName()), 
                 configOptions?.notFoundPage?.getName(),
                 configOptions?.notFoundPage?.getComponents().map(c => componentBuilder.build(c)),
-                configOptions?.notFoundPage?.getName()
+                configOptions?.notFoundPage?.getName(),
+                configOptions?.notFoundPage?.getOnRender(),
+                new InternalCss(nCss)
             )
             : defaultConfig.defaultPage;
         

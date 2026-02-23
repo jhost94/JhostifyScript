@@ -3,6 +3,7 @@ import DefaultValues from '../constants/DefaultValues.js';
 import Logger from '../debug/Logger.js';
 import Renderer from './Renderer.js';
 import ComponentRenderer from './ComponentRenderer.js';
+import { ATTR_STYLE } from '../constants/Attributes.js';
 
 class PageRenderer {
     private static pages: Map<string, InternalPage> = new Map();
@@ -25,12 +26,14 @@ class PageRenderer {
     }
 
     public static render(id: string = DefaultValues.DEFAULT_PAGE_ID): void {
-        if (!this.pages.has(id)) throw "error";
         const page = this.pages.get(id);
+        if (!page) throw "error";
         Logger.log('DEBUG', ["Rendering page: ", page]);
-        Renderer.renderAt(page!.get(), this.re);
-        page?.getComponents().forEach(c => ComponentRenderer.render(c, page));
-        page?.getOnRender().forEach(a => a());
+        const css = page.getCss();
+        if (css) Renderer.renderAt(css.get(), this.re);
+        Renderer.renderAt(page.get(), this.re);
+        page.getComponents().forEach(c => ComponentRenderer.render(c, page));
+        page.getOnRender().forEach(a => a());
     }
 
     public static refresh(): void {

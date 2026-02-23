@@ -13,4 +13,9 @@ export default class Renderer {
         const children = at.childNodes;
         children.forEach(e => at.removeChild(e));
     }
+
+    
+    public static renderCSSAt(css: string, id: string, at: Element) {
+        
+    }
 }
