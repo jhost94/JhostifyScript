@@ -26,3 +26,7 @@
         - To be implemented in the future
         - The reason is, there is an official implementation, but that requires a dependency to that package.
         - Options will be evaluated in the future.
+
+### 0.7.0
+- Added on... events
+- Added 'Aside' Component
