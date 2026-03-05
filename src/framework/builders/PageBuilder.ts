@@ -8,7 +8,7 @@ class PageBuilder {
     constructor (private elementBuilder: ElementVendor, private componentBuilder: ComponentBuilder) {}
 
     public build(page: Page): InternalPage {
-        const element: Element = this.elementBuilder.createElement(page.getName());
+        const element: Element = page.build(this.elementBuilder.createElement(page.getName()));
         const components = page.getComponents()
             .map(c => this.componentBuilder.build(c));
         const css = this.elementBuilder.createElement("style");

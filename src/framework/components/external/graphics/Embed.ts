@@ -1,4 +1,8 @@
-import { EVENT_ON_ABORT } from "../../../constants/OnEvents";
+import { 
+    EVENT_ON_ABORT, 
+    EVENT_ON_CAN_PLAY,
+    EVENT_ON_ERROR
+} from "../../../constants/OnEvents";
 import { 
     ATTR_HEIGHT,
     ATTR_SRC,
@@ -17,10 +21,6 @@ export default class Embed extends Component{
         return this.setAttrAndReturn(ATTR_HEIGHT, attr);
     }
     
-    public onAbort(attr?: string): string | undefined {
-        return this.setAttrAndReturn(EVENT_ON_ABORT, attr);
-    }
-
     public src(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_SRC, attr);
     }
@@ -31,5 +31,17 @@ export default class Embed extends Component{
 
     public width(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_WIDTH, attr);
+    }
+
+    public onAbort(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_ABORT, action);
+    }
+
+    public onCanPlay(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_CAN_PLAY, action);
+    }
+
+    public onError(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_ERROR, action);
     }
 }

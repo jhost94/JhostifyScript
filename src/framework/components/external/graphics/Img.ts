@@ -1,4 +1,8 @@
-import { EVENT_ON_ABORT } from "../../../constants/OnEvents";
+import { 
+    EVENT_ON_ABORT, 
+    EVENT_ON_ERROR,
+    EVENT_ON_LOAD
+} from "../../../constants/OnEvents";
 import { 
     ATTR_ALT, 
     ATTR_HEIGHT,
@@ -47,5 +51,17 @@ export default class Img extends Component{
 
     public width(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_WIDTH, attr);
+    }
+
+    public onAbort(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_ABORT, action);
+    }
+
+    public onError(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_ERROR, action);
+    }
+
+    public onLoad(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_LOAD, action);
     }
 }

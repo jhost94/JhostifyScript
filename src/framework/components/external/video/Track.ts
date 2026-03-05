@@ -1,4 +1,7 @@
 import { 
+    EVENT_ON_CUE_CHANGE 
+} from "src/framework/constants/OnEvents";
+import { 
     ATTR_DEFAULT, 
     ATTR_KIND, 
     ATTR_LABEL, 
@@ -31,5 +34,9 @@ export default class Track extends Component{
 
     public srcLang(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_SRC_LANG, attr);
+    }
+
+    public onCueCHange(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_CUE_CHANGE, action);
     }
 }

@@ -1,4 +1,8 @@
 import { 
+    EVENT_ON_RESET, 
+    EVENT_ON_SUBMIT
+} from "../../../constants/OnEvents";
+import { 
     ATTR_ACCEPT_CHARSET, 
     ATTR_ACTION, 
     ATTR_AUTO_COMPLETE,
@@ -51,5 +55,13 @@ export default class Form extends Component{
 
     public target(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_TARGET, attr);
+    }
+
+    public onReset(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_RESET, action);
+    }
+
+    public onSubmit(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_SUBMIT, action);
     }
 }

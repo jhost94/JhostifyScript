@@ -1,7 +1,6 @@
-class ExceptionConstants {
+export default class ExceptionConstants {
     public static readonly CODE = {
-        BASE: "00000001"
+        BASE: "00000001",
+        NOT_IMPLMENTED: "00000002"
     }
 }
-
-export default ExceptionConstants;

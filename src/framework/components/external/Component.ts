@@ -21,12 +21,42 @@ import Random from "../../../utils/Random";
 import { Color } from "../style/Color";
 import Style from "../style/Style";
 import { 
-    EVENT_ON_BLUR 
+    EVENT_ON_BLUR, 
+    EVENT_ON_CHANGE, 
+    EVENT_ON_CLICK,
+    EVENT_ON_CONTEXT_MENU,
+    EVENT_ON_COPY,
+    EVENT_ON_CUT,
+    EVENT_ON_DOUBLE_CLICK,
+    EVENT_ON_DRAG,
+    EVENT_ON_DRAG_END,
+    EVENT_ON_DRAG_ENTER,
+    EVENT_ON_DRAG_LEAVE,
+    EVENT_ON_DRAG_OVER,
+    EVENT_ON_DRAG_START,
+    EVENT_ON_DROP,
+    EVENT_ON_FOCUS,
+    EVENT_ON_INPUT,
+    EVENT_ON_INVALID,
+    EVENT_ON_KEY_DOWN,
+    EVENT_ON_KEY_PRESS,
+    EVENT_ON_KEY_UP,
+    EVENT_ON_MOUSE_DOWN,
+    EVENT_ON_MOUSE_MOVE,
+    EVENT_ON_MOUSE_OUT,
+    EVENT_ON_MOUSE_OVER,
+    EVENT_ON_MOUSE_UP,
+    EVENT_ON_MOUSE_WHEEL,
+    EVENT_ON_PASTE,
+    EVENT_ON_SCROLL,
+    EVENT_ON_SELECT,
+    EVENT_ON_WHEEL
 } from "../../constants/OnEvents";
+import { OnEventType } from "./OnEvent";
 
 export default class Component implements ID {
     protected _attributes: Map<string, string>;
-    protected _onEvents: Map<string, (e: any) => void>;
+    protected _onEvents: Map<OnEventType, (e: any) => void>;
     protected _children: Component[];
     protected _style: Style;
     protected _content?: string;
@@ -56,7 +86,7 @@ export default class Component implements ID {
     }
 
     //TODO: redo/fix this
-    private setElementEvent(el: Element, scriptElement: Element): Element {
+    private setElementEvent(el: Element): Element {
         // const se = (scriptElement as HTMLElement);
         // let it = se.innerText;
         // this._onEvents.forEach((v, k) => {
@@ -77,9 +107,9 @@ export default class Component implements ID {
         return this._attributes.get(key);
     }
 
-    public build(el: Element, scriptElement: Element): Element {
+    public build(el: Element): Element {
         el = this.setElementAttr(el);
-        el = this.setElementEvent(el, scriptElement);
+        el = this.setElementEvent(el);
         return el;
     }
 
@@ -166,6 +196,130 @@ export default class Component implements ID {
     public translate(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_TRANSLATE, attr);
     }
+
+    public onBlur(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_BLUR, action);
+    }
+
+    public onChange(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_CHANGE, action);
+    }
+
+    public onClick(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_CLICK, action);
+    }
+
+    public onContextMenu(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_CONTEXT_MENU, action);
+    }
+
+    public onCopy(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_COPY, action);
+    }
+
+    public onCut(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_CUT, action);
+    }
+
+    public onDoubleClick(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_DOUBLE_CLICK, action);
+    }
+
+    public onDblClick(action: (e: any) => void): void {
+        this.onDoubleClick(action);
+    }
+
+    public onDrag(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_DRAG, action);
+    }
+
+    public onDragEnd(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_DRAG_END, action);
+    }
+
+    public onDragEnter(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_DRAG_ENTER, action);
+    }
+
+    public onDragLeave(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_DRAG_LEAVE, action);
+    }
+
+    public onDragOver(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_DRAG_OVER, action);
+    }
+
+    public onDragStart(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_DRAG_START, action);
+    }
+
+    public onDrop(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_DROP, action);
+    }
+
+    public onFocus(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_FOCUS, action);
+    }
+
+    public onInput(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_INPUT, action);
+    }
+
+    public onInvalid(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_INVALID, action);
+    }
+
+    public onKeyDown(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_KEY_DOWN, action);
+    }
+
+    public onKeyPress(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_KEY_PRESS, action);
+    }
+
+    public onKeyUp(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_KEY_UP, action);
+    }
+
+    public onMouseDown(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_MOUSE_DOWN, action);
+    }
+
+    public onMouseMove(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_MOUSE_MOVE, action);
+    }
+
+    public onMouseOut(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_MOUSE_OUT, action);
+    }
+
+    public onMouseOver(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_MOUSE_OVER, action);
+    }
+
+    public onMouseUp(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_MOUSE_UP, action);
+    }
+
+    public onMouseWheel(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_MOUSE_WHEEL, action);
+    }
+
+    public onPaste(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_PASTE, action);
+    }
+
+    public onScroll(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_SCROLL, action);
+    }
+
+    public onSelect(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_SELECT, action);
+    }
+
+    public onWheel(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_WHEEL, action);
+    }
     
     public getId(): string {
         return this.id;
@@ -174,6 +328,10 @@ export default class Component implements ID {
     public getName(): string {
         return this._name;
     }
+
+    public getOnEvents(): Map<OnEventType, (e: any) => void> {
+        return this._onEvents;
+    }
 }
 
 export interface ComponentOptions {
@@ -181,5 +339,5 @@ export interface ComponentOptions {
     attributes?: Map<string, string>;
     children?: Component[];
     style?: Style;
-    onEvents: Map<string, (e: any) => void>
+    onEvents: Map<OnEventType, (e: any) => void>
 }
