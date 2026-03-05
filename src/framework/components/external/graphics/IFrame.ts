@@ -1,4 +1,7 @@
 import { 
+    EVENT_ON_LOAD 
+} from "../../../constants/OnEvents";
+import { 
     ATTR_HEIGHT, 
     ATTR_NAME, 
     ATTR_SANDBOX,
@@ -36,5 +39,9 @@ export default class IFrame extends Component{
 
     public width(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_WIDTH, attr);
+    }
+
+    public onLoad(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_LOAD, action);
     }
 }

@@ -2,6 +2,7 @@ import Objects from "src/utils/Objects.js";
 import PageLocation from "./PageLocation.js";
 import Route from "./Route.js";
 import Routes from "./Routes.js";
+import Context from "../Context.js";
 
 export default class Router {
     private interval: number = 0;
@@ -65,6 +66,7 @@ export default class Router {
         const route = this.internalRoutes.getRoutes().get(id);
         if (!route) throw "This route does not exist. TODO FIX EXCEPTION";
         this.navigation.pushState({}, route?.getPage().getName(), route.url());
+        Context.renderCurrentPage(); //TODO: this sort of works, but it keeps the previous css. Fix this
     }
 
     private navigateExternal(id: string): void {
@@ -115,7 +117,7 @@ export default class Router {
 }
 
 export interface NavigationOption {
-    type: NavigationType | undefined,
+    type?: NavigationType | undefined,
     id: string
 }
 

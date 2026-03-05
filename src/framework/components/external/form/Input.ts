@@ -1,4 +1,8 @@
 import { 
+    EVENT_ON_LOAD, 
+    EVENT_ON_SEARCH
+} from "src/framework/constants/OnEvents";
+import { 
     ATTR_ACCEPT, 
     ATTR_ALT, 
     ATTR_AUTO_COMPLETE,
@@ -146,5 +150,13 @@ export default class Input extends Component{
 
     public width(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_WIDTH, attr);
+    }
+
+    public onLoad(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_LOAD, action);
+    }
+
+    public onSearch(action: (e: any) => void): void {
+        this._onEvents.set(EVENT_ON_SEARCH, action);
     }
 }

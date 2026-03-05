@@ -11,7 +11,7 @@ import {
 } from "../../../constants/Attributes";
 import Component from "../Component";
 
-export default class Button extends Component{
+export default class Button extends Component {
     
     constructor() {
         super("button");
