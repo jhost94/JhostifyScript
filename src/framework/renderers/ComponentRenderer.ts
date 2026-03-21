@@ -11,10 +11,10 @@ export default class ComponentRenderer {
         if (at) {
             const el = Context.elementBuilder().getElementById(at.getId());
             if (!el) throw `Component ${at} is given but not registered.`;
-            Logger.log('DEBUG', ["Rendering component: ", component, " at: ", el]);
+            // Logger.log('DEBUG', ["Rendering component: ", component, " at: ", el]);
             Renderer.renderAt(component.get(), el);
         } else {
-            Logger.log('DEBUG', ["Rendering component: ", component, " at: ", this.re]);
+            // Logger.log('DEBUG', ["Rendering component: ", component, " at: ", this.re]);
             Renderer.renderAt(component.get(), this.re);
         }
 

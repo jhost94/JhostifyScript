@@ -1,51 +1,152 @@
 
 export default class Css {
+    private data: Map<string, string> = new Map();
 
-    constructor(private internalCss: string = '', private isScss: boolean = false) {
-        if (isScss) {
-            this.processScss();
+    constructor(private internalCss: string = '', private options: CssOptions = {
+        isScss: false,
+        isPage: false
+    }) {
+        if (options) {
+            if (options.isScss) this.processScss();
+        }
+        if (internalCss && internalCss.trim().length > 0) {
+            this.deserialize();
         }
     }
+
+    public static class(clazz: string): string {
+        return `.${clazz}`;
+    }
+
+    public static element(element: string): string {
+        return element;
+    }
+
+    public static id(id: string): string {
+        return `#${id}`;
+    }
+
+    public static decendent(parent: string, child: string): string {
+        return `${parent} ${child}`;
+    }
+
+    public static combined(parent: string, child: string): string {
+        return `${parent}${child}`;
+    }
+
+    public static directChild(parent: string, child: string): string {
+        return `${parent} > ${child}`;
+    }
+
+    public static adjacentSibling(parent: string, child: string): string {
+        return `${parent} + ${child}`;
+    }
+
+    public static generalSibling(parent: string, child: string): string {
+        return `${parent} ~ ${child}`;
+    }
+
 
     private processScss() {
         throw "Sass/SCSS is not yet implemented";
     }
 
-    public getCss(): string {
+    /**
+     * Convert data into string
+     */
+    public serialize(minimize: boolean = false): Css {
+        this.internalCss = '';
+        this.data.forEach((v, k) => {
+            if (minimize) {
+                this.internalCss += `${k}{${v.replace(/\s+/g, "")}} `;
+            } else {
+                this.internalCss += `${k} {
+                    ${v}
+                    }
+                    `;
+                }
+            });
+        return this;
+    }
+
+    /**
+     * Basic Selectors
+     */
+
+    public class(clazz: string, value: string): Css {
+        return this.set(Css.class(clazz), value);
+    }
+
+    public element(element: string, value: string): Css {
+        return this.set(Css.element(element), value);
+    }
+
+    public id(id: string, value: string): Css {
+        return this.set(Css.id(id), value);
+    }
+
+    /**
+     * Combinators (Relationships)
+     * Usage:
+     * @method combinator(Css.decendent(Css.class("slide"), Css.element("div")), "background-color: black");
+     */
+    public combinator(relation: string, value: string): Css {
+        return this.set(relation, value);
+    }
+
+    public group(selectors: string[], value: string): Css {
+        return this.set(selectors.reduce((p, c) => `${p}, ${c}`), value);
+    }
+
+    public all(value: string): Css {
+        if (this.options.isPage) return this.set("*", value);
+        throw "This is not a page, cannot set css for all"
+    }
+
+    /**
+     * Same as @method all
+     */
+    public universal(value: string): Css {
+        return this.all(value);
+    }
+
+    public hover(selector: string, value: string): Css {
+        return this.set(`${selector}:hover`, value);
+    }
+
+    private set(key: string, value: string): Css {
+        this.data.set(key, value);
+        return this;
+    }
+
+    /**
+     * Convert string into data
+     */
+    private deserialize(): Css {
+        //TODO: do
+        return this;
+    }
+
+    public getCss(doSerialize: boolean = false): string {
+        if (doSerialize) this.serialize();
         return this.internalCss;
     }
 
     /**
+     * Add another CSS to this one
+     */
+    public concat(css: Css): Css {
+        console.log("Concatinating ", css, "with", this)
+        css.data.forEach((v, k) => {
+            if (!this.data.has(k)) this.data.set(k, v);
+        });
+        return this;
+    }
+
+
+    /**
      * Long list of concerns got from GPT:
      * 
-     🧠 1. Selector Types (Core of Everything)
-     These are the ways elements are targeted.
-
-     Basic Selectors
-        - Element: div, p, img
-        - Class: .carousel
-        - ID: #main
-
-    Combinators (Relationships)
-    * These define structure:
-
-        - Descendant:
-            - ex: .carousel .slide
-        - Direct child:
-            - ex: .carousel > .slide
-        - Adjacent sibling:
-            - ex: .slide + .slide
-        - General sibling:
-            - ex: .slide ~ .slide
-        
-    Multiple selectors (grouping)
-        - ex: .carousel, .slider, .gallery { ... }
-
-    Universal selector
-        - ex: * { ... }
-    ⚠️ Special handling required in scoped systems.
-
-
      * 🧬 2. Attribute Selectors
         - ex: 
             input[type="text"]
@@ -227,4 +328,9 @@ export default class Css {
         Later rules override earlier ones.
         Your system must preserve order.
      */
+}
+
+export interface CssOptions {
+    isScss: boolean;
+    isPage: boolean;
 }

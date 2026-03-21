@@ -83,7 +83,8 @@ export default class ComponentBuilder {
         const element = component.build(this.elementBuilder.createElement(component.getName()));
         const components: InternalComponent[] = [];
         if (component.children() && component.children().length > 0) {
-            components.push(...component.children().map(c => this.build(c)))
+            components.push(...component.children().map(c => this.build(c)));
+            components.forEach(c => component.css().concat(c.getCss()));
         }
         const content = component.content();
         const color = component.color();
@@ -299,6 +300,6 @@ export default class ComponentBuilder {
                 }
             });
         }
-        return new InternalComponent(element, component.getName(), component.getId(), components);
+        return new InternalComponent(element, component.getName(), component.getId(), components, component.css());
     }
 }
