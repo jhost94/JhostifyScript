@@ -111,6 +111,10 @@ export default class Component implements ID {
         return this._attributes.get(key);
     }
 
+    protected uniqueCssClass(className: string): string {
+        return `${className}_${this.getId()}`;
+    }
+
     public build(el: Element): Element {
         el = this.setElementAttr(el);
         el = this.setElementEvent(el);

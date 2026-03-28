@@ -15,7 +15,7 @@ export default class Carousel extends Component {
 
     private controller: CarouselControler;
 
-    constructor(items: CarouselItem[] = []) {
+    constructor(items: CarouselItem[] = [], private options?: CarouselOptions) {
         super("div");
 
         this.cssClass(this.carouselCssClass());
@@ -33,11 +33,11 @@ export default class Carousel extends Component {
         dots.cssClass(this.carouselDotsCssClass());
         dots.children(components.dots);
 
-        arrowL.content("❮");
+        arrowL.content(this.getOption("leftArrow"));
         arrowL.cssClass(`${this.carouselArrowCssClass()} ${this.carouselLeftCssClass()}`);
         arrowL.onClick(() => this.controller.moveSlide(-1));
 
-        arrowR.content("❯");
+        arrowR.content(this.getOption("rightArrow"));
         arrowR.cssClass(`${this.carouselArrowCssClass()} ${this.carouselRightCssClass()}`);
         arrowR.onClick(() => this.controller.moveSlide(1));
 
@@ -56,7 +56,7 @@ export default class Carousel extends Component {
     height: 220px;
     overflow: hidden;
     border-radius: 12px;
-    background: #2a2a40;`)
+    background: ${this.getOption("backgroundColor")};`)
         .class(this.carouselTrackCssClass(), `display: flex;
     transition: transform 0.5s ease-in-out;
     height: 100%;`)
@@ -66,13 +66,13 @@ export default class Carousel extends Component {
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    color: #ccc;`)
+    color: ${this.getOption("slideTextColor")};`)
         .class(this.carouselArrowCssClass(), `position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(20, 20, 34, 0.7);
+    background: ${this.getOption("arrowBackgroundColor")};
     border: none;
-    color: #b084ff;
+    color: ${this.getOption("arrowTextColor")};
     font-size: 22px;
     padding: 10px;
     cursor: pointer;
@@ -86,13 +86,13 @@ export default class Carousel extends Component {
     width: 8px;
     height: 8px;
     margin: 0 5px;
-    background: #555;
+    background: ${this.getOption("dotsBackgroundColor")};
     border-radius: 50%;
     cursor: pointer;`)
-        .combinator(Css.decendent(Css.class(this.carouselDotsCssClass()), Css.class(this.carouselAvtiveCssClass())), `background: #b084ff;`)
+        .combinator(Css.decendent(Css.class(this.carouselDotsCssClass()), Css.class(this.carouselAvtiveCssClass())), `background: ${this.getOption("activeDotsBackgroundColor")};`)
         .combinator(Css.combined(Css.class(this.carouselArrowCssClass()), Css.class(this.carouselLeftCssClass())), `left: 10px;`)
         .combinator(Css.combined(Css.class(this.carouselArrowCssClass()), Css.class(this.carouselRightCssClass())), `right: 10px;`)
-        .hover(Css.class(this.carouselArrowCssClass()), `background: rgba(128, 0, 255, 0.4);`);
+        .hover(Css.class(this.carouselArrowCssClass()), `background: ${this.getOption("arrowHoverBackgroundColor")};`);
     }
 
     private createItemsDots(items: CarouselItem[]): ItemsDots {
@@ -116,36 +116,42 @@ export default class Carousel extends Component {
         }
     }
 
+    private getOption(opt: keyof CarouselOptions) {
+        return this.options ? 
+            this.options[opt] ?? defaultOptions[opt]
+            : defaultOptions[opt];
+    }
+
     public carouselCssClass(): string {
-        return `${Carousel.CAROUSEL_CSS_CLASS}_${this.getId()}`;
+        return this.uniqueCssClass(Carousel.CAROUSEL_CSS_CLASS);
     }
 
     public carouselTrackCssClass(): string {
-        return `${Carousel.CAROUSEL_TRACK_CSS_CLASS}_${this.getId()}`;
+        return this.uniqueCssClass(Carousel.CAROUSEL_TRACK_CSS_CLASS);
     }
 
     public carouselDotsCssClass(): string {
-        return `${Carousel.CAROUSEL_DOTS_CSS_CLASS}_${this.getId()}`;
+        return this.uniqueCssClass(Carousel.CAROUSEL_DOTS_CSS_CLASS);
     }
 
     public carouselArrowCssClass(): string {
-        return `${Carousel.CAROUSEL_ARROW_CSS_CLASS}_${this.getId()}`;
+        return this.uniqueCssClass(Carousel.CAROUSEL_ARROW_CSS_CLASS);
     }
 
     public carouselLeftCssClass(): string {
-        return `${Carousel.CAROUSEL_LEFT_CSS_CLASS}_${this.getId()}`;
+        return this.uniqueCssClass(Carousel.CAROUSEL_LEFT_CSS_CLASS);
     }
 
     public carouselRightCssClass(): string {
-        return `${Carousel.CAROUSEL_RIGHT_CSS_CLASS}_${this.getId()}`;
+        return this.uniqueCssClass(Carousel.CAROUSEL_RIGHT_CSS_CLASS);
     }
 
     public carouselSlideCssClass(): string {
-        return `${Carousel.CAROUSEL_SLIDE_CSS_CLASS}_${this.getId()}`;
+        return this.uniqueCssClass(Carousel.CAROUSEL_SLIDE_CSS_CLASS);
     }
 
     public carouselAvtiveCssClass(): string {
-        return `${Carousel.CAROUSEL_ACTIVE_CSS_CLASS}_${this.getId()}`;
+        return this.uniqueCssClass(Carousel.CAROUSEL_ACTIVE_CSS_CLASS);
     }
 }
 
@@ -194,10 +200,32 @@ class CarouselControler {
 
     public moveSlide(direction: number) {
         this.index += direction;
-
         if (this.index < 0) this.index = this.components.items.length - 1;
         if (this.index >= this.components.items.length) this.index = 0;
-
         this.updateCarousel();
     }
+}
+
+export interface CarouselOptions {
+    leftArrow?: string;
+    rightArrow?: string;
+    backgroundColor?: string;
+    slideTextColor?: string;
+    arrowBackgroundColor?: string;
+    arrowTextColor?: string;
+    dotsBackgroundColor?: string;
+    activeDotsBackgroundColor?: string;
+    arrowHoverBackgroundColor?: string;
+}
+
+const defaultOptions: CarouselOptions = {
+    leftArrow: "❮",
+    rightArrow: "❯",
+    backgroundColor: "#2a2a40",
+    slideTextColor: "#ccc",
+    arrowBackgroundColor: "rgba(20, 20, 34, 0.7)",
+    arrowTextColor: "#b084ff",
+    dotsBackgroundColor: "#555",
+    activeDotsBackgroundColor: "#b084ff",
+    arrowHoverBackgroundColor: "rgba(128, 0, 255, 0.4)"
 }
