@@ -46,6 +46,77 @@ export default class Css {
         return `${parent} ~ ${child}`;
     }
 
+    public static hover(selector: string): string {
+        return `${selector}:hover`;
+    }
+
+    public static active(selector: string): string {
+        return `${selector}:active`;
+    }
+
+    public static focus(selector: string): string {
+        return `${selector}:focus`;
+    }
+
+    public static visited(selector: string): string {
+        return `${selector}:visited`;
+    }
+
+    public static firstChild(selector: string): string {
+        return `${selector}:first-child`;
+    }
+
+    public static lastChild(selector: string): string {
+        return `${selector}:last-child`;
+    }
+
+    public static nthChild(selector: string, number: number): string {
+        return `${selector}:nth-child(${number})`;
+    }
+    
+    public static nthOfType(selector: string, number: number): string {
+        return `${selector}:nth-of-type(${number})`;
+    }
+    
+    public static onlyChild(selector: string): string {
+        return `${selector}:only-child`;
+    }
+
+    public static not(element: string, selector: string): string {
+        return `${element}:not(${selector})`;
+    }
+
+    public static is(element: string, selector: string): string {
+        return `${element}:is(${selector})`;
+    }
+
+    public static where(element: string, selector: string): string {
+        return `${element}:where(${selector})`;
+    }
+
+    public static has(element: string, selector: string): string {
+        return `${element}:has(${selector})`;
+    }
+
+    public static before(selector: string): string {
+        return `${selector}::before`;
+    }
+
+    public static after(selector: string): string {
+        return `${selector}::after`;
+    }
+
+    public static placeholder(selector: string): string {
+        return `${selector}::placeholder`;
+    }
+
+    public static marker(selector: string): string {
+        return `${selector}::marker`;
+    }
+
+    public static selection(selector: string): string {
+        return `${selector}::selection`;
+    }
 
     private processScss() {
         throw "Sass/SCSS is not yet implemented";
@@ -111,12 +182,146 @@ export default class Css {
     }
 
     public hover(selector: string, value: string): Css {
-        return this.set(`${selector}:hover`, value);
+        return this.set(Css.hover(selector), value);
+    }
+
+    public active(selector: string, value: string): Css {
+        return this.set(Css.active(selector), value);
+    }
+
+    public focus(selector: string, value: string): Css {
+        return this.set(Css.focus(selector), value);
+    }
+
+    public visited(selector: string, value: string): Css {
+        return this.set(Css.visited(selector), value);
+    }
+
+    public firstChild(selector: string, value: string): Css {
+        return this.set(Css.firstChild(selector), value);
+    }
+
+    public lastChild(selector: string, value: string): Css {
+        return this.set(Css.lastChild(selector), value);
+    }
+
+    public nthChild(selector: string, number: number, value: string): Css {
+        return this.set(Css.nthChild(selector, number), value);
+    }
+    
+    public nthOfType(selector: string, number: number, value: string): Css {
+        return this.set(Css.nthOfType(selector, number), value);
+    }
+    
+    public onlyChild(selector: string, value: string): Css {
+        return this.set(Css.onlyChild(selector), value);
+    }
+
+    public not(element: string, selector: string, value: string): Css {
+        return this.set(Css.not(element, selector), value);
+    }
+
+    public is(element: string, selector: string, value: string): Css {
+        return this.set(Css.is(element, selector), value);
+    }
+
+    public where(element: string, selector: string, value: string): Css {
+        return this.set(Css.where(element, selector), value);
+    }
+
+    public has(element: string, selector: string, value: string): Css {
+        return this.set(Css.has(element, selector), value);
+    }
+
+
+    /**
+     * Attribute Selectors
+        - ex: 
+            input[type="text"]
+            div[data-id="123"]
+            a[href^="https"]
+            img[src$=".png"]
+
+        Variants:
+            [attr]
+            [attr=value]
+            [attr^=value] (starts with)
+            [attr$=value] (ends with)
+            [attr*=value] (contains)
+     * @param element The element to point to, example a, div, span, input, img, etc
+     * @param attribute The specific attribute, example src for img, type for input, etc
+     * @param value The CSS value
+     * @param attributeValue Attribute value, such as the source for the src, etc
+     * @param variant Attribute Selectors can accept exact value, starts with, ends with and contains. By default is exact value
+     */
+    public attribute(element: string, attribute: string, value: string, attributeValue?: string, variant: CssAttributeVariantType = "DEFAULT", caseSensitive?: "case-sensitive" | "case-insensitive") {
+        if (attributeValue) {
+            const key: string = caseSensitive ?
+                `${Css.element(element)}[${attribute}${this.attributeValue(variant)}"${attributeValue}" ${this.attributeCaseSensitivity(caseSensitive)}]`
+                : `${Css.element(element)}[${attribute}${this.attributeValue(variant)}"${attributeValue}"]`;
+            this.set(key, value);
+        } else {
+            this.set(`${Css.element(element)}[${attribute}]`, value);
+        }
+    }
+
+    public before(selector: string, value: string): Css {
+        return this.set(Css.before(selector), value);
+    }
+
+    public after(selector: string, value: string): Css {
+        return this.set(Css.after(selector), value);
+    }
+
+    public placeholder(selector: string, value: string): Css {
+        return this.set(Css.placeholder(selector), value);
+    }
+
+    public marker(selector: string, value: string): Css {
+        return this.set(Css.marker(selector), value);
+    }
+
+    public selection(selector: string, value: string): Css {
+        return this.set(Css.selection(selector), value);
+    }
+
+    public html(value: string): Css {
+        return this.set("html", value);
+    }
+
+    public body(value: string): Css {
+        return this.set("body", value);
+    }
+
+    public root(value: string): Css {
+        return this.set(":root", value);
     }
 
     private set(key: string, value: string): Css {
         this.data.set(key, value);
         return this;
+    }
+
+    private attributeValue(variant: CssAttributeVariantType): string {
+        switch (variant) {
+            case 'CONTAINS':
+                return "*=";
+            case 'ENDS_WITH':
+                return "$=";
+            case 'STARTS_WITH':
+                return "^";
+            default:
+                return "=";
+        }
+    }
+
+    private attributeCaseSensitivity(caseSensitive: "case-sensitive" | "case-insensitive"): string {
+        switch (caseSensitive) {
+            case 'case-sensitive':
+                return "s";
+            case 'case-insensitive':
+                return "i";
+        }
     }
 
     /**
@@ -145,55 +350,9 @@ export default class Css {
 
 
     /**
-     * Long list of concerns got from GPT:
+     * TODO:
+     * Implement missing features
      * 
-     * 🧬 2. Attribute Selectors
-        - ex: 
-            input[type="text"]
-            div[data-id="123"]
-            a[href^="https"]
-            img[src$=".png"]
-
-        Variants:
-            [attr]
-            [attr=value]
-            [attr^=value] (starts with)
-            [attr$=value] (ends with)
-            [attr*=value] (contains)
-
-    
-     * 🎭 3. Pseudo-Classes (State-Based)
-    * These are dynamic or structural.
-        - Interaction
-            - :hover
-            - :active
-            - :focus
-            - :visited
-        - Structural
-            - :first-child
-            - :last-child
-            - :nth-child(n)
-            - :nth-of-type(n)
-            - :only-child
-        - Logical / advanced
-            - :not(selector)
-            - :is(selector)
-            - :where(selector)
-            - :has(selector) ⚠️ very important & complex
-        Ex: 
-            div:not(.active)
-            div:has(img)
-        
-
-         * 🧪 4. Pseudo-Elements
-        These create virtual elements:
-            - ::before
-            - ::after
-            - ::placeholder
-            - ::marker
-            - ::selection
-        Ex: .button::before { ... }
-
      
      * 🧩 5. Selector Nesting (Important for Parsing)
         Even if you don’t support it now, users may expect:
@@ -205,16 +364,7 @@ export default class Css {
 
         This is not native CSS (yet widely), but tools support it.
         You may ignore for now, but be aware.
-
      
-     * 🌍 6. Global / Root-Level Selectors
-        These are special:
-            - html
-            - body
-            - :root
-        ⚠️ These should NOT be scoped like normal selectors.
-    
-
      * 📐 7. At-Rules (VERY Important)
         These are not selectors, but wrappers.
 
@@ -236,17 +386,6 @@ export default class Css {
             @supports (display: grid) {
                 ...
             }
-    
-
-     * 🎯 8. Specificity Rules (CRITICAL)
-        CSS has priority rules:
-            ID > Class > Element
-        ex: 
-            #id { }        // highest
-            .class { }
-            div { }        // lowest
-        Your system must not accidentally break specificity when scoping.
-
     
      * 🔗 9. Chained Selectors
         ex: div.carousel.active[data-x="1"]:hover
@@ -312,21 +451,6 @@ export default class Css {
             color: var(--main-color);
         }
 
-
-
-     * 🔁 15. Inheritance
-        Some properties inherit:
-            - color ✅
-            - font-family ✅
-            - margin ❌
-        Important for cross-platform later.
-    
-
-
-     * 🧠 16. Order Matters
-        CSS is order-dependent:
-        Later rules override earlier ones.
-        Your system must preserve order.
      */
 }
 
@@ -334,3 +458,5 @@ export interface CssOptions {
     isScss: boolean;
     isPage: boolean;
 }
+
+export type CssAttributeVariantType = "DEFAULT" | "STARTS_WITH" | "ENDS_WITH" | "CONTAINS";

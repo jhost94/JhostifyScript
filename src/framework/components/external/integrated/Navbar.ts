@@ -80,7 +80,8 @@ export default class Navbar extends Aside {
     position: fixed;
     transition: width 0.3s ease;
     overflow: hidden;
-    border-right: 1px solid #2c2c44;`)
+    border-right: 1px solid #2c2c44;
+    z-index: 9000;`)
         .combinator(Css.combined(Css.class(this.navbarCssClass()), Css.class(this.navbarExpandedCssClass())), `width: 220px;`)
         .class(this.navbarHeaderCssClass(), `display: flex;
     align-items: center;
