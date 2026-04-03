@@ -53,12 +53,14 @@ import {
     EVENT_ON_WHEEL
 } from "../../constants/OnEvents";
 import { OnEventType } from "./OnEvent";
+import Css from "./Css";
 
 export default class Component implements ID {
     protected _attributes: Map<string, string>;
     protected _onEvents: Map<OnEventType, (e: any) => void>;
     protected _children: Component[];
     protected _style: Style;
+    protected _css: Css;
     protected _content?: string;
 
     // TODO! IMPORTANT!!!! SOME TAGS HAVE UNIQUE ATTRIBUTES, MAKE THE BUILD AND RENDER TO BE COMPONENT DEFINED AND CREATE A SIMPLE WAY TO IMPLEMENT SO USER CAN IMPLEMENT AS EASY AS POSSIBLE!!!
@@ -69,11 +71,13 @@ export default class Component implements ID {
             this._content = options.content;
             this._style = options.style ?? {};
             this._onEvents = options.onEvents ?? new Map();
+            this._css = options.css ?? new Css('', {isPage: false, isScss: false});
         } else {
             this._children = [];
             this._attributes = new Map();
             this._style = {};
             this._onEvents = new Map();
+            this._css = new Css('', {isPage: false, isScss: false});
         }
     }
 
@@ -105,6 +109,10 @@ export default class Component implements ID {
     protected setAttrAndReturn(key: string, attr?: string): string | undefined {
         if (attr) this._attributes.set(key, attr);
         return this._attributes.get(key);
+    }
+
+    protected uniqueCssClass(className: string): string {
+        return `${className}_${this.getId()}`;
     }
 
     public build(el: Element): Element {
@@ -139,6 +147,13 @@ export default class Component implements ID {
 
     public cssClass(attr?: string): string | undefined {
         return this.setAttrAndReturn(ATTR_CLASS, attr);
+    }
+
+    public css(css?: Css): Css {
+        if (css) {
+            this._css = css;
+        }
+        return this._css;
     }
 
     public contentEditable(attr?: string): string | undefined {
@@ -339,5 +354,6 @@ export interface ComponentOptions {
     attributes?: Map<string, string>;
     children?: Component[];
     style?: Style;
+    css?: Css;
     onEvents: Map<OnEventType, (e: any) => void>
 }

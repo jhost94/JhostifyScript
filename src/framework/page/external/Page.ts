@@ -26,9 +26,9 @@ class Page implements ID {
     protected _attributes: Map<string, string>;
 
     constructor(
-        protected name: string = '', 
+        protected name: string, 
         protected components: Component[] = [], 
-        protected css: Css = new Css(),
+        protected css: Css = new Css('', {isScss: false, isPage: true}),
         private id: string = Random.randomUUID()
     ) {
         this._attributes = new Map();

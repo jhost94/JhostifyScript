@@ -9,10 +9,16 @@ class PageBuilder {
 
     public build(page: Page): InternalPage {
         const element: Element = page.build(this.elementBuilder.createElement(page.getName()));
+        let cssParsed = page.getCssParsed();
         const components = page.getComponents()
-            .map(c => this.componentBuilder.build(c));
+            .map(c => {
+                const ic = this.componentBuilder.build(c);
+                console.log("Getting css for: ", ic.getCss())
+                cssParsed += ic.getCss().serialize().getCss();
+                return ic;
+            });
         const css = this.elementBuilder.createElement("style");
-        (css as HTMLElement).innerText = page.getCssParsed();
+        (css as HTMLElement).innerText = cssParsed;
         return new InternalPage(element, page.getName(), components, page.getId(), page.getOnRender(), new InternalCss(css));
     }
 }
