@@ -1,3 +1,5 @@
+import ComponentBuilder from "../builders/ComponentBuilder";
+import Component from "../components/external/Component";
 import InternalComponent from "../components/internal/InternalComponent";
 import Context from "../Context";
 import Logger from "../debug/Logger";
@@ -27,12 +29,40 @@ export default class ComponentRenderer {
         Renderer.refreshAt(this.re);
     }
 
-    public static rerender(component: InternalComponent): void {
-        Renderer.rerenderAt(component.get(), this.re);
+    public static rerender(component: InternalComponent, at?: ID): void {
+        if (at) {
+            const el = Context.elementBuilder().getElementById(at.getId());
+            if (!el) throw `Component ${at.getId()} is given but not registered.`;
+            // Logger.log('DEBUG', ["Rendering component: ", component, " at: ", el]);
+            Renderer.rerenderAt(component.get(), el);
+        } else {
+            // Logger.log('DEBUG', ["Rendering component: ", component, " at: ", this.re]);
+            Renderer.rerenderAt(component.get(), this.re);
+        }
+
+        if (component.hasChildren()) {
+            component.children().forEach(c => ComponentRenderer.render(c, component));
+        }
     }
 
     public static setRootElement(el: Element): Element {
         this.re = el;
         return this.re;
+    }
+
+    public static renderChildren(component: Component, doRefresh: boolean = true): void {
+        const inC = Context.getComponentBuilder().build(component);
+        console.log("Rerendering", inC)
+        const el = Context.elementBuilder().getElementById(inC.getId());
+        if (!el) throw `Component ${inC.getId()} is given but not registered.`;
+        if (doRefresh) {
+            Renderer.refreshAt(el);
+        }
+        inC.children().forEach(c => {
+            Renderer.renderAt(c.get(), el);
+            if (c.hasChildren()) {
+                c.children().forEach(c0 => ComponentRenderer.render(c0, c));
+            }
+        });
     }
 }

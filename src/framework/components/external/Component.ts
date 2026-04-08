@@ -54,6 +54,8 @@ import {
 } from "../../constants/OnEvents";
 import { OnEventType } from "./OnEvent";
 import Css from "./Css";
+import ComponentRenderer from "../../renderers/ComponentRenderer";
+import Logger from "src/framework/debug/Logger";
 
 export default class Component implements ID {
     protected _attributes: Map<string, string>;
@@ -346,6 +348,28 @@ export default class Component implements ID {
 
     public getOnEvents(): Map<OnEventType, (e: any) => void> {
         return this._onEvents;
+    }
+
+    public async loadChildrenAsync(body: Promise<any> | Promise<[any]>, 
+                                         mapper: (b: any) => Component, 
+                                         showLoading: boolean = false, 
+                                         loadingBody?: Component | any): Promise<void> {
+        if (showLoading) {
+            if (!loadingBody) throw "If showLoading is set to true, loadingBody is required";
+            if (loadingBody instanceof Component) {
+                this.children([loadingBody]);
+            } else {
+                this.children([mapper(loadingBody)]);
+            }
+        }
+
+        const cb = await body;
+        if (Array.isArray(cb)) {
+            this.children(cb.map((c: any) => mapper(c)));
+        } else {
+            this.children([mapper(cb)]);
+        }
+        ComponentRenderer.renderChildren(this);
     }
 }
 

@@ -45,7 +45,7 @@ export default class Initializer {
         Context.init(this.buildContextConfig());
         this.addPagesByRoutes();
         Context.runStartupActions();
-        this.renderCurrentPage();
+        Context.renderCurrentPage();
     }
 
     public static running(): boolean {
@@ -68,10 +68,6 @@ export default class Initializer {
             defaultPageName:this.configuration.getConfig().defaultPageName
         };
     }
-
-    private static renderCurrentPage(): void {
-        Context.renderCurrentPage();
-    } 
 
     private static addPagesByRoutes(): void {
         PageRenderer.page("/", this.configuration.get("defaultPage") as InternalPage);

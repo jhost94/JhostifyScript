@@ -16,7 +16,7 @@ export default class Context {
     private static contextRouter: Router;
     private static contextPageRenderer: PageRenderer;
     private static contextElementRenderer: ElementRenderer;
-    private static contextSystem: ContextSystem;
+    private static contextSystem: ContextSystem = this.initSystem();
     private static pageBuilder: PageBuilder;
     private static componentBuilder: ComponentBuilder;
     private static _elementBuilder: ElementVendor;
@@ -40,7 +40,6 @@ export default class Context {
     }
 
     public static system(): ContextSystem {
-        this.isContextLoaded();
         return this.contextSystem;
     }
 
@@ -108,18 +107,22 @@ export default class Context {
         this.startUpActions.forEach(a => a());
     }
 
-    private static initSystem(): void {
-        this.contextSystem = {
+    private static initSystem(): ContextSystem {
+        return {
             repeat: function(miliseconds: number, action: () => void): NodeJS.Timer {
                 return setInterval(action, miliseconds);
             },
-            wait: function(miliseconds: number, action: () => void): NodeJS.Timer {
+            waitFor: function(miliseconds: number, action: () => void): NodeJS.Timer {
                 return setTimeout(action, miliseconds);
+            },
+            wait: function(miliseconds: number): Promise<void> {
+                return new Promise(resolve => setTimeout(resolve, miliseconds));
             }
         };
 
-        this.rootElement().addEventListener(EventConstants.LOCATION_CHANGE, ev => this.renderCurrentPage());
+        // this.rootElement().addEventListener(EventConstants.LOCATION_CHANGE, ev => this.renderCurrentPage());
     }
+
 
     //TODO: FIX
     //at the moment it's just adding to the current page. fix it, but keep the functionality for the future.
@@ -151,5 +154,6 @@ export interface ContextConfig {
 
 interface ContextSystem {
     repeat: (miliseconds: number, action: () => void) => NodeJS.Timer;
-    wait: (miliseconds: number, action: () => void) => NodeJS.Timer;
+    waitFor: (miliseconds: number, action: () => void) => NodeJS.Timer;
+    wait: (miliseconds: number) => Promise<unknown>;
 }

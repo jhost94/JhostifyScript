@@ -341,7 +341,6 @@ export default class Css {
      * Add another CSS to this one
      */
     public concat(css: Css): Css {
-        console.log("Concatinating ", css, "with", this)
         css.data.forEach((v, k) => {
             if (!this.data.has(k)) this.data.set(k, v);
         });
