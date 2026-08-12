@@ -1,18 +1,16 @@
 {
     "name": "@jhub-center/jhostify-script",
-    "version": "0.8.0",
+    "version": "0.9.0",
     "description": "The frontend framework to reduce the use of HTML to none, and be able to use configuration to build the whole website. Made for the JHub project",
-    "main": "index.js",
-    "types": "index.d.ts",
     "scripts": {
         "clean": "rm -rf ./dist",
         "pre_build_amd": "tsc -p tsconfigAMD.json",
         "pre_build_normal": "tsc -p tsconfig.json",
-        "pre_build": "npm run pre_build_amd && npm run pre_build_normal",
-        "adjust": "cp package.json ./dist/ && cp .npmrc ./dist/ && cp README.md ./dist/ && cp LICENSE ./dist/ && node cleanse-pkg.js",
+        "pre_build": "npm run pre_build_normal",
+        "adjust": "cp package.json ./dist/ && cp .npmrc ./dist/ && cp README.md ./dist/ && cp LICENSE ./dist/ && node fix-imports.js && node generate-exports.js",
         "add_missing_files": "cp -r ./src/bin ./dist/ && cp -r ./src/scripts ./dist/",
         "build": "npm run clean && npm run pre_build && npm run adjust && npm run add_missing_files",
-        "test": "npm run build && cd dist && npm pack && mv *.tgz ../../../test/JHub_Frontend_test/ && cd .."
+        "test": "npm run build && cd dist && npm pack && mv *.tgz ../../JHub_Frontend/ && cd .."
     },
     "bin": {
         "jhost": "bin/jhost.js"
@@ -67,12 +65,11 @@
     },
     "homepage": "https://github.com/jhost94/JhostifyScript#readme",
     "dependencies": {
-        "requirejs": "^2.3.7",
         "tslib": "^2.5.2"
     },
     "devDependencies": {
-        "@types/node": "^16.7.13",
+        "@types/node": "^26.2.0",
         "tslib": "^2.5.2",
-        "typescript": "^4.4.2"
+        "typescript": "^6.0.2"
     }
 }

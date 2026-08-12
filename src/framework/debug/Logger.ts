@@ -1,4 +1,4 @@
-import Objects from "src/utils/Objects";
+import Objects from "../../utils/Objects";
 
 
 class Logger {

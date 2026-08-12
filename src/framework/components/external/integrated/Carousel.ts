@@ -10,13 +10,13 @@ export default class Carousel extends Component {
     public static readonly CAROUSEL_ARROW_CSS_CLASS: string = "jhostify-carousel-arrow";
     public static readonly CAROUSEL_LEFT_CSS_CLASS: string = "jhostify-carousel-left";
     public static readonly CAROUSEL_RIGHT_CSS_CLASS: string = "jhostify-carousel-right";
-    public static readonly CAROUSEL_SLIDE_CSS_CLASS: string = "jhostify-carousel-slide"
-    public static readonly CAROUSEL_ACTIVE_CSS_CLASS: string = "jhostify-carousel-active"
+    public static readonly CAROUSEL_SLIDE_CSS_CLASS: string = "jhostify-carousel-slide";
+    public static readonly CAROUSEL_ACTIVE_CSS_CLASS: string = "jhostify-carousel-active";
 
     private controller: CarouselControler;
 
     constructor(items: CarouselItem[] = [], private options?: CarouselOptions) {
-        super("div");
+        super(Div.TAG);
 
         this.cssClass(this.carouselCssClass());
         const components = this.createItemsDots(items);
@@ -166,7 +166,7 @@ export interface CarouselItem {
 
 class CarouselControler {
     private index: number = 0;
-    private intervalId: NodeJS.Timer;
+    private intervalId: number;
     
     constructor(private track: Div, private components: ItemsDots, private cssDotsClass: string, private activeClass: string) {
         // Auto-slide (optional)
@@ -192,7 +192,7 @@ class CarouselControler {
         this.updateCarousel();
     }
 
-    private autoMoveSlide(ms: number = 5000): NodeJS.Timer {
+    private autoMoveSlide(ms: number = 5000): number {
         return setInterval(() => {
             this.moveSlide(1);
         }, ms);

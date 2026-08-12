@@ -110,10 +110,10 @@ export default class Context {
 
     private static initSystem(): void {
         this.contextSystem = {
-            repeat: function(miliseconds: number, action: () => void): NodeJS.Timer {
+            repeat: function(miliseconds: number, action: () => void): number {
                 return setInterval(action, miliseconds);
             },
-            wait: function(miliseconds: number, action: () => void): NodeJS.Timer {
+            wait: function(miliseconds: number, action: () => void): number {
                 return setTimeout(action, miliseconds);
             }
         };
@@ -150,6 +150,6 @@ export interface ContextConfig {
 }
 
 interface ContextSystem {
-    repeat: (miliseconds: number, action: () => void) => NodeJS.Timer;
-    wait: (miliseconds: number, action: () => void) => NodeJS.Timer;
+    repeat: (miliseconds: number, action: () => void) => number;
+    wait: (miliseconds: number, action: () => void) => number;
 }

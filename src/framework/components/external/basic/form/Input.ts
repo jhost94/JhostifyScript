@@ -1,7 +1,7 @@
 import { 
     EVENT_ON_LOAD, 
     EVENT_ON_SEARCH
-} from "src/framework/constants/OnEvents";
+} from "../../../../constants/OnEvents";
 import { 
     ATTR_ACCEPT, 
     ATTR_ALT, 

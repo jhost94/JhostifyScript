@@ -8,7 +8,7 @@ import {
     ATTR_REL,
     ATTR_SHAPE,
     ATTR_TARGET
-} from "src/framework/constants/Attributes";
+} from "../../../../constants/Attributes";
 import Component from "../../Component";
 
 export default class Area extends Component{
