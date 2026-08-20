@@ -1,7 +1,6 @@
 import ComponentBuilder from "./builders/ComponentBuilder";
 import PageBuilder from "./builders/PageBuilder";
 import Component from "./components/external/Component";
-import EventConstants from "./constants/EventConstants";
 import ExceptionConstants from "./exceptions/ExceptionConstants";
 import GenericException from "./exceptions/GenericException";
 import ElementRenderer from "./renderers/ElementRenderer";
@@ -22,6 +21,7 @@ export default class Context {
     private static _elementBuilder: ElementVendor;
     private static startUpActions: (() => void)[] = [];
     private static defaultPageName: string;
+    private static currentPageBeingRendered: string;
 
 
     public static router(): Router {
@@ -129,6 +129,10 @@ export default class Context {
     public static renderCurrentPage(): void {
         const currentPath = this.router().getCurrentPageLocation().getPath();
         const routeId = this.router().findRouteIdByPath(currentPath);
+        if (this.currentPageBeingRendered && this.currentPageBeingRendered === routeId) {
+            console.log(`============================== Page: ${routeId} is already being rendered`);
+            return;
+        }
         console.log("rendering current page", currentPath, routeId);
         if (routeId) {
             this.renderPage(routeId);

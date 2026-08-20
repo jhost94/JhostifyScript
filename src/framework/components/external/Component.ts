@@ -55,7 +55,6 @@ import {
 import { OnEventType } from "./OnEvent";
 import Css from "./Css";
 import ComponentRenderer from "../../renderers/ComponentRenderer";
-import Logger from "src/framework/debug/Logger";
 
 export default class Component implements ID {
     protected _attributes: Map<string, string>;

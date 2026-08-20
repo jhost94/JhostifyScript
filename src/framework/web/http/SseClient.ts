@@ -1,9 +1,13 @@
 import HttpClient, { RequestOptions } from "./HttpClient";
 
-export default class SseClient extends HttpClient {
-    private customEvents: Map<string, (ev: SseMessageEvent) => any> = new Map();
+export default class SseClient<D = string, I = string> extends HttpClient {
+    private customEvents: Map<string, (ev: SseMessageEvent<D, I>) => any> = new Map();
     private reader?: ReadableStreamReader<any>;
-    
+    private stop: boolean = false;
+
+    constructor(private parse: boolean = false) {
+        super();
+    }
 
     private onCustomEvent(event: SseMessageEvent): void {
         const action = this.customEvents.get(event.id);
@@ -12,9 +16,9 @@ export default class SseClient extends HttpClient {
         }
     }
 
-    public onMessage: ((this: SseClient, ev: SseMessageEvent) => any) | null = e => {};
-    public onOpen: ((this: SseClient, ev: SseMessageEvent) => any) | null = e => {};
-    public onError: ((this: SseClient, ev: SseMessageEvent) => any) | null = e => {};
+    public onMessage: ((this: SseClient<D, I>, ev: SseMessageEvent<D, I>) => any) | null = e => {};
+    public onOpen: ((this: SseClient<D, I>, ev: SseMessageEvent<D, I>) => any) | null = e => {};
+    public onError: ((this: SseClient<D, I>, ev: SseMessageEvent<D, I>) => any) | null = e => {};
 
     public async connect(url: string, requestOptions?: RequestOptions) {
         const response = await this.coreRequest(url, requestOptions);
@@ -22,10 +26,9 @@ export default class SseClient extends HttpClient {
         if (!response.body) throw `Body was not found on response: ${response}`;
         this.reader = response.body.getReader();
         const decoder = new TextDecoder("utf-8");
-
         let buffer: string = "";
 
-        while (true) {
+        while (!this.stop) {
             const { done, value } = await this.reader.read();
 
             if (done) break;
@@ -54,6 +57,9 @@ export default class SseClient extends HttpClient {
                     }
                 }
 
+                if (this.parse && event.data) event.data = JSON.parse(event.data);
+                if (this.parse && event.id) event.id = JSON.parse(event.id);
+
                 switch(event.type) {
                     case "message":
                         if (this.onMessage) this.onMessage(event);
@@ -69,19 +75,22 @@ export default class SseClient extends HttpClient {
                 }
             }
         }
+
+        this.reader.releaseLock();
     }
 
-    public addEventListener(event: string, action: (this: SseClient, ev: SseMessageEvent) => any): void {
+    public addEventListener(event: string, action: (this: SseClient, ev: SseMessageEvent<D, I>) => any): void {
         this.customEvents.set(event, action);
     }
 
-    public async close(reason: any): Promise<void> {
+    public async close(reason?: any): Promise<void> {
+        this.stop = true;
         return this.reader?.cancel(reason);
     }
 }
 
-export interface SseMessageEvent<T = any, ID = any> {
+export interface SseMessageEvent<D = any, I = any> {
     type: string;
-    data: T;
-    id: ID;
+    data: D;
+    id: I;
 }
