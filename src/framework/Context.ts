@@ -107,16 +107,16 @@ export default class Context {
         this.startUpActions.forEach(a => a());
     }
 
-    private static initSystem(): ContextSystem {
-        return {
-            repeat: function(miliseconds: number, action: () => void): NodeJS.Timer {
+    private static initSystem(): void {
+        this.contextSystem = {
+            repeat: function(miliseconds: number, action: () => void): number {
                 return setInterval(action, miliseconds);
             },
-            waitFor: function(miliseconds: number, action: () => void): NodeJS.Timer {
+            waitFor: function(miliseconds: number, action: () => void): number {
                 return setTimeout(action, miliseconds);
             },
-            wait: function(miliseconds: number): Promise<void> {
-                return new Promise(resolve => setTimeout(resolve, miliseconds));
+            wait: function(miliseconds: number, action: () => void): number {
+                return setTimeout(action, miliseconds);
             }
         };
 
@@ -157,7 +157,7 @@ export interface ContextConfig {
 }
 
 interface ContextSystem {
-    repeat: (miliseconds: number, action: () => void) => NodeJS.Timer;
-    waitFor: (miliseconds: number, action: () => void) => NodeJS.Timer;
-    wait: (miliseconds: number) => Promise<unknown>;
+    repeat: (miliseconds: number, action: () => void) => number;
+    waitFor: (miliseconds: number, action: () => void) => number;
+    wait: (miliseconds: number, action: () => void) => number;
 }

@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
@@ -10,13 +9,12 @@
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2017",
-    "module": "ESNext",
-    "declarationDir": "./dist",
+    "module": "esnext",
+    "rootDir": "./src",
     "outDir": "./dist",
     "lib": [
       "es2018",

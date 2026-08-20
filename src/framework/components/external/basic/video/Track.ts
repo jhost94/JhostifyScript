@@ -1,13 +1,11 @@
 import { 
-    EVENT_ON_CUE_CHANGE 
-} from "src/framework/constants/OnEvents";
-import { 
     ATTR_DEFAULT, 
     ATTR_KIND, 
     ATTR_LABEL, 
     ATTR_SRC,
     ATTR_SRC_LANG
 } from "../../../../constants/Attributes";
+import { EVENT_ON_CUE_CHANGE } from "../../../../constants/OnEvents";
 import Component from "../../Component";
 
 export default class Track extends Component{

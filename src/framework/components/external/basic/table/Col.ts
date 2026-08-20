@@ -1,4 +1,4 @@
-import { ATTR_SPAN } from "src/framework/constants/Attributes";
+import { ATTR_SPAN } from "../../../../constants/Attributes";
 import Component from "../../Component";
 
 export default class Col extends Component{

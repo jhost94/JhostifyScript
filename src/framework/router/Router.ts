@@ -1,8 +1,8 @@
-import Objects from "src/utils/Objects.js";
 import PageLocation from "./PageLocation.js";
 import Route from "./Route.js";
 import Routes from "./Routes.js";
 import Context from "../Context.js";
+import Objects from "../../utils/Objects.js";
 
 export default class Router {
     private interval: number = 0;

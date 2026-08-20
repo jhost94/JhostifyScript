@@ -11,11 +11,13 @@ const FAMEWORK_CONFIG_FILE = "jhostconfig.json";
 const NOT_ALLOWED_CHARACTERS = " ";
 const FRAMEWORK_CONFIG_FIELDS = [ 
     [ "appName", "string" ],
-    [ "htmlEntry", "string" ]
+    [ "htmlEntry", "string" ],
+    [ "outFile", "string" ]
 ];
 const FRAMEWORK_DEFAULT_CONFIG = {
     appName: "jhostify",
-    htmlEntry: "index.html"
+    htmlEntry: "index.html",
+    outFile: "./dist/index.js"
 };
 
 let options;
@@ -35,10 +37,6 @@ function buildFrontend() {
 
     const config = JSON.parse(configStr);
 
-    if (!config.compilerOptions.outFile) {
-        throw "No outFile configured";
-    }
-
     const frameworkConfigStr = getFrameWorkConfig(projDir);
     let frameworkConfig;
     if (frameworkConfigStr) {
@@ -50,9 +48,15 @@ function buildFrontend() {
         frameworkConfig = applyFrameworkConfigDefaults(frameworkConfig);
         log({msg: ["Framework config: ", frameworkConfig], level: 'DEBUG'});
     }
+    
+    const outFileStr = frameworkConfig.outFile;
+    
+    if (!outFileStr) {
+        throw "No outFile configured";
+    }
 
-    const destDir = path.resolve(projDir, normalizePath(path.dirname(config.compilerOptions.outFile)));
-    const destFile = path.resolve(destDir, normalizePath(path.basename(config.compilerOptions.outFile)));
+    const destDir = path.resolve(projDir, normalizePath(path.dirname(outFileStr)));
+    const destFile = path.resolve(destDir, normalizePath(path.basename(outFileStr)));
 
     // 1. Compile frontend entry with tsc
     console.log("📦 Compiling TypeScript...");

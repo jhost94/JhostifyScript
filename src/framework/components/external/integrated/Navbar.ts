@@ -1,4 +1,5 @@
-import PageRenderer from "src/framework/renderers/PageRenderer";
+import Context from "../../../Context";
+import PageRenderer from "../../../renderers/PageRenderer";
 import Button from "../basic/form/Button";
 import Aside from "../basic/formatting/Aside";
 import Div from "../basic/formatting/Div";
@@ -6,7 +7,6 @@ import Nav from "../basic/formatting/Nav";
 import Span from "../basic/formatting/Span";
 import Img from "../basic/graphics/Img";
 import A from "../basic/link/A";
-import Context from "src/framework/Context";
 import Css from "../Css";
 
 export default class Navbar extends Aside {

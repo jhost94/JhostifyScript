@@ -1,4 +1,4 @@
-import { ATTR_HEIGHT, ATTR_WIDTH } from "src/framework/constants/Attributes";
+import { ATTR_HEIGHT, ATTR_WIDTH } from "../../../../constants/Attributes";
 import Component from "../../Component";
 
 export default class Canvas extends Component{
