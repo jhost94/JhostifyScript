@@ -15,7 +15,7 @@ export default class Context {
     private static contextRouter: Router;
     private static contextPageRenderer: PageRenderer;
     private static contextElementRenderer: ElementRenderer;
-    private static contextSystem: ContextSystem = this.initSystem();
+    private static contextSystem: ContextSystem;
     private static pageBuilder: PageBuilder;
     private static componentBuilder: ComponentBuilder;
     private static _elementBuilder: ElementVendor;
@@ -115,8 +115,8 @@ export default class Context {
             waitFor: function(miliseconds: number, action: () => void): number {
                 return setTimeout(action, miliseconds);
             },
-            wait: function(miliseconds: number, action: () => void): number {
-                return setTimeout(action, miliseconds);
+            wait: function(miliseconds: number): Promise<void> {
+                return new Promise(resolve => setTimeout(resolve, miliseconds));
             }
         };
 
@@ -159,5 +159,5 @@ export interface ContextConfig {
 interface ContextSystem {
     repeat: (miliseconds: number, action: () => void) => number;
     waitFor: (miliseconds: number, action: () => void) => number;
-    wait: (miliseconds: number, action: () => void) => number;
+    wait: (miliseconds: number) => Promise<void>;
 }

@@ -36,7 +36,7 @@ export default class WebsocketClient extends HttpClient {
         }
     }
 
-    public send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
+    public send(data: string | Blob | BufferSource): void {
         if (!this.isConnected) throw "Web Socket is not connected";
         this.webSocket?.send(data);
     }
