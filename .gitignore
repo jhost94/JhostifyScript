@@ -45,3 +45,5 @@ testem.log
 Thumbs.db
 
 package-lock.json
+ssh_key
+ssh_key.pub
