@@ -1,8 +1,9 @@
-import Component from "../../Component";
+import Random from "../../../../../utils/Random";
+import Component, { ComponentOptions } from "../../Component";
 
 export default class Section extends Component{
     
-    constructor() {
-        super("section");
+    constructor(id: string = Random.randomUUID(), options?: ComponentOptions) {
+        super("section", options, id);
     }
 }

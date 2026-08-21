@@ -10,9 +10,11 @@ import {
 import Component from "../../Component";
 
 export default class A extends Component{
+
+    public static readonly TAG: string = "a";
     
     constructor() {
-        super("a");
+        super(A.TAG);
     }
 
     public download(attr?: string): string | undefined {
