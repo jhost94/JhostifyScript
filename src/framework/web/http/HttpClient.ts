@@ -208,7 +208,28 @@ export default class HttpClient {
     }
 
     protected async coreRequest(url: string, requestOptions?: RequestOptions): Promise<Response> {
-        return await fetch(this.resolveParams(url, requestOptions?.params), requestOptions);
+        const headersFinal: Record<any, string> = {};
+
+        requestOptions?.headers?.forEach((v, k) => {
+            headersFinal[k] = v;
+        });
+        
+        const requestOptionsFinal: RequestInit = {
+            body: requestOptions?.body,
+            cache: requestOptions?.cache,
+            credentials: requestOptions?.credentials,
+            headers: headersFinal,
+            integrity: requestOptions?.integrity,
+            keepalive: requestOptions?.keepalive,
+            method: requestOptions?.method,
+            mode: requestOptions?.mode,
+            redirect: requestOptions?.redirect,
+            referrer: requestOptions?.referrer,
+            referrerPolicy: requestOptions?.referrerPolicy,
+            signal: requestOptions?.signal,
+            window: requestOptions?.window
+        };
+        return await fetch(this.resolveParams(url, requestOptions?.params), requestOptionsFinal);
     }
 
 }
@@ -224,7 +245,7 @@ export interface RequestOptions {
     body?: BodyInit | null;
     cache?: RequestCache;
     credentials?: RequestCredentials;
-    headers?: HeadersInit;
+    headers?: Map<string, string>;
     integrity?: string
     keepalive?: boolean;
     method?: RestMethod;
