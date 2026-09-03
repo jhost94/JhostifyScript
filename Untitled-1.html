@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>API Documentation</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        /* ---------------------------------------------------------
+           Layout
+           --------------------------------------------------------- */
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #202124;
+            color: white;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .content {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+            padding: 40px;
+            max-width: 1400px;
+        }
+
+        /* ---------------------------------------------------------
+           Sidebar
+           --------------------------------------------------------- */
+
+        .sidebar-title {
+            padding: 0 24px 20px;
+            border-bottom: 1px solid #3c4043;
+        }
+
+        .sidebar-title h1 {
+            font-size: 20px;
+            margin: 0 0 5px;
+        }
+
+        .sidebar-title span {
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        .tag-navigation {
+            padding-top: 10px;
+        }
+
+        .tag-link {
+            display: block;
+            padding: 10px 24px;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .tag-link:hover {
+            background: #303134;
+            color: white;
+        }
+
+        /* ---------------------------------------------------------
+           Service header
+           --------------------------------------------------------- */
+
+        .service {
+            margin-bottom: 50px;
+        }
+
+        .service h1 {
+            font-size: 36px;
+            margin: 0 0 10px;
+        }
+
+        .service-description {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .version {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #e8e8e8;
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* ---------------------------------------------------------
+           Tags
+           --------------------------------------------------------- */
+
+        .tag-section {
+            margin-bottom: 50px;
+            scroll-margin-top: 30px;
+        }
+
+        .tag-title {
+            font-size: 26px;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tag-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* ---------------------------------------------------------
+           Endpoint
+           --------------------------------------------------------- */
+
+        .endpoint {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            cursor: pointer;
+        }
+
+        .endpoint-header:hover {
+            background: #fafafa;
+        }
+
+        .method {
+            width: 70px;
+            padding: 5px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            margin-right: 15px;
+        }
+
+        .method-get {
+            background: #4caf50;
+        }
+
+        .method-post {
+            background: #2196f3;
+        }
+
+        .method-put {
+            background: #ff9800;
+        }
+
+        .method-patch {
+            background: #9c27b0;
+        }
+
+        .method-delete {
+            background: #f44336;
+        }
+
+        .method-head,
+        .method-options {
+            background: #607d8b;
+        }
+
+        .path {
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .summary {
+            margin-left: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .arrow {
+            margin-left: auto;
+            color: #888;
+        }
+
+        /* ---------------------------------------------------------
+           Endpoint body
+           --------------------------------------------------------- */
+
+        .endpoint-body {
+            display: none;
+            border-top: 1px solid #ddd;
+            padding: 20px;
+        }
+
+        .endpoint.open .endpoint-body {
+            display: block;
+        }
+
+        .description {
+            margin-bottom: 25px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-top: 25px;
+        }
+
+        .section h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        /* ---------------------------------------------------------
+           Parameters
+           --------------------------------------------------------- */
+
+        .parameter {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            padding: 12px;
+        }
+
+        .parameter-name {
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .parameter-location {
+            color: #777;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .required {
+            color: #d32f2f;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .parameter-description {
+            margin-top: 7px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        /* ---------------------------------------------------------
+           Responses
+           --------------------------------------------------------- */
+
+        .response {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .response-header {
+            padding: 10px 12px;
+            background: #f7f7f7;
+        }
+
+        .status-code {
+            font-family: monospace;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .response-description {
+            color: #666;
+        }
+
+        .response-body {
+            padding: 12px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* ---------------------------------------------------------
+           Code / JSON
+           --------------------------------------------------------- */
+
+        pre {
+            background: #1e1e1e;
+            color: #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+
+        code {
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        /* ---------------------------------------------------------
+           Schema
+           --------------------------------------------------------- */
+
+        .schema {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .schema-property {
+            padding: 4px 0;
+        }
+
+        .schema-name {
+            color: #1565c0;
+        }
+
+        .schema-type {
+            color: #777;
+        }
+
+        /* ---------------------------------------------------------
+           Responsive
+           --------------------------------------------------------- */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .endpoint-header {
+                flex-wrap: wrap;
+            }
+
+            .summary {
+                width: 100%;
+                margin-left: 85px;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            <h1 id="sidebar-title">API</h1>
+            <span id="sidebar-version"></span>
+        </div>
+
+        <nav id="tag-navigation" class="tag-navigation"></nav>
+
+    </aside>
+
+
+    <main class="content">
+
+        <section class="service">
+
+            <h1 id="service-title">API Documentation</h1>
+
+            <div id="service-description"
+                 class="service-description">
+            </div>
+
+            <span id="service-version" class="version"></span>
+
+        </section>
+
+        <div id="documentation"></div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    /*
+     * ============================================================
+     * Configuration
+     * ============================================================
+     *
+     * Eventually this can simply be:
+     *
+     *     loadOpenApi("/openapi.json");
+     *
+     */
+
+    const OPENAPI_URL = "https://app.jhub.center/v3/api-docs";
+
+
+    /*
+     * ============================================================
+     * Application
+     * ============================================================
+     */
+
+    async function loadOpenApi(url) {
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(
+                `Could not load OpenAPI document: ${response.status}`
+            );
+        }
+
+        const openApi = await response.json();
+
+        renderDocumentation(openApi);
+    }
+
+
+    function renderDocumentation(api) {
+
+        renderService(api);
+
+        const tags = buildTags(api);
+
+        renderNavigation(tags);
+
+        renderTags(api, tags);
+    }
+
+
+    /*
+     * ============================================================
+     * Service
+     * ============================================================
+     */
+
+    function renderService(api) {
+
+        document.title =
+            api.info?.title ?? "API Documentation";
+
+        document.getElementById("service-title").textContent =
+            api.info?.title ?? "API Documentation";
+
+        document.getElementById("sidebar-title").textContent =
+            api.info?.title ?? "API";
+
+        document.getElementById("service-description").textContent =
+            api.info?.description ?? "";
+
+        document.getElementById("service-version").textContent =
+            `Version ${api.info?.version ?? "unknown"}`;
+
+        document.getElementById("sidebar-version").textContent =
+            api.info?.version ?? "";
+    }
+
+
+    /*
+     * ============================================================
+     * Tags
+     * ============================================================
+     */
+
+    function buildTags(api) {
+
+        const tags = {};
+
+        /*
+         * Explicit OpenAPI tags
+         */
+        for (const tag of api.tags ?? []) {
+
+            tags[tag.name] = {
+                name: tag.name,
+                description: tag.description ?? "",
+                operations: []
+            };
+        }
+
+
+        /*
+         * Operations
+         */
+        for (const [path, pathItem] of Object.entries(api.paths ?? {})) {
+
+            for (const [method, operation] of Object.entries(pathItem)) {
+
+                if (!isHttpMethod(method)) {
+                    continue;
+                }
+
+                const operationTags =
+                    operation.tags?.length
+                        ? operation.tags
+                        : ["default"];
+
+
+                for (const tagName of operationTags) {
+
+                    if (!tags[tagName]) {
+
+                        tags[tagName] = {
+                            name: tagName,
+                            description: "",
+                            operations: []
+                        };
+                    }
+
+                    tags[tagName].operations.push({
+                        path,
+                        method: method.toUpperCase(),
+                        operation
+                    });
+                }
+            }
+        }
+
+        return Object.values(tags);
+    }
+
+
+    function isHttpMethod(method) {
+
+        return [
+            "get",
+            "post",
+            "put",
+            "patch",
+            "delete",
+            "head",
+            "options",
+            "trace"
+        ].includes(method.toLowerCase());
+    }
+
+
+    /*
+     * ============================================================
+     * Navigation
+     * ============================================================
+     */
+
+    function renderNavigation(tags) {
+
+        const navigation =
+            document.getElementById("tag-navigation");
+
+        navigation.innerHTML = "";
+
+        for (const tag of tags) {
+
+            const link = document.createElement("a");
+
+            link.className = "tag-link";
+            link.href = `#tag-${slugify(tag.name)}`;
+            link.textContent = tag.name;
+
+            navigation.appendChild(link);
+        }
+    }
+
+
+    /*
+     * ============================================================
+     * Tag sections
+     * ============================================================
+     */
+
+    function renderTags(api, tags) {
+
+        const documentation =
+            document.getElementById("documentation");
+
+        documentation.innerHTML = "";
+
+        for (const tag of tags) {
+
+            const section =
+                document.createElement("section");
+
+            section.className = "tag-section";
+            section.id = `tag-${slugify(tag.name)}`;
+
+
+            const title =
+                document.createElement("h2");
+
+            title.className = "tag-title";
+            title.textContent = tag.name;
+
+            section.appendChild(title);
+
+
+            if (tag.description) {
+
+                const description =
+                    document.createElement("div");
+
+                description.className = "tag-description";
+                description.textContent = tag.description;
+
+                section.appendChild(description);
+            }
+
+
+            for (const endpoint of tag.operations) {
+
+                section.appendChild(
+                    renderEndpoint(api, endpoint)
+                );
+            }
+
+
+            documentation.appendChild(section);
+        }
+    }
+
+
+    /*
+     * ============================================================
+     * Endpoint
+     * ============================================================
+     */
+
+    function renderEndpoint(api, endpointData) {
+
+        const {
+            path,
+            method,
+            operation
+        } = endpointData;
+
+
+        const endpoint =
+            document.createElement("div");
+
+        endpoint.className = "endpoint";
+
+
+        /*
+         * Header
+         */
+
+        const header =
+            document.createElement("div");
+
+        header.className = "endpoint-header";
+
+
+        const methodElement =
+            document.createElement("span");
+
+        methodElement.className =
+            `method method-${method.toLowerCase()}`;
+
+        methodElement.textContent =
+            method;
+
+        header.appendChild(methodElement);
+
+
+        const pathElement =
+            document.createElement("span");
+
+        pathElement.className = "path";
+        pathElement.textContent = path;
+
+        header.appendChild(pathElement);
+
+
+        const summary =
+            document.createElement("span");
+
+        summary.className = "summary";
+
+        summary.textContent =
+            operation.summary ?? "";
+
+        header.appendChild(summary);
+
+
+        const arrow =
+            document.createElement("span");
+
+        arrow.className = "arrow";
+        arrow.textContent = "▼";
+
+        header.appendChild(arrow);
+
+
+        /*
+         * Body
+         */
+
+        const body =
+            document.createElement("div");
+
+        body.className = "endpoint-body";
+
+
+        /*
+         * Description
+         */
+
+        if (operation.description) {
+
+            const description =
+                document.createElement("div");
+
+            description.className = "description";
+            description.textContent =
+                operation.description;
+
+            body.appendChild(description);
+        }
+
+
+        /*
+         * Parameters
+         */
+
+        const parameters =
+            operation.parameters ?? [];
+
+        if (parameters.length > 0) {
+
+            const section =
+                createSection("Parameters");
+
+            for (const parameter of parameters) {
+
+                section.appendChild(
+                    renderParameter(parameter)
+                );
+            }
+
+            body.appendChild(section);
+        }
+
+
+        /*
+         * Request body
+         */
+
+        if (operation.requestBody) {
+
+            const section =
+                createSection("Request Body");
+
+            section.appendChild(
+                renderRequestBody(
+                    api,
+                    operation.requestBody
+                )
+            );
+
+            body.appendChild(section);
+        }
+
+
+        /*
+         * Responses
+         */
+
+        if (operation.responses) {
+
+            const section =
+                createSection("Responses");
+
+            for (
+                const [status, response]
+                of Object.entries(operation.responses)
+            ) {
+
+                section.appendChild(
+                    renderResponse(
+                        api,
+                        status,
+                        response
+                    )
+                );
+            }
+
+            body.appendChild(section);
+        }
+
+
+        endpoint.appendChild(header);
+        endpoint.appendChild(body);
+
+
+        /*
+         * Open / close endpoint
+         */
+
+        header.addEventListener("click", () => {
+
+            endpoint.classList.toggle("open");
+
+        });
+
+
+        return endpoint;
+    }
+
+
+    /*
+     * ============================================================
+     * Parameters
+     * ============================================================
+     */
+
+    function renderParameter(parameter) {
+
+        const element =
+            document.createElement("div");
+
+        element.className = "parameter";
+
+
+        const name =
+            document.createElement("span");
+
+        name.className = "parameter-name";
+        name.textContent = parameter.name;
+
+        element.appendChild(name);
+
+
+        const location =
+            document.createElement("span");
+
+        location.className = "parameter-location";
+        location.textContent =
+            parameter.in ?? "";
+
+        element.appendChild(location);
+
+
+        if (parameter.required) {
+
+            const required =
+                document.createElement("span");
+
+            required.className = "required";
+            required.textContent = "required";
+
+            element.appendChild(required);
+        }
+
+
+        if (parameter.description) {
+
+            const description =
+                document.createElement("div");
+
+            description.className =
+                "parameter-description";
+
+            description.textContent =
+                parameter.description;
+
+            element.appendChild(description);
+        }
+
+
+        if (parameter.schema) {
+
+            const schema =
+                document.createElement("div");
+
+            schema.className =
+                "parameter-description";
+
+            schema.textContent =
+                `Type: ${parameter.schema.type ?? "object"}`;
+
+            element.appendChild(schema);
+        }
+
+
+        return element;
+    }
+
+
+    /*
+     * ============================================================
+     * Request body
+     * ============================================================
+     */
+
+    function renderRequestBody(api, requestBody) {
+
+        const container =
+            document.createElement("div");
+
+
+        if (requestBody.description) {
+
+            const description =
+                document.createElement("p");
+
+            description.textContent =
+                requestBody.description;
+
+            container.appendChild(description);
+        }
+
+
+        const content =
+            requestBody.content ?? {};
+
+
+        for (const [mediaType, media] of Object.entries(content)) {
+
+            const title =
+                document.createElement("strong");
+
+            title.textContent =
+                mediaType;
+
+            container.appendChild(title);
+
+
+            if (media.schema) {
+
+                container.appendChild(
+                    renderSchema(api, media.schema)
+                );
+            }
+        }
+
+
+        return container;
+    }
+
+
+    /*
+     * ============================================================
+     * Responses
+     * ============================================================
+     */
+
+    function renderResponse(api, status, response) {
+
+        const element =
+            document.createElement("div");
+
+        element.className = "response";
+
+
+        const header =
+            document.createElement("div");
+
+        header.className =
+            "response-header";
+
+
+        const statusCode =
+            document.createElement("span");
+
+        statusCode.className =
+            "status-code";
+
+        statusCode.textContent =
+            status;
+
+        header.appendChild(statusCode);
+
+
+        const description =
+            document.createElement("span");
+
+        description.className =
+            "response-description";
+
+        description.textContent =
+            response.description ?? "";
+
+        header.appendChild(description);
+
+
+        element.appendChild(header);
+
+
+        /*
+         * Response content
+         */
+
+        if (response.content) {
+
+            const body =
+                document.createElement("div");
+
+            body.className =
+                "response-body";
+
+
+            for (
+                const [mediaType, media]
+                of Object.entries(response.content)
+            ) {
+
+                const type =
+                    document.createElement("div");
+
+                type.textContent =
+                    mediaType;
+
+                type.style.fontWeight =
+                    "bold";
+
+                body.appendChild(type);
+
+
+                if (media.schema) {
+
+                    body.appendChild(
+                        renderSchema(
+                            api,
+                            media.schema
+                        )
+                    );
+                }
+            }
+
+
+            element.appendChild(body);
+        }
+
+
+        return element;
+    }
+
+
+    /*
+     * ============================================================
+     * Schema
+     * ============================================================
+     */
+
+    function renderSchema(api, schema) {
+
+        const container =
+            document.createElement("div");
+
+        container.className =
+            "schema";
+
+
+        /*
+         * Resolve $ref
+         */
+
+        if (schema.$ref) {
+
+            const name =
+                schema.$ref.split("/").pop();
+
+            const resolved =
+                api.components?.schemas?.[name];
+
+            if (resolved) {
+
+                return renderSchema(api, resolved);
+            }
+
+            container.textContent =
+                `$ref: ${schema.$ref}`;
+
+            return container;
+        }
+
+
+        /*
+         * Primitive
+         */
+
+        if (schema.type !== "object") {
+
+            container.textContent =
+                schema.type ?? "unknown";
+
+            return container;
+        }
+
+
+        /*
+         * Object
+         */
+
+        for (
+            const [name, property]
+            of Object.entries(schema.properties ?? {})
+        ) {
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "schema-property";
+
+
+            const propertyName =
+                document.createElement("span");
+
+            propertyName.className =
+                "schema-name";
+
+            propertyName.textContent =
+                name;
+
+            row.appendChild(propertyName);
+
+
+            const propertyType =
+                document.createElement("span");
+
+            propertyType.className =
+                "schema-type";
+
+            propertyType.textContent =
+                ` : ${getSchemaType(property)}`;
+
+            row.appendChild(propertyType);
+
+
+            container.appendChild(row);
+        }
+
+
+        return container;
+    }
+
+
+    function getSchemaType(schema) {
+
+        if (schema.$ref) {
+
+            return schema.$ref.split("/").pop();
+        }
+
+        if (schema.type === "array") {
+
+            return `array<${getSchemaType(schema.items)}>`;
+        }
+
+        return schema.type ?? "unknown";
+    }
+
+
+    /*
+     * ============================================================
+     * Helpers
+     * ============================================================
+     */
+
+    function createSection(title) {
+
+        const section =
+            document.createElement("div");
+
+        section.className = "section";
+
+
+        const heading =
+            document.createElement("h3");
+
+        heading.textContent = title;
+
+        section.appendChild(heading);
+
+
+        return section;
+    }
+
+
+    function slugify(value) {
+
+        return value
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+    }
+
+
+    /*
+     * ============================================================
+     * Start
+     * ============================================================
+     */
+
+    loadOpenApi(OPENAPI_URL)
+        .catch(error => {
+
+            console.error(error);
+
+            document.getElementById("documentation")
+                .textContent =
+                    "Failed to load OpenAPI documentation.";
+        });
+
+</script>
+
+</body>
+</html>
