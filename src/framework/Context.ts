@@ -1,7 +1,6 @@
 import ComponentBuilder from "./builders/ComponentBuilder";
 import PageBuilder from "./builders/PageBuilder";
 import Component from "./components/external/Component";
-import EventConstants from "./constants/EventConstants";
 import ExceptionConstants from "./exceptions/ExceptionConstants";
 import GenericException from "./exceptions/GenericException";
 import ElementRenderer from "./renderers/ElementRenderer";
@@ -22,6 +21,7 @@ export default class Context {
     private static _elementBuilder: ElementVendor;
     private static startUpActions: (() => void)[] = [];
     private static defaultPageName: string;
+    private static currentPageBeingRendered: string;
 
 
     public static router(): Router {
@@ -40,7 +40,6 @@ export default class Context {
     }
 
     public static system(): ContextSystem {
-        this.isContextLoaded();
         return this.contextSystem;
     }
 
@@ -113,19 +112,27 @@ export default class Context {
             repeat: function(miliseconds: number, action: () => void): number {
                 return setInterval(action, miliseconds);
             },
-            wait: function(miliseconds: number, action: () => void): number {
+            waitFor: function(miliseconds: number, action: () => void): number {
                 return setTimeout(action, miliseconds);
+            },
+            wait: function(miliseconds: number): Promise<void> {
+                return new Promise(resolve => setTimeout(resolve, miliseconds));
             }
         };
 
-        this.rootElement().addEventListener(EventConstants.LOCATION_CHANGE, ev => this.renderCurrentPage());
+        // this.rootElement().addEventListener(EventConstants.LOCATION_CHANGE, ev => this.renderCurrentPage());
     }
+
 
     //TODO: FIX
     //at the moment it's just adding to the current page. fix it, but keep the functionality for the future.
     public static renderCurrentPage(): void {
         const currentPath = this.router().getCurrentPageLocation().getPath();
         const routeId = this.router().findRouteIdByPath(currentPath);
+        if (this.currentPageBeingRendered && this.currentPageBeingRendered === routeId) {
+            console.log(`============================== Page: ${routeId} is already being rendered`);
+            return;
+        }
         console.log("rendering current page", currentPath, routeId);
         if (routeId) {
             this.renderPage(routeId);
@@ -151,5 +158,6 @@ export interface ContextConfig {
 
 interface ContextSystem {
     repeat: (miliseconds: number, action: () => void) => number;
-    wait: (miliseconds: number, action: () => void) => number;
+    waitFor: (miliseconds: number, action: () => void) => number;
+    wait: (miliseconds: number) => Promise<void>;
 }

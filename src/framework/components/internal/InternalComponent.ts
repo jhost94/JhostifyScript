@@ -1,12 +1,13 @@
 import ID from "../../meta/ID";
 import Css from "../external/Css";
+import { OnEventType } from "../external/OnEvent";
 
 /**
  * This is going to be an internal only class, outside of the user's responsabilites, this is going to be created internally
  */
 export default class InternalComponent implements ID {
 
-    constructor(private element: Element, private name: string, private id: string, private components: InternalComponent[] = [], private css: Css) {
+    constructor(private element: Element, private name: string, private id: string, private components: InternalComponent[] = [], private css: Css, private onEvents: Map<OnEventType, (e: any) => void>) {
         element.id = id;
     }
 
@@ -28,5 +29,9 @@ export default class InternalComponent implements ID {
 
     public getCss(): Css {
         return this.css;
+    }
+
+    public getOnEvents(): Map<OnEventType, (e: any) => void> {
+        return this.onEvents;
     }
 }

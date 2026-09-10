@@ -13,7 +13,6 @@ class PageBuilder {
         const components = page.getComponents()
             .map(c => {
                 const ic = this.componentBuilder.build(c);
-                console.log("Getting css for: ", ic.getCss())
                 cssParsed += ic.getCss().serialize().getCss();
                 return ic;
             });

@@ -42,8 +42,8 @@ class Logger {
                 formating += 'color: red; '
                 break;
             case 'WARNING': 
-            formating += 'color: #CC7000; '
-            break;
+                formating += 'color: #CC7000; '
+                break;
         }
 
         return formating;
