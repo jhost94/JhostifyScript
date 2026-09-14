@@ -1,5 +1,5 @@
 import ID from "../../meta/ID";
-import Css from "../external/Css";
+import Css from "../style/Css";
 import { OnEventType } from "../external/OnEvent";
 
 /**

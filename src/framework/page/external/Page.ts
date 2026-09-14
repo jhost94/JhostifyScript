@@ -1,7 +1,7 @@
 import Component from "../../components/external/Component.js";
 import ID from "../../../framework/meta/ID.js";
 import Random from "../../../utils/Random.js";
-import Css from "../../components/external/Css.js";
+import Css from "../../components/style/Css.js";
 import { 
     ATTR_ACCESS_KEY,
     ATTR_CLASS,

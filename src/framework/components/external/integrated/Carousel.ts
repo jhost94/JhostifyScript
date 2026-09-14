@@ -1,7 +1,7 @@
 import Div from "../basic/formatting/Div";
 import Span from "../basic/formatting/Span";
 import Component from "../Component";
-import Css from "../Css";
+import Css from "../../style/Css";
 
 export default class Carousel extends Component {
     public static readonly CAROUSEL_CSS_CLASS: string = "jhostify-carousel";

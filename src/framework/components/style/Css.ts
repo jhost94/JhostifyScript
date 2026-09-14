@@ -1,3 +1,4 @@
+import Style from "./Style";
 
 export default class Css {
     private data: Map<string, string> = new Map();
@@ -297,6 +298,27 @@ export default class Css {
         return this.set(":root", value);
     }
 
+    public getCss(doSerialize: boolean = false): string {
+        if (doSerialize) this.serialize();
+        return this.internalCss;
+    }
+
+    /**
+     * Add another CSS to this one
+     */
+    public concat(css: Css): Css {
+        css.data.forEach((v, k) => {
+            if (!this.data.has(k)) this.data.set(k, v);
+        });
+        return this;
+    }
+
+    public style(style: Style): Css {
+        if (style.accent_color) 
+
+        return this;
+    }
+
     private set(key: string, value: string): Css {
         this.data.set(key, value);
         return this;
@@ -331,131 +353,13 @@ export default class Css {
         //TODO: do
         return this;
     }
-
-    public getCss(doSerialize: boolean = false): string {
-        if (doSerialize) this.serialize();
-        return this.internalCss;
-    }
-
-    /**
-     * Add another CSS to this one
-     */
-    public concat(css: Css): Css {
-        css.data.forEach((v, k) => {
-            if (!this.data.has(k)) this.data.set(k, v);
-        });
-        return this;
-    }
-
-
-    /**
-     * TODO:
-     * Implement missing features
-     * 
-     
-     * 🧩 5. Selector Nesting (Important for Parsing)
-        Even if you don’t support it now, users may expect:
-        .carousel {
-            .slide {
-                ...
-            }
-        }
-
-        This is not native CSS (yet widely), but tools support it.
-        You may ignore for now, but be aware.
-     
-     * 📐 7. At-Rules (VERY Important)
-        These are not selectors, but wrappers.
-
-        - Media Queries
-            @media (max-width: 768px) {
-                .carousel { ... }
-            }
-        - Keyframes (animations)
-            @keyframes slide {
-                from { ... }
-                to { ... }
-            }
-            ⚠️ Names must not collide → may need scoping too.
-        - Font Face
-            @font-face {
-               font-family: "MyFont";
-            }
-        - Supports
-            @supports (display: grid) {
-                ...
-            }
-    
-     * 🔗 9. Chained Selectors
-        ex: div.carousel.active[data-x="1"]:hover
-
-        These stack:
-            - element
-            - class
-            - attribute
-            - pseudo-class
-
-
-     * 🧠 10. Complex Selector Functions
-        These are tricky:
-            :not(.a, .b)
-            :is(.a, .b)
-            :where(.a, .b)
-            :has(.child)
-        They contain nested selectors inside selectors.
-
-    
-     * ⚠️ 11. Things That Break Naive Scoping
-        ❌ Global selectors
-            body { }
-            html { }
-            * { }
-        ❌ Root-relative logic
-            :root { }
-        ❌ Keyframes (name collisions)
-            @keyframes slide
-        ❌ :has()
-            div:has(.child)
-        ❌ Grouped selectors
-            .a, .b, .c
-        (each must be scoped individually)
-
-
-     * 🧱 12. CSS Properties (The Other Half)
-        Selectors are only half.
-        Properties include:
-            Layout: display, position, flex, grid
-                - Box model: margin, padding, border
-                - Typography: font, line-height
-                - Visual: background, color, box-shadow
-                - Animation: animation, transition
-                - 👉 You do NOT need to model all properties now
-                - Just allow key/value storage.
-    
-
-     * 🎯 13. Units & Values
-        10px
-        2rem
-        50%
-        calc(100% - 20px)
-        var(--color)
-    
-
-     * 🌱 14. CSS Variables (Custom Properties)
-        :root {
-            --main-color: red;
-        }
-
-        div {
-            color: var(--main-color);
-        }
-
-     */
 }
 
 export interface CssOptions {
-    isScss: boolean;
-    isPage: boolean;
+    isScss?: boolean;
+    isPage?: boolean;
+    minify?: boolean;
 }
 
 export type CssAttributeVariantType = "DEFAULT" | "STARTS_WITH" | "ENDS_WITH" | "CONTAINS";
+

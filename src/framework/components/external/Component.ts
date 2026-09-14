@@ -53,7 +53,7 @@ import {
     EVENT_ON_WHEEL
 } from "../../constants/OnEvents";
 import { OnEventType } from "./OnEvent";
-import Css from "./Css";
+import Css from "../style/Css";
 import ComponentRenderer from "../../renderers/ComponentRenderer";
 
 export default class Component implements ID {

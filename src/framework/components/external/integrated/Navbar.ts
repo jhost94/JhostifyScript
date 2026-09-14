@@ -7,7 +7,7 @@ import Nav from "../basic/formatting/Nav";
 import Span from "../basic/formatting/Span";
 import Img from "../basic/graphics/Img";
 import A from "../basic/link/A";
-import Css from "../Css";
+import Css from "../../style/Css";
 
 export default class Navbar extends Aside {
     public static readonly NAVBAR_CSS_CLASS: string = "jhostify-navbar";
