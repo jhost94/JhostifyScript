@@ -18,7 +18,6 @@ import {
 } from "../../constants/Attributes";
 import ID from "../../../framework/meta/ID";
 import Random from "../../../utils/Random";
-import { Color } from "../style/Color";
 import Style from "../style/Style";
 import { 
     EVENT_ON_BLUR, 
@@ -53,14 +52,13 @@ import {
     EVENT_ON_WHEEL
 } from "../../constants/OnEvents";
 import { OnEventType } from "./OnEvent";
-import Css from "./Css";
+import Css from "../style/css/Css";
 import ComponentRenderer from "../../renderers/ComponentRenderer";
 
 export default class Component implements ID {
     protected _attributes: Map<string, string>;
     protected _onEvents: Map<OnEventType, (e: any) => void>;
     protected _children: Component[];
-    protected _style: Style;
     protected _css: Css;
     protected _content?: string;
 
@@ -70,15 +68,13 @@ export default class Component implements ID {
             this._children = options.children ?? [];
             this._attributes = options.attributes ?? new Map();
             this._content = options.content;
-            this._style = options.style ?? {};
             this._onEvents = options.onEvents ?? new Map();
-            this._css = options.css ?? new Css('', {isPage: false, isScss: false});
+            this._css = options.css ?? new Css('');
         } else {
             this._children = [];
             this._attributes = new Map();
-            this._style = {};
             this._onEvents = new Map();
-            this._css = new Css('', {isPage: false, isScss: false});
+            this._css = new Css('');
         }
     }
 
@@ -125,16 +121,6 @@ export default class Component implements ID {
     public content(content?: string): string | undefined {
         if (content) this._content = content;
         return this._content;
-    }
-
-    public color(color?: string): string | undefined {
-        if (color) this._style.color = color;
-        return this._style.color;
-    }
-
-    public backgroundColor(backgroundColor?: string | Color): string | undefined {
-        if (backgroundColor) this._style.backgroundColor = backgroundColor;
-        return this._style.backgroundColor;
     }
 
     public children(children?: Component[]): Component[] {

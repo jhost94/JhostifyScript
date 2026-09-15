@@ -1,7 +1,8 @@
 import Div from "../basic/formatting/Div";
 import Span from "../basic/formatting/Span";
 import Component from "../Component";
-import Css from "../Css";
+import Css from "../../style/css/Css";
+import CssHelper from "../../style/css/CssHelper";
 
 export default class Carousel extends Component {
     public static readonly CAROUSEL_CSS_CLASS: string = "jhostify-carousel";
@@ -50,49 +51,85 @@ export default class Carousel extends Component {
     }
 
     private setCss() {
-        this.css()
-        .class(this.carouselCssClass(), `position: relative;
-    width: 100%;
-    height: 220px;
-    overflow: hidden;
-    border-radius: 12px;
-    background: ${this.getOption("backgroundColor")};`)
-        .class(this.carouselTrackCssClass(), `display: flex;
-    transition: transform 0.5s ease-in-out;
-    height: 100%;`)
-        .class(this.carouselSlideCssClass(), `min-width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: ${this.getOption("slideTextColor")};`)
-        .class(this.carouselArrowCssClass(), `position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: ${this.getOption("arrowBackgroundColor")};
-    border: none;
-    color: ${this.getOption("arrowTextColor")};
-    font-size: 22px;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: 0.2s;`)
-        .class(this.carouselDotsCssClass(), `    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;`)
-        .combinator(Css.decendent(Css.class(this.carouselDotsCssClass()), Css.element("span")), `display: inline-block;
-    width: 8px;
-    height: 8px;
-    margin: 0 5px;
-    background: ${this.getOption("dotsBackgroundColor")};
-    border-radius: 50%;
-    cursor: pointer;`)
-        .combinator(Css.decendent(Css.class(this.carouselDotsCssClass()), Css.class(this.carouselAvtiveCssClass())), `background: ${this.getOption("activeDotsBackgroundColor")};`)
-        .combinator(Css.combined(Css.class(this.carouselArrowCssClass()), Css.class(this.carouselLeftCssClass())), `left: 10px;`)
-        .combinator(Css.combined(Css.class(this.carouselArrowCssClass()), Css.class(this.carouselRightCssClass())), `right: 10px;`)
-        .hover(Css.class(this.carouselArrowCssClass()), `background: ${this.getOption("arrowHoverBackgroundColor")};`);
+        const selector = Css.newSelector();
+
+        selector.class(this.carouselCssClass());
+        this.css().add(selector.style({
+            position: "relative",
+            width: "100%",
+            height: "220px",
+            overflow: "hidden",
+            border_radius: "12px",
+            background: this.getOption("backgroundColor")
+        }));
+
+        selector.class(this.carouselTrackCssClass());
+        this.css().add(selector.style({
+            display: "flex",
+            transition: "transform 0.5s ease-in-out",
+            height: "100%"
+        }));
+
+        selector.class(this.carouselSlideCssClass());
+        this.css().add(selector.style({
+            min_width: "100%",
+            height: "100%",
+            display: "flex",
+            align_items: "center",
+            justify_content: "center",
+            font_size: "24px",
+            color: this.getOption("slideTextColor")
+        }));
+        
+        selector.class(this.carouselArrowCssClass());
+        this.css().add(selector.style({
+            position: "absolute",
+            top: "50%",
+            transform: "translateY(-50%)",
+            background: this.getOption("arrowBackgroundColor"),
+            border: "none",
+            color: this.getOption("arrowTextColor"),
+            font_size: "22px",
+            padding: "10px",
+            cursor: "pointer",
+            border_radius: "50%",
+            transition: "0.2s"
+        }));
+
+        selector.class(this.carouselDotsCssClass());
+        this.css().add(selector.style({
+            position: "absolute",
+            bottom: "10px",
+            width: "100%",
+            text_align: "center"
+        }));
+
+        selector.class(this.carouselDotsCssClass())
+            .decendent(CssHelper.element("span"));
+        this.css().add(selector.style({
+            display: "inline-block",
+            width: "8px",
+            height: "8px",
+            margin: "0 5px",
+            background: this.getOption("dotsBackgroundColor"),
+            border_radius: "50%",
+            cursor: "pointer"
+        }));
+
+        selector.class(this.carouselDotsCssClass())
+            .decendent(CssHelper.class(this.carouselAvtiveCssClass()));
+        this.css().add(selector.style({background: this.getOption("activeDotsBackgroundColor")}));
+        
+        selector.class(this.carouselArrowCssClass())
+            .combined(CssHelper.class(this.carouselLeftCssClass()));
+        this.css().add(selector.style({left: "10px"}));
+
+        selector.class(this.carouselArrowCssClass())
+            .combined(CssHelper.class(this.carouselRightCssClass()));
+        this.css().add(selector.style({right: "10px"}));
+
+        selector.class(this.carouselArrowCssClass()).hover();
+        this.css().add(selector.style({background: this.getOption("arrowHoverBackgroundColor")}))
     }
 
     private createItemsDots(items: CarouselItem[]): ItemsDots {
