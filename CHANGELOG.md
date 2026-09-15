@@ -69,3 +69,16 @@ I should advance a major version, but since it's not entirely done yet I don't w
     - Now just imports the entry js and you do the honors as you see fit
     - Aditionally adds a new script tag, to implement import mapping, this is for both the framework and the application
 - There are still some residual files and configuration. It is by design, as I spent countless hours making them work, I will remove them later, for now, I want to enjoy my progress before I send it to the garbage.
+
+### 0.10.0
+- Added API framework
+    - RestClient
+    - SseClient
+    - WebsocketClient
+
+### 0.11.0
+- Refactored Css class
+    - Css static methods are now on CssHelper
+    - Selectors are used with CssSelector
+    - Cleaned up messy combined/complex css paths this way
+- Created Style interface, that defines CSS properties, to be used in selector.style({...}) instead of using raw strings.
