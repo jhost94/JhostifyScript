@@ -131,7 +131,7 @@ export default interface Style {
 	display?: string;
 
 	empty_cells?: string;
-	F?: string;
+	
 	filter?: string;
 	flex?: string;
 	flex_basis?: string;

@@ -1,7 +1,7 @@
 import Component from "../../components/external/Component.js";
 import ID from "../../../framework/meta/ID.js";
 import Random from "../../../utils/Random.js";
-import Css from "../../components/style/Css.js";
+import Css from "../../components/style/css/Css.js";
 import { 
     ATTR_ACCESS_KEY,
     ATTR_CLASS,
@@ -28,7 +28,7 @@ class Page implements ID {
     constructor(
         protected name: string, 
         protected components: Component[] = [], 
-        protected css: Css = new Css('', {isScss: false, isPage: true}),
+        protected css: Css = new Css(''),
         private id: string = Random.randomUUID()
     ) {
         this._attributes = new Map();

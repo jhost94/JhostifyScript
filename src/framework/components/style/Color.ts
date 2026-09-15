@@ -48,7 +48,7 @@ export const PALETTE = {
     transparent: "transparent"
 };
 
-export class ColorUtils {
+export class Color {
     /**
      * Parse a hex color to RGB
      */
@@ -106,41 +106,4 @@ export class ColorUtils {
     }
 }
 
-export class Color {
-    
-    // NEW: Color parsing and validation
-    static parse(value: string): ColorValue | null;
-    static isValid(value: string): boolean;
-    static normalize(value: string): string;
-    
-    // NEW: CSS Variable support
-    static asVariable(name: string): string;
-    static fromVariable(name: string): string;
-    
-    // NEW: Color interpolation
-    static mix(color1: string, color2: string, ratio: number): string;
-    static interpolate(start: string, end: string, t: number): string;
-    
-    // NEW: Named color helpers
-    static contrastRatio(color1: string, color2: string): number;
-    static isLight(color: string): boolean;
-    static isDark(color: string): boolean;
-    
-    // NEW: Theme colors
-    static primary(value: string): string;
-    static secondary(value: string): string;
-    static accent(value: string): string;
-    static error(value: string): string;
-    static success(value: string): string;
-    static warning(value: string): string;
-    static info(value: string): string;
-}
-
 export type PaletteColor = keyof typeof PALETTE;
-
-export interface ColorValue {
-    hex?: string;
-    rgb?: { r: number; g: number; b: number };
-    name?: PaletteColor;
-    variable?: string;  // CSS variable reference
-}

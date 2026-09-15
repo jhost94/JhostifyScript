@@ -1,5 +1,7 @@
 import Context from "../../../Context";
 import PageRenderer from "../../../renderers/PageRenderer";
+import Css from "../../style/css/Css";
+import CssHelper from "../../style/css/CssHelper";
 import Button from "../basic/form/Button";
 import Aside from "../basic/formatting/Aside";
 import Div from "../basic/formatting/Div";
@@ -7,7 +9,6 @@ import Nav from "../basic/formatting/Nav";
 import Span from "../basic/formatting/Span";
 import Img from "../basic/graphics/Img";
 import A from "../basic/link/A";
-import Css from "../../style/Css";
 
 export default class Navbar extends Aside {
     public static readonly NAVBAR_CSS_CLASS: string = "jhostify-navbar";
@@ -73,47 +74,93 @@ export default class Navbar extends Aside {
     }
 
     private setupCss(linksCssClasses: {nav: string, span: string}[]): void {
-        this.css()
-            .class(this.navbarCssClass(), `width: 70px;
-    height: 100vh;
-    background: #141422;
-    position: fixed;
-    transition: width 0.3s ease;
-    overflow: hidden;
-    border-right: 1px solid #2c2c44;
-    z-index: 9000;`)
-        .combinator(Css.combined(Css.class(this.navbarCssClass()), Css.class(this.navbarExpandedCssClass())), `width: 220px;`)
-        .class(this.navbarHeaderCssClass(), `display: flex;
-    align-items: center;
-    padding: 20px;`)
-        .class(this.navbarToggleBtnCssClass(), `background: none;
-    border: none;
-    color: #b084ff;
-    font-size: 22px;
-    cursor: pointer;`)
-        .class(this.navbarLogoCssClass(), `margin-left: 15px;
-    font-weight: bold;
-    display: none;`)
-        .combinator(Css.decendent(Css.combined(Css.class(this.navbarCssClass()), Css.class(this.navbarExpandedCssClass())), Css.class(this.navbarLogoCssClass())) , `display: inline;`)
-        .class(this.navbarNavLinksCssClass(), `margin-top: 40px;
-    display: flex;
-    flex-direction: column;`)
-        .combinator(Css.decendent(Css.class(this.navbarNavLinksCssClass()), Css.element("a")), `display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    text-decoration: none;
-    color: #ccc;
-    transition: background 0.2s;`)
-        .hover(Css.decendent(Css.class(this.navbarNavLinksCssClass()), Css.element("a")), `background: #24243a;
-    color: #b084ff;`);
+        const selector = Css.newSelector();
+
+        selector.class(this.navbarCssClass());
+        this.css().add(selector.style({
+            width: "70px",
+            height: "100vh",
+            background: "#141422",
+            position: "fixed",
+            transition: "width 0.3s ease",
+            overflow: "hidden",
+            border_right: "1px solid #2c2c44",
+            z_index: "9000"
+        }));
+
+        selector.class(this.navbarCssClass())
+            .combined(CssHelper.class(this.navbarExpandedCssClass()));
+        this.css().add(selector.style({width: "220px"}));
+
+        selector.class(this.navbarHeaderCssClass());
+        this.css().add(selector.style({
+            display: "flex",
+            align_items: "center",
+            padding: "20px"
+        }));
+
+        selector.class(this.navbarToggleBtnCssClass());
+        this.css().add(selector.style({
+            background: "none",
+            border: "none",
+            color: "#b084ff",
+            font_size: "22px",
+            cursor: "pointer"
+        }));
+
+        selector.class(this.navbarLogoCssClass());
+        this.css().add(selector.style({
+            margin_left: "15px",
+            font_weight: "bold",
+            display: "none"
+        }))
+
+        selector.class(this.navbarCssClass())
+            .combined(CssHelper.class(this.navbarExpandedCssClass()))
+            .decendent(CssHelper.class(this.navbarLogoCssClass()));
+        this.css().add(selector.style({display: "inline"}));
+        
+        selector.class(this.navbarNavLinksCssClass());
+        this.css().add(selector.style({
+            margin_top: "40px",
+            display: "flex",
+            flex_direction: "column"
+        }))
+
+        selector.class(this.navbarNavLinksCssClass())
+            .decendent(CssHelper.element("a"));
+        this.css().add(selector.style({
+            display: "flex",
+            align_items: "center",
+            padding: "15px 20px",
+            text_decoration: "none",
+            color: "#ccc",
+            transition: "background 0.2s"
+        }));
+
+        selector.class(this.navbarNavLinksCssClass())
+            .decendent(CssHelper.element("a"))
+            .hover();
+        this.css().add(selector.style({
+            background: "#24243a",
+            color: "#b084ff"
+        }));
         
 
         linksCssClasses.forEach(l => {
-            this.css()
-                .class(l.nav, `font-size: 18px;`)
-                .class(l.span, `margin-left: 15px;
-    display: none;`)
-                .combinator(Css.decendent(Css.combined(Css.class(this.navbarCssClass()), Css.class(this.navbarExpandedCssClass())), Css.class(l.span)), `display: inline;`)
+            selector.class(l.nav);
+            this.css().add(selector.style({font_size: "18px"}));
+
+            selector.class(l.span);
+            this.css().add(selector.style({
+                margin_left: "15px",
+                display: "none"
+            }));
+
+            selector.class(this.navbarCssClass())
+                .combined(CssHelper.class(this.navbarExpandedCssClass()))
+                .decendent(CssHelper.class(l.span));
+            this.css().add(selector.style({display: "inline"}));
         });
     }
 
@@ -169,7 +216,6 @@ export class NavbarNavLink extends A {
         if (alt) icon.alt(alt);
 
         icon.height("25");
-        icon.color("red");
 
         this.cssClass(cssClass);
         if (routeId) {

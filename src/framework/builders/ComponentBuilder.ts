@@ -14,15 +14,11 @@ export default class ComponentBuilder {
             components.forEach(c => component.css().concat(c.getCss()));
         }
         const content = component.content();
-        const color = component.color();
-        const backgroundColor = component.backgroundColor();
         const onEvents = component.getOnEvents();
         
         if (element instanceof HTMLElement) {
             const htmlElement = element as HTMLElement;
             if (content) htmlElement.innerText = content;
-            if (color) htmlElement.style.color = color;
-            if (backgroundColor) htmlElement.style.backgroundColor = backgroundColor;
         }
         return new InternalComponent(element, component.getName(), component.getId(), components, component.css(), onEvents);
     }
