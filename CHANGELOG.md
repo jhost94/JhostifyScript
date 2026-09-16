@@ -82,3 +82,7 @@ I should advance a major version, but since it's not entirely done yet I don't w
     - Selectors are used with CssSelector
     - Cleaned up messy combined/complex css paths this way
 - Created Style interface, that defines CSS properties, to be used in selector.style({...}) instead of using raw strings.
+
+### 0.11.1-3
+- Fixes building bug
+- Fixes package.json bug
