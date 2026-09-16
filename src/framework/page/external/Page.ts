@@ -91,7 +91,7 @@ class Page implements ID {
     }
 
     public getCssParsed(): string {
-        return this.getCss().getCss();
+        return this.getCss().getCss(true);
     }
     
     public accessKey(attr?: string): string | undefined {

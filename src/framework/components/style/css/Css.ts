@@ -50,8 +50,7 @@ export default class Css {
     }
 
     public getCss(doSerialize: boolean = false): string {
-        if (doSerialize) this.serialize();
-        return this.internalCss;
+        return doSerialize ? this.serialize().getCss() : this.internalCss;
     }
 
     public add(style: {selector: string, value: string}): Css {

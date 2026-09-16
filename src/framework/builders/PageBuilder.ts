@@ -13,7 +13,7 @@ class PageBuilder {
         const components = page.getComponents()
             .map(c => {
                 const ic = this.componentBuilder.build(c);
-                cssParsed += ic.getCss().serialize().getCss();
+                cssParsed += ic.getCss().getCss(true);
                 return ic;
             });
         const css = this.elementBuilder.createElement("style");
