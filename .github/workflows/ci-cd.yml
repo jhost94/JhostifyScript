@@ -88,7 +88,6 @@ jobs:
       if: success()
       run: |
         cd ./dist
-        cp ../package.json package.json
         npm publish --access public
       env:
         NPM_PIPELINE_TOKEN: ${{ secrets.NPM_PIPELINE_TOKEN }}
