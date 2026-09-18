@@ -6,8 +6,8 @@ import Component from "../../Component";
 
 export default class Ol extends Component{
     
-    constructor() {
-        super("ol");
+    constructor(parent?: Component) {
+        super("ol", parent);
     }
 
     public reversed(attr?: string): string | undefined {

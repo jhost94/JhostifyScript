@@ -36,8 +36,8 @@ import Component from "../../Component";
 
 export default class Input extends Component{
     
-    constructor() {
-        super("input");
+    constructor(parent?: Component) {
+        super("input", parent);
     }
 
     public accept(attr?: string): string | undefined {

@@ -7,8 +7,8 @@ import Component from "../../Component";
 
 export default class Output extends Component{
     
-    constructor() {
-        super("output");
+    constructor(parent?: Component) {
+        super("output", parent);
     }
 
     public for(attr?: string): string | undefined {

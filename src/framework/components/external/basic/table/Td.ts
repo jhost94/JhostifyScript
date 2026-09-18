@@ -7,8 +7,8 @@ import Component from "../../Component";
 
 export default class Td extends Component{
     
-    constructor() {
-        super("td");
+    constructor(parent?: Component) {
+        super("td", parent);
     }
 
     public colspan(attr?: string): string | undefined {

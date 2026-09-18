@@ -9,8 +9,8 @@ import Component from "../../Component";
 
 export default class Source extends Component{
     
-    constructor() {
-        super("source");
+    constructor(parent?: Component) {
+        super("source", parent);
     }
 
     public media(attr?: string): string | undefined {

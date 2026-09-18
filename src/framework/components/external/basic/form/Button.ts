@@ -13,8 +13,8 @@ import Component from "../../Component";
 
 export default class Button extends Component {
     
-    constructor() {
-        super("button");
+    constructor(parent?: Component) {
+        super("button", parent);
     }
 
     public autoFocus(attr?: string): string | undefined {

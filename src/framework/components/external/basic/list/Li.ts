@@ -3,8 +3,8 @@ import Component from "../../Component";
 
 export default class Li extends Component{
     
-    constructor() {
-        super("li");
+    constructor(parent?: Component) {
+        super("li", parent);
     }
 
     public value(attr?: string): string | undefined {

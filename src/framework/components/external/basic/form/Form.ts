@@ -17,8 +17,8 @@ import Component from "../../Component";
 
 export default class Form extends Component{
     
-    constructor() {
-        super("form");
+    constructor(parent?: Component) {
+        super("form", parent);
     }
 
     public acceptCharset(attr?: string): string | undefined {

@@ -13,8 +13,8 @@ import Component from "../../Component";
 
 export default class Area extends Component{
     
-    constructor() {
-        super("area");
+    constructor(parent?: Component) {
+        super("area", parent);
     }
 
     public alt(attr?: string): string | undefined {

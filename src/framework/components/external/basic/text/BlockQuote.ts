@@ -3,8 +3,8 @@ import Component from "../../Component";
 
 export default class BlockQuote extends Component{
     
-    constructor() {
-        super("blockquote");
+    constructor(parent?: Component) {
+        super("blockquote", parent);
     }
 
     public cite(attr?: string): string | undefined {

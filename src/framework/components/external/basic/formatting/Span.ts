@@ -2,7 +2,7 @@ import Component from "../../Component";
 
 export default class Span extends Component{
     
-    constructor() {
-        super("span");
+    constructor(parent?: Component) {
+        super("span", parent);
     }
 }

@@ -2,7 +2,7 @@ import Component from "../../Component";
 
 export default class Tt extends Component{
     
-    constructor() {
-        super("tt");
+    constructor(parent?: Component) {
+        super("tt", parent);
     }
 }

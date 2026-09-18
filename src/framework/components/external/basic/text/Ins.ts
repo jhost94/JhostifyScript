@@ -6,8 +6,8 @@ import Component from "../../Component";
 
 export default class Ins extends Component{
     
-    constructor() {
-        super("ins");
+    constructor(parent?: Component) {
+        super("ins", parent);
     }
 
     public cite(attr?: string): string | undefined {

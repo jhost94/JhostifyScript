@@ -6,8 +6,8 @@ import Component from "../../Component";
 
 export default class Del extends Component{
     
-    constructor() {
-        super("del");
+    constructor(parent?: Component) {
+        super("del", parent);
     }
 
     public cite(attr?: string): string | undefined {

@@ -6,8 +6,8 @@ import Component from "../../Component";
 
 export default class Label extends Component{
     
-    constructor() {
-        super("label");
+    constructor(parent?: Component) {
+        super("label", parent);
     }
 
     public for(attr?: string): string | undefined {

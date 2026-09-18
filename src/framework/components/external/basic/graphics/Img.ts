@@ -17,8 +17,8 @@ import Component from "../../Component";
 
 export default class Img extends Component{
     
-    constructor() {
-        super("img");
+    constructor(parent?: Component) {
+        super("img", parent);
     }
 
     public alt(attr?: string): string | undefined {

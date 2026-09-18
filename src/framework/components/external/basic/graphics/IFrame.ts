@@ -13,8 +13,8 @@ import Component from "../../Component";
 
 export default class IFrame extends Component{
     
-    constructor() {
-        super("iframe");
+    constructor(parent?: Component) {
+        super("iframe", parent);
     }
 
     public height(attr?: string): string | undefined {

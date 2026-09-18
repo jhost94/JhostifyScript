@@ -3,8 +3,8 @@ import Component from "../../Component";
 
 export default class Col extends Component{
     
-    constructor() {
-        super("col");
+    constructor(parent?: Component) {
+        super("col", parent);
     }
 
     public span(attr?: string): string | undefined {

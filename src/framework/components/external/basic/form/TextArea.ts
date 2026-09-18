@@ -16,8 +16,8 @@ import Component from "../../Component";
 
 export default class TextArea extends Component{
     
-    constructor() {
-        super("textarea");
+    constructor(parent?: Component) {
+        super("textarea", parent);
     }
 
     public autoFocus(attr?: string): string | undefined {

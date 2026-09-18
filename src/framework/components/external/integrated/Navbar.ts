@@ -9,6 +9,7 @@ import Nav from "../basic/formatting/Nav";
 import Span from "../basic/formatting/Span";
 import Img from "../basic/graphics/Img";
 import A from "../basic/link/A";
+import Component from "../Component";
 
 export default class Navbar extends Aside {
     public static readonly NAVBAR_CSS_CLASS: string = "jhostify-navbar";
@@ -18,8 +19,8 @@ export default class Navbar extends Aside {
     public static readonly NAVBAR_LOGO_CSS_CLASS: string = "jhostify-navbar-logo";
     public static readonly NAVBAR_NAV_LINKS_CSS_CLASS: string = "jhostify-navbar-nav-links";
 
-    constructor(navbarLinks: NavbarNavLink[], private options?: NavbarOptions) {
-        super();
+    constructor(navbarLinks: NavbarNavLink[], parent?: Component, private options?: NavbarOptions) {
+        super(parent);
         this.cssClass(this.navbarCssClass());
 
         const linksCssClasses = navbarLinks.map(l => l.updateCssClass(s => this.uniqueCssClass(s)));

@@ -6,8 +6,8 @@ import Component from "../../Component";
 
 export default class OptGroup extends Component{
     
-    constructor() {
-        super("optgroup");
+    constructor(parent?: Component) {
+        super("optgroup", parent);
     }
 
     public disabled(attr?: string): string | undefined {

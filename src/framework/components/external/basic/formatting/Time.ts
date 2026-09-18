@@ -3,8 +3,8 @@ import Component from "../../Component";
 
 export default class Time extends Component{
     
-    constructor() {
-        super("time");
+    constructor(parent?: Component) {
+        super("time", parent);
     }
 
     public dateTime(attr?: string): string | undefined {

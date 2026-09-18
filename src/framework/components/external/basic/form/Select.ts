@@ -11,8 +11,8 @@ import Component from "../../Component";
 
 export default class Select extends Component{
     
-    constructor() {
-        super("select");
+    constructor(parent?: Component) {
+        super("select", parent);
     }
 
     public autoFocus(attr?: string): string | undefined {

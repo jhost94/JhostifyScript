@@ -11,8 +11,8 @@ import Component from "../../Component";
 
 export default class A extends Component{
     
-    constructor() {
-        super("a");
+    constructor(parent?: Component) {
+        super("a", parent);
     }
 
     public download(attr?: string): string | undefined {

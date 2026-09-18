@@ -34,8 +34,8 @@ import Component from "../../Component";
 
 export default class Audio extends Component{
     
-    constructor() {
-        super("audio");
+    constructor(parent?: Component) {
+        super("audio", parent);
     }
 
     public autoPlay(attr?: string): string | undefined {

@@ -13,8 +13,8 @@ import Component from "../../Component";
 
 export default class Embed extends Component{
     
-    constructor() {
-        super("embed");
+    constructor(parent?: Component) {
+        super("embed", parent);
     }
 
     public height(attr?: string): string | undefined {

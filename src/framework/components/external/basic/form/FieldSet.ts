@@ -7,8 +7,8 @@ import Component from "../../Component";
 
 export default class FieldSet extends Component{
     
-    constructor() {
-        super("fieldset");
+    constructor(parent?: Component) {
+        super("fieldset", parent);
     }
 
     public disabled(attr?: string): string | undefined {

@@ -16,8 +16,8 @@ export default class Carousel extends Component {
 
     private controller: CarouselControler;
 
-    constructor(items: CarouselItem[] = [], private options?: CarouselOptions) {
-        super(Div.TAG);
+    constructor(items: CarouselItem[] = [], parent?: Component, private options?: CarouselOptions) {
+        super(Div.TAG, parent);
 
         this.cssClass(this.carouselCssClass());
         const components = this.createItemsDots(items);

@@ -37,8 +37,8 @@ import Component from "../../Component";
 
 export default class Video extends Component{
     
-    constructor() {
-        super("video");
+    constructor(parent?: Component) {
+        super("video", parent);
     }
 
     public autoPlay(attr?: string): string | undefined {

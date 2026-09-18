@@ -2,7 +2,7 @@ import Component from "../../Component";
 
 export default class Strong extends Component{
     
-    constructor() {
-        super("strong");
+    constructor(parent?: Component) {
+        super("strong", parent);
     }
 }

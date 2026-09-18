@@ -2,7 +2,7 @@ import Component from "../../Component";
 
 export default class Summary extends Component{
     
-    constructor() {
-        super("summary");
+    constructor(parent?: Component) {
+        super("summary", parent);
     }
 }

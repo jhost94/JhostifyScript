@@ -6,8 +6,8 @@ import Component from "../../Component";
 
 export default class Progress extends Component{
     
-    constructor() {
-        super("progress");
+    constructor(parent?: Component) {
+        super("progress", parent);
     }
 
     public max(attr?: string): string | undefined {

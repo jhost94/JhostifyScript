@@ -3,8 +3,8 @@ import Component from "../../Component";
 
 export default class Menu extends Component{
     
-    constructor() {
-        super("menu");
+    constructor(parent?: Component) {
+        super("menu", parent);
     }
 
     public type(attr?: string): string | undefined {

@@ -3,8 +3,8 @@ import Component from "../../Component";
 
 export default class Canvas extends Component{
     
-    constructor() {
-        super("canvas");
+    constructor(parent?: Component) {
+        super("canvas", parent);
     }
 
     public height(attr?: string): string | undefined {

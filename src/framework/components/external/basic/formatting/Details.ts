@@ -4,8 +4,8 @@ import Component from "../../Component";
 
 export default class Details extends Component{
     
-    constructor() {
-        super("details");
+    constructor(parent?: Component) {
+        super("details", parent);
     }
 
     public open(attr?: string): string | undefined {

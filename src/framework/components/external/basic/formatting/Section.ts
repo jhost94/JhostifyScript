@@ -2,7 +2,7 @@ import Component from "../../Component";
 
 export default class Section extends Component{
     
-    constructor() {
-        super("section");
+    constructor(parent?: Component) {
+        super("section", parent);
     }
 }

@@ -54,20 +54,22 @@ import {
 import { OnEventType } from "./OnEvent";
 import Css from "../style/css/Css";
 import ComponentRenderer from "../../renderers/ComponentRenderer";
+import ObservableValue from "../../../utils/observable/ObservableValue";
+import Context from "../../Context";
 
 export default class Component implements ID {
     protected _attributes: Map<string, string>;
     protected _onEvents: Map<OnEventType, (e: any) => void>;
     protected _children: Component[];
     protected _css: Css;
-    protected _content?: string;
+    protected _content: ObservableValue<string>;
 
     // TODO! IMPORTANT!!!! SOME TAGS HAVE UNIQUE ATTRIBUTES, MAKE THE BUILD AND RENDER TO BE COMPONENT DEFINED AND CREATE A SIMPLE WAY TO IMPLEMENT SO USER CAN IMPLEMENT AS EASY AS POSSIBLE!!!
-    constructor(protected _name: string, options?: ComponentOptions, protected id: string = Random.randomUUID()) {
+    constructor(protected _name: string, protected _parent?: Component, options?: ComponentOptions, protected id: string = Random.randomUUID()) {
         if (options) {
             this._children = options.children ?? [];
             this._attributes = options.attributes ?? new Map();
-            this._content = options.content;
+            this._content =  ObservableValue.from(options.content ?? "");
             this._onEvents = options.onEvents ?? new Map();
             this._css = options.css ?? new Css('');
         } else {
@@ -75,7 +77,9 @@ export default class Component implements ID {
             this._attributes = new Map();
             this._onEvents = new Map();
             this._css = new Css('');
+            this._content =  ObservableValue.from("");
         }
+        this.doSubscriptions();
     }
 
     private setElementAttr(el: Element): Element {
@@ -103,6 +107,10 @@ export default class Component implements ID {
         return el;
     }
 
+    private doSubscriptions(): void {
+        this._content.subscribe(c => ComponentRenderer.renderExternalComponent(this, "content"));
+    }
+
     protected setAttrAndReturn(key: string, attr?: string): string | undefined {
         if (attr) this._attributes.set(key, attr);
         return this._attributes.get(key);
@@ -119,8 +127,8 @@ export default class Component implements ID {
     }
 
     public content(content?: string): string | undefined {
-        if (content) this._content = content;
-        return this._content;
+        if (content) this._content.set(content);
+        return this._content.get();
     }
 
     public children(children?: Component[]): Component[] {
@@ -327,6 +335,10 @@ export default class Component implements ID {
         return this.id;
     }
 
+    public getParent(): Component | undefined {
+        return this._parent;
+    }
+
     public getName(): string {
         return this._name;
     }
@@ -336,9 +348,9 @@ export default class Component implements ID {
     }
 
     public async loadChildrenAsync(body: Promise<any> | Promise<[any]>, 
-                                         mapper: (b: any) => Component, 
-                                         showLoading: boolean = false, 
-                                         loadingBody?: Component | any): Promise<void> {
+                                    mapper: (b: any) => Component, 
+                                    showLoading: boolean = false, 
+                                    loadingBody?: Component | any): Promise<void> {
         if (showLoading) {
             if (!loadingBody) throw "If showLoading is set to true, loadingBody is required";
             if (loadingBody instanceof Component) {

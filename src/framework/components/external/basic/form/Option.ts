@@ -8,8 +8,8 @@ import Component from "../../Component";
 
 export default class Option extends Component{
     
-    constructor() {
-        super("option");
+    constructor(parent?: Component) {
+        super("option", parent);
     }
 
     public disabled(attr?: string): string | undefined {

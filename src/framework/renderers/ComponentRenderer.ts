@@ -114,6 +114,30 @@ export default class ComponentRenderer {
         });
     }
 
+    public static renderExternalComponent(component: Component, toRender: "all" | "content"): void {
+        switch(toRender) {
+            case "all": 
+                this.renderExternalComponentAll(component);
+                break;
+            case "content":
+                this.renderExternalComponentContent(component);
+                break;
+        }
+    }
+
+    public static renderExternalComponentAll(component: Component): void {
+        const c = Context.getComponentBuilder().build(component);
+        this.renderComponent(c, component.getParent(), true);
+    }
+
+    public static renderExternalComponentContent(component: Component): void {
+        // TODO: Use context. was breaking because on build this code is run before initialization. TODO: fix that
+        // const ele = Context.elementBuilder().getElementById(component.getId());
+        console.log("Rendering", component, "content");
+        const ele = document.getElementById(component.getId());
+        if (ele) ele.textContent = component.content() ?? null;
+    }
+
     private static renderComponent(component: InternalComponent, at?: ID, rerender: boolean = false): void {
         if (at) {
             const el = Context.elementBuilder().getElementById(at.getId());

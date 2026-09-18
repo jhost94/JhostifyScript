@@ -2,7 +2,7 @@ import Component from "../../Component";
 
 export default class Br extends Component{
     
-    constructor() {
-        super("br");
+    constructor(parent?: Component) {
+        super("br", parent);
     }
 }

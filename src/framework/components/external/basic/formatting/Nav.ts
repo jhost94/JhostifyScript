@@ -2,7 +2,7 @@ import Component from "../../Component";
 
 export default class Nav extends Component{
     
-    constructor() {
-        super("nav");
+    constructor(parent?: Component) {
+        super("nav", parent);
     }
 }

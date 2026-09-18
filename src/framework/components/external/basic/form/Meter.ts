@@ -11,8 +11,8 @@ import Component from "../../Component";
 
 export default class Meter extends Component{
     
-    constructor() {
-        super("meter");
+    constructor(parent?: Component) {
+        super("meter", parent);
     }
 
     public form(attr?: string): string | undefined {

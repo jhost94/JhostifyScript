@@ -3,8 +3,8 @@ import Component from "../../Component";
 
 export default class Map extends Component{
     
-    constructor() {
-        super("Map");
+    constructor(parent?: Component) {
+        super("Map", parent);
     }
 
     public name(attr?: string): string | undefined {

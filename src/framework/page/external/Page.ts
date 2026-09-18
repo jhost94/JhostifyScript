@@ -74,6 +74,11 @@ class Page implements ID {
         return this.components;
     }
 
+    public children(children?: Component[]): Component[] {
+        if (children) this.components = children;
+        return this.components;
+    }
+
     public getName(): string {
         return this.name;
     }

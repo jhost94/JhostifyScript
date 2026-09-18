@@ -3,8 +3,8 @@ import Component from "../../Component";
 
 export default class Q extends Component{
     
-    constructor() {
-        super("q");
+    constructor(parent?: Component) {
+        super("q", parent);
     }
 
     public cite(attr?: string): string | undefined {

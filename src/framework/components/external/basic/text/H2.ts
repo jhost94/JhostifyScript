@@ -2,7 +2,7 @@ import Component from "../../Component";
 
 export default class H2 extends Component{
     
-    constructor() {
-        super("h2");
+    constructor(parent?: Component) {
+        super("h2", parent);
     }
 }
