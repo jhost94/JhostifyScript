@@ -33,11 +33,12 @@ import {
     ATTR_WIDTH
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Input extends Component{
     
-    constructor() {
-        super("input");
+    constructor(parent?: ID) {
+        super("input", parent);
     }
 
     public accept(attr?: string): string | undefined {
@@ -153,10 +154,10 @@ export default class Input extends Component{
     }
 
     public onLoad(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_LOAD, action);
+        this.setEvent(EVENT_ON_LOAD, action);
     }
 
     public onSearch(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_SEARCH, action);
+        this.setEvent(EVENT_ON_SEARCH, action);
     }
 }

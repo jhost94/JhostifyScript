@@ -6,6 +6,7 @@ import DefaultValues from "./constants/DefaultValues.js";
 import { LOGGING_LEVEL } from "./debug/Logger.js";
 import ElementVendor from "./requirements/ElementVendor.js";
 import ComponentBuilder from "./builders/ComponentBuilder.js";
+import Css from "./components/style/css/Css.js";
 
 export default class InitialConfiguration {
     private defaultConfiguration: Configuration;
@@ -38,9 +39,11 @@ export default class InitialConfiguration {
     private buildDefaultConfig(defaultElementBuilder: ElementVendor): Configuration {
         const ele = defaultElementBuilder.createElement(DefaultValues.DEFAULT_PAGE_ID); //TODO: GET APP NAME SOMEHOW?
         const notFoundEle = defaultElementBuilder.createElement(DefaultValues.NOT_FOUND_PAGE_ID);
+        const dCss = defaultElementBuilder.createElement("style");
+        const nCss = defaultElementBuilder.createElement("style");
         return this.defaultConfiguration = { 
-            notFoundPage: new InternalPage(notFoundEle, DefaultValues.NOT_FOUND_PAGE_ID, [], DefaultValues.DEFAULT_PAGE_ID),
-            defaultPage: new InternalPage(ele, DefaultValues.DEFAULT_PAGE_ID, [], DefaultValues.DEFAULT_PAGE_ID),
+            notFoundPage: new InternalPage(notFoundEle, DefaultValues.NOT_FOUND_PAGE_ID, DefaultValues.DEFAULT_PAGE_ID, new InternalCss(nCss), [], new Css(''), new Map()),
+            defaultPage: new InternalPage(ele, DefaultValues.DEFAULT_PAGE_ID, DefaultValues.DEFAULT_PAGE_ID, new InternalCss(dCss), [], new Css(''), new Map()),
             defaultPageName: DefaultValues.DEFAULT_PAGE_ID,
             elementBuilder: defaultElementBuilder,
             logLevel: 'ERROR'
@@ -58,20 +61,24 @@ export default class InitialConfiguration {
             new InternalPage(
                 eleBuilder.createElement(configOptions?.defaultPage?.getName()), 
                 configOptions?.defaultPage?.getName(), 
-                configOptions?.defaultPage?.getComponents().map(c => componentBuilder.build(c)), 
                 configOptions?.defaultPage?.getName(),
+                new InternalCss(dCss),
+                configOptions?.defaultPage?.children().get().map(c => componentBuilder.build(c)), 
+                new Css(''),
+                new Map(),
                 configOptions?.defaultPage?.getOnRender(),
-                new InternalCss(dCss)
             ) 
             : defaultConfig.defaultPage;
         const notFoundPage = configOptions && configOptions.defaultPage ?  
             new InternalPage(
                 eleBuilder.createElement(configOptions?.notFoundPage?.getName()), 
                 configOptions?.notFoundPage?.getName(),
-                configOptions?.notFoundPage?.getComponents().map(c => componentBuilder.build(c)),
                 configOptions?.notFoundPage?.getName(),
+                new InternalCss(nCss),
+                configOptions?.notFoundPage?.children().get().map(c => componentBuilder.build(c)),
+                new Css(''),
+                new Map(),
                 configOptions?.notFoundPage?.getOnRender(),
-                new InternalCss(nCss)
             )
             : defaultConfig.defaultPage;
         

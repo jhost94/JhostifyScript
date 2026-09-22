@@ -7,7 +7,17 @@ import { OnEventType } from "../external/OnEvent";
  */
 export default class InternalComponent implements ID {
 
-    constructor(private element: Element, private name: string, private id: string, private components: InternalComponent[] = [], private css: Css, private onEvents: Map<OnEventType, (e: any) => void>) {
+    constructor(
+            private element: Element, 
+            private name: string, 
+            private id: string, 
+            private components: InternalComponent[] = [], 
+            private css: Css, 
+            private onEvents: Map<OnEventType, (e: any) => void>,
+            private doOnRender: (() => void)[] = [],
+            private doBeforeRender: (() => void)[] = [],
+            private doAfterRender: (() => void)[] = []
+        ) {
         element.id = id;
     }
 
@@ -33,5 +43,17 @@ export default class InternalComponent implements ID {
 
     public getOnEvents(): Map<OnEventType, (e: any) => void> {
         return this.onEvents;
+    }
+
+    public getOnRender(): (() => void)[] {
+        return this.doOnRender;
+    }
+
+    public getBeforeRender(): (() => void)[] {
+        return this.doBeforeRender;
+    }
+
+    public getAfterRender(): (() => void)[] {
+        return this.doAfterRender;
     }
 }

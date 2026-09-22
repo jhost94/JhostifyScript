@@ -1,4 +1,5 @@
 import Context from "../../../Context";
+import ID from "../../../meta/ID";
 import PageRenderer from "../../../renderers/PageRenderer";
 import Css from "../../style/css/Css";
 import CssHelper from "../../style/css/CssHelper";
@@ -18,8 +19,8 @@ export default class Navbar extends Aside {
     public static readonly NAVBAR_LOGO_CSS_CLASS: string = "jhostify-navbar-logo";
     public static readonly NAVBAR_NAV_LINKS_CSS_CLASS: string = "jhostify-navbar-nav-links";
 
-    constructor(navbarLinks: NavbarNavLink[], private options?: NavbarOptions) {
-        super();
+    constructor(navbarLinks: NavbarNavLink[], parent?: ID, private options?: NavbarOptions) {
+        super(parent);
         this.cssClass(this.navbarCssClass());
 
         const linksCssClasses = navbarLinks.map(l => l.updateCssClass(s => this.uniqueCssClass(s)));
@@ -236,7 +237,7 @@ export class NavbarNavLink extends A {
     public updateCssClass(updater: (s: string) => string): {nav: string, span: string} {
         return {
             nav: this.cssClass(updater(this.cssClass()!))!,
-            span: this.children()[1].cssClass(updater(this.children()[1].cssClass()!))!
+            span: this.children().get()[1].cssClass(updater(this.children().get()[1].cssClass()!))!
         }
     }
 }

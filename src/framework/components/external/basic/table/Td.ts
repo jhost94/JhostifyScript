@@ -4,11 +4,12 @@ import {
     ATTR_ROWSPAN
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Td extends Component{
     
-    constructor() {
-        super("td");
+    constructor(parent?: ID) {
+        super("td", parent);
     }
 
     public colspan(attr?: string): string | undefined {

@@ -3,11 +3,12 @@ import {
     ATTR_DATE_TIME 
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Del extends Component{
     
-    constructor() {
-        super("del");
+    constructor(parent?: ID) {
+        super("del", parent);
     }
 
     public cite(attr?: string): string | undefined {

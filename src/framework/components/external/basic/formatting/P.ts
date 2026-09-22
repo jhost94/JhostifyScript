@@ -1,8 +1,9 @@
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class P extends Component{
     
-    constructor() {
-        super("p");
+    constructor(parent?: ID) {
+        super("p", parent);
     }
 }

@@ -3,11 +3,12 @@ import {
     ATTR_FORM 
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Label extends Component{
     
-    constructor() {
-        super("label");
+    constructor(parent?: ID) {
+        super("label", parent);
     }
 
     public for(attr?: string): string | undefined {

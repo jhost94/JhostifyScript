@@ -10,11 +10,12 @@ import {
     ATTR_TARGET
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Area extends Component{
     
-    constructor() {
-        super("area");
+    constructor(parent?: ID) {
+        super("area", parent);
     }
 
     public alt(attr?: string): string | undefined {

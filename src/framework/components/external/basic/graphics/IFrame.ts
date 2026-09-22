@@ -10,11 +10,12 @@ import {
     ATTR_WIDTH
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class IFrame extends Component{
     
-    constructor() {
-        super("iframe");
+    constructor(parent?: ID) {
+        super("iframe", parent);
     }
 
     public height(attr?: string): string | undefined {
@@ -42,6 +43,6 @@ export default class IFrame extends Component{
     }
 
     public onLoad(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_LOAD, action);
+        this.setEvent(EVENT_ON_LOAD, action);
     }
 }

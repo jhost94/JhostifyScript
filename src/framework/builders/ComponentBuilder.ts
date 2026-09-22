@@ -9,8 +9,8 @@ export default class ComponentBuilder {
     public build(component: Component): InternalComponent {
         const element = component.build(this.elementBuilder.createElement(component.getName()));
         const components: InternalComponent[] = [];
-        if (component.children() && component.children().length > 0) {
-            components.push(...component.children().map(c => this.build(c)));
+        if (component.children() && component.children().get().length > 0) {
+            components.push(...component.children().get().map(c => this.build(c)));
             components.forEach(c => component.css().concat(c.getCss()));
         }
         const content = component.content();
@@ -20,6 +20,14 @@ export default class ComponentBuilder {
             const htmlElement = element as HTMLElement;
             if (content) htmlElement.innerText = content;
         }
-        return new InternalComponent(element, component.getName(), component.getId(), components, component.css(), onEvents);
+        return new InternalComponent(element, 
+                                    component.getName(), 
+                                    component.getId(), 
+                                    components, 
+                                    component.css(), 
+                                    onEvents, 
+                                    component.getOnRender(), 
+                                    component.getBeforeRender(), 
+                                    component.getAfterRender());
     }
 }

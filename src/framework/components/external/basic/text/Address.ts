@@ -1,8 +1,9 @@
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Address extends Component{
     
-    constructor() {
-        super("address");
+    constructor(parent?: ID) {
+        super("address", parent);
     }
 }

@@ -1,8 +1,9 @@
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Summary extends Component{
     
-    constructor() {
-        super("summary");
+    constructor(parent?: ID) {
+        super("summary", parent);
     }
 }

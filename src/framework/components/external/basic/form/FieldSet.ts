@@ -4,11 +4,12 @@ import {
     ATTR_NAME 
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class FieldSet extends Component{
     
-    constructor() {
-        super("fieldset");
+    constructor(parent?: ID) {
+        super("fieldset", parent);
     }
 
     public disabled(attr?: string): string | undefined {

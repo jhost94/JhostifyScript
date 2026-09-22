@@ -1,8 +1,9 @@
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class H6 extends Component{
     
-    constructor() {
-        super("h6");
+    constructor(parent?: ID) {
+        super("h6", parent);
     }
 }

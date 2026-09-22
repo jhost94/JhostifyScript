@@ -3,9 +3,9 @@ import DefaultValues from '../constants/DefaultValues.js';
 import Logger from '../debug/Logger.js';
 import Renderer from './Renderer.js';
 import ComponentRenderer from './ComponentRenderer.js';
-import { ATTR_STYLE } from '../constants/Attributes.js';
+import Context from '../Context.js';
 
-class PageRenderer {
+export default class PageRenderer {
     private static pages: Map<string, InternalPage> = new Map();
     private static defaultCondif: boolean = true;
     //The root element, the base for all the new elements to start from. Usually document.body, but could be reconfigured
@@ -29,11 +29,18 @@ class PageRenderer {
         const page = this.pages.get(id);
         if (!page) throw "error";
         Logger.log('DEBUG', ["Rendering page: ", page]);
-        const css = page.getCss();
+        const css = page.getPageCss();
         if (css) Renderer.renderAt(css.get(), this.re);
         Renderer.renderAt(page.get(), this.re);
-        page.getComponents().forEach(c => ComponentRenderer.render(c, page));
+        page.children().forEach(c => ComponentRenderer.render(c, page));
         page.getOnRender().forEach(a => a());
+        
+        for(let i = 0; i < page.getAfterRender().length; i++){
+            const action = page.getAfterRender().pop();
+            if (!!action) {
+                Context.system().waitFor(0, action);
+            }
+        }
     }
 
     public static refresh(): void {
@@ -45,5 +52,3 @@ class PageRenderer {
         this.render(id);
     }
 }
-
-export default PageRenderer;

@@ -3,12 +3,13 @@ import {
     ATTR_ROWSPAN,
     ATTR_SCOPE
 } from "../../../../constants/Attributes";
+import ID from "../../../../meta/ID";
 import Component from "../../Component";
 
 export default class Th extends Component{
     
-    constructor() {
-        super("th");
+    constructor(parent?: ID) {
+        super("th", parent);
     }
 
     public colspan(attr?: string): string | undefined {

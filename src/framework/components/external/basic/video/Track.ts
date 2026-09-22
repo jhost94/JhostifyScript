@@ -7,11 +7,12 @@ import {
 } from "../../../../constants/Attributes";
 import { EVENT_ON_CUE_CHANGE } from "../../../../constants/OnEvents";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Track extends Component{
     
-    constructor() {
-        super("track");
+    constructor(parent?: ID) {
+        super("track", parent);
     }
 
     public default(attr?: string): string | undefined {
@@ -35,6 +36,6 @@ export default class Track extends Component{
     }
 
     public onCueCHange(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_CUE_CHANGE, action);
+        this.setEvent(EVENT_ON_CUE_CHANGE, action);
     }
 }

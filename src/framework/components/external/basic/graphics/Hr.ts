@@ -1,8 +1,9 @@
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Hr extends Component{
     
-    constructor() {
-        super("hr");
+    constructor(parent?: ID) {
+        super("hr", parent);
     }
 }

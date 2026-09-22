@@ -8,11 +8,12 @@ import {
     ATTR_VALUE
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Meter extends Component{
     
-    constructor() {
-        super("meter");
+    constructor(parent?: ID) {
+        super("meter", parent);
     }
 
     public form(attr?: string): string | undefined {

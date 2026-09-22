@@ -1,10 +1,11 @@
 import { ATTR_HEIGHT, ATTR_WIDTH } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Canvas extends Component{
     
-    constructor() {
-        super("canvas");
+    constructor(parent?: ID) {
+        super("canvas", parent);
     }
 
     public height(attr?: string): string | undefined {

@@ -1,10 +1,11 @@
 import { ATTR_CITE } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class BlockQuote extends Component{
     
-    constructor() {
-        super("blockquote");
+    constructor(parent?: ID) {
+        super("blockquote", parent);
     }
 
     public cite(attr?: string): string | undefined {

@@ -8,11 +8,12 @@ import {
     ATTR_SIZE
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Select extends Component{
     
-    constructor() {
-        super("select");
+    constructor(parent?: ID) {
+        super("select", parent);
     }
 
     public autoFocus(attr?: string): string | undefined {

@@ -1,8 +1,9 @@
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Ul extends Component{
     
-    constructor() {
-        super("ul");
+    constructor(parent?: ID) {
+        super("ul", parent);
     }
 }

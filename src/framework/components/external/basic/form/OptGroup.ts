@@ -3,11 +3,12 @@ import {
     ATTR_LABEL 
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
-export default class OptGroup extends Component{
+export default class OptGroup extends Component {
     
-    constructor() {
-        super("optgroup");
+    constructor(parent?: ID) {
+        super("optgroup", parent);
     }
 
     public disabled(attr?: string): string | undefined {

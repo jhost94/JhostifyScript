@@ -4,11 +4,12 @@ import {
     ATTR_NAME
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Output extends Component{
     
-    constructor() {
-        super("output");
+    constructor(parent?: ID) {
+        super("output", parent);
     }
 
     public for(attr?: string): string | undefined {

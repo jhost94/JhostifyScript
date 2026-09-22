@@ -14,11 +14,12 @@ import {
     ATTR_TARGET
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Form extends Component{
     
-    constructor() {
-        super("form");
+    constructor(parent?: ID) {
+        super("form", parent);
     }
 
     public acceptCharset(attr?: string): string | undefined {
@@ -58,10 +59,10 @@ export default class Form extends Component{
     }
 
     public onReset(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_RESET, action);
+        this.setEvent(EVENT_ON_RESET, action);
     }
 
     public onSubmit(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_SUBMIT, action);
+        this.setEvent(EVENT_ON_SUBMIT, action);
     }
 }

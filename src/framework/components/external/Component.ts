@@ -54,32 +54,40 @@ import {
 import { OnEventType } from "./OnEvent";
 import Css from "../style/css/Css";
 import ComponentRenderer from "../../renderers/ComponentRenderer";
+import ObservableValue from "../../../utils/observable/ObservableValue";
+import Context from "../../Context";
+import ObservableList from "../../../utils/observable/ObservableList";
 
 export default class Component implements ID {
-    protected _attributes: Map<string, string>;
-    protected _onEvents: Map<OnEventType, (e: any) => void>;
-    protected _children: Component[];
-    protected _css: Css;
-    protected _content?: string;
+    protected _attributes: ObservableValue<Map<string, string>>;
+    protected _onEvents: ObservableValue<Map<OnEventType, (e: any) => {} | void>>;
+    protected _children: ObservableList<Component>;
+    protected _css: ObservableValue<Css>;
+    protected _content: ObservableValue<string>;
+    protected doBeforeRender: (() => void)[] = [];
+    protected doOnRender: (() => void)[] = [];
+    protected doAfterRender: (() => void)[] = [];
 
     // TODO! IMPORTANT!!!! SOME TAGS HAVE UNIQUE ATTRIBUTES, MAKE THE BUILD AND RENDER TO BE COMPONENT DEFINED AND CREATE A SIMPLE WAY TO IMPLEMENT SO USER CAN IMPLEMENT AS EASY AS POSSIBLE!!!
-    constructor(protected _name: string, options?: ComponentOptions, protected id: string = Random.randomUUID()) {
+    constructor(protected _name: string, protected _parent?: ID, options?: ComponentOptions, protected id: string = Random.randomUUID()) {
         if (options) {
-            this._children = options.children ?? [];
-            this._attributes = options.attributes ?? new Map();
-            this._content = options.content;
-            this._onEvents = options.onEvents ?? new Map();
-            this._css = options.css ?? new Css('');
+            this._children = ObservableList.fromList(options.children ?? []);
+            this._attributes = ObservableValue.from(options.attributes ?? new Map());
+            this._content =  ObservableValue.from(options.content ?? "");
+            this._onEvents = ObservableValue.from(options.onEvents ?? new Map());
+            this._css = ObservableValue.from(options.css ?? new Css(''));
         } else {
-            this._children = [];
-            this._attributes = new Map();
-            this._onEvents = new Map();
-            this._css = new Css('');
+            this._children = ObservableList.fromList([] as Component[]);
+            this._attributes = ObservableValue.from(new Map());
+            this._onEvents = ObservableValue.from(new Map());
+            this._css = ObservableValue.from(new Css(''));
+            this._content =  ObservableValue.from("");
         }
+        this.doAfterRender.push(() => this.doSubscriptions());
     }
 
     private setElementAttr(el: Element): Element {
-        this._attributes.forEach((v, k) => {
+        this._attributes.get().forEach((v, k) => {
             el.setAttribute(k, v);
         });
 
@@ -103,9 +111,25 @@ export default class Component implements ID {
         return el;
     }
 
+    private doSubscriptions(): void {
+        this._content.subscribe(_ => ComponentRenderer.renderExternalComponent(this, "content"));
+        this._attributes.subscribe(_ => ComponentRenderer.renderExternalComponent(this, "attributes"));
+        this._onEvents.subscribe(_ => ComponentRenderer.renderExternalComponent(this, "events"));
+        this._css.subscribe(_ => ComponentRenderer.renderExternalComponent(this, "css"));
+        this._children.subscribe(cs => cs.forEach(c => ComponentRenderer.renderExternalComponent(c, "all")));
+    }
+
     protected setAttrAndReturn(key: string, attr?: string): string | undefined {
-        if (attr) this._attributes.set(key, attr);
-        return this._attributes.get(key);
+        if (attr) {
+            this._attributes.get().set(key, attr);
+            this._attributes.notify();
+        }
+        return this._attributes.get().get(key);
+    }
+
+    protected setEvent(key: OnEventType, ev: (e: any) => {} | void): void {
+        this._onEvents.get().set(key, ev);
+        this._onEvents.notify();
     }
 
     protected uniqueCssClass(className: string): string {
@@ -118,13 +142,25 @@ export default class Component implements ID {
         return el;
     }
 
-    public content(content?: string): string | undefined {
-        if (content) this._content = content;
-        return this._content;
+    public getOnRender(): (() => void)[] {
+        return this.doOnRender;
     }
 
-    public children(children?: Component[]): Component[] {
-        if (children) this._children = children;
+    public getBeforeRender(): (() => void)[] {
+        return this.doBeforeRender;
+    }
+
+    public getAfterRender(): (() => void)[] {
+        return this.doAfterRender;
+    }
+
+    public content(content?: string): string | undefined {
+        if (content) this._content.set(content);
+        return this._content.get();
+    }
+
+    public children(children?: Component[]): ObservableList<Component> {
+        if (children) this._children.set(children);
         return this._children;
     }
 
@@ -138,9 +174,9 @@ export default class Component implements ID {
 
     public css(css?: Css): Css {
         if (css) {
-            this._css = css;
+            this._css.set(css);
         }
-        return this._css;
+        return this._css.get();
     }
 
     public contentEditable(attr?: string): string | undefined {
@@ -183,8 +219,14 @@ export default class Component implements ID {
         return this.setAttrAndReturn(ATTR_SPELL_CHECK, attr);
     }
 
-    public style(attr?: string): string | undefined {
-        return this.setAttrAndReturn(ATTR_STYLE, attr);
+    public style(attr?: Style | string): string | undefined {
+        if (!!attr && typeof attr === 'object') {
+            const str = Object.entries(attr)
+                .map(kv => `${kv[0]}: ${kv[1]}`)
+                .reduce((acc, cur) => `${acc} ${cur}`);
+            return this.setAttrAndReturn(ATTR_STYLE, str);
+        }
+        return this.setAttrAndReturn(ATTR_STYLE, attr)
     }
 
     public tabIndex(attr?: string): string | undefined {
@@ -200,31 +242,31 @@ export default class Component implements ID {
     }
 
     public onBlur(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_BLUR, action);
+        this.setEvent(EVENT_ON_BLUR, action);
     }
 
     public onChange(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_CHANGE, action);
+        this.setEvent(EVENT_ON_CHANGE, action);
     }
 
     public onClick(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_CLICK, action);
+        this.setEvent(EVENT_ON_CLICK, action);
     }
 
     public onContextMenu(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_CONTEXT_MENU, action);
+        this.setEvent(EVENT_ON_CONTEXT_MENU, action);
     }
 
     public onCopy(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_COPY, action);
+        this.setEvent(EVENT_ON_COPY, action);
     }
 
     public onCut(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_CUT, action);
+        this.setEvent(EVENT_ON_CUT, action);
     }
 
     public onDoubleClick(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_DOUBLE_CLICK, action);
+        this.setEvent(EVENT_ON_DOUBLE_CLICK, action);
     }
 
     public onDblClick(action: (e: any) => void): void {
@@ -232,99 +274,103 @@ export default class Component implements ID {
     }
 
     public onDrag(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_DRAG, action);
+        this.setEvent(EVENT_ON_DRAG, action);
     }
 
     public onDragEnd(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_DRAG_END, action);
+        this.setEvent(EVENT_ON_DRAG_END, action);
     }
 
     public onDragEnter(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_DRAG_ENTER, action);
+        this.setEvent(EVENT_ON_DRAG_ENTER, action);
     }
 
     public onDragLeave(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_DRAG_LEAVE, action);
+        this.setEvent(EVENT_ON_DRAG_LEAVE, action);
     }
 
     public onDragOver(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_DRAG_OVER, action);
+        this.setEvent(EVENT_ON_DRAG_OVER, action);
     }
 
     public onDragStart(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_DRAG_START, action);
+        this.setEvent(EVENT_ON_DRAG_START, action);
     }
 
     public onDrop(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_DROP, action);
+        this.setEvent(EVENT_ON_DROP, action);
     }
 
     public onFocus(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_FOCUS, action);
+        this.setEvent(EVENT_ON_FOCUS, action);
     }
 
     public onInput(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_INPUT, action);
+        this.setEvent(EVENT_ON_INPUT, action);
     }
 
     public onInvalid(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_INVALID, action);
+        this.setEvent(EVENT_ON_INVALID, action);
     }
 
     public onKeyDown(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_KEY_DOWN, action);
+        this.setEvent(EVENT_ON_KEY_DOWN, action);
     }
 
     public onKeyPress(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_KEY_PRESS, action);
+        this.setEvent(EVENT_ON_KEY_PRESS, action);
     }
 
     public onKeyUp(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_KEY_UP, action);
+        this.setEvent(EVENT_ON_KEY_UP, action);
     }
 
     public onMouseDown(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_MOUSE_DOWN, action);
+        this.setEvent(EVENT_ON_MOUSE_DOWN, action);
     }
 
     public onMouseMove(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_MOUSE_MOVE, action);
+        this.setEvent(EVENT_ON_MOUSE_MOVE, action);
     }
 
     public onMouseOut(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_MOUSE_OUT, action);
+        this.setEvent(EVENT_ON_MOUSE_OUT, action);
     }
 
     public onMouseOver(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_MOUSE_OVER, action);
+        this.setEvent(EVENT_ON_MOUSE_OVER, action);
     }
 
     public onMouseUp(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_MOUSE_UP, action);
+        this.setEvent(EVENT_ON_MOUSE_UP, action);
     }
 
     public onMouseWheel(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_MOUSE_WHEEL, action);
+        this.setEvent(EVENT_ON_MOUSE_WHEEL, action);
     }
 
     public onPaste(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_PASTE, action);
+        this.setEvent(EVENT_ON_PASTE, action);
     }
 
     public onScroll(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_SCROLL, action);
+        this.setEvent(EVENT_ON_SCROLL, action);
     }
 
     public onSelect(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_SELECT, action);
+        this.setEvent(EVENT_ON_SELECT, action);
     }
 
     public onWheel(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_WHEEL, action);
+        this.setEvent(EVENT_ON_WHEEL, action);
     }
     
     public getId(): string {
         return this.id;
+    }
+
+    public getParent(): ID | undefined {
+        return this._parent;
     }
 
     public getName(): string {
@@ -332,13 +378,13 @@ export default class Component implements ID {
     }
 
     public getOnEvents(): Map<OnEventType, (e: any) => void> {
-        return this._onEvents;
+        return this._onEvents.get();
     }
 
     public async loadChildrenAsync(body: Promise<any> | Promise<[any]>, 
-                                         mapper: (b: any) => Component, 
-                                         showLoading: boolean = false, 
-                                         loadingBody?: Component | any): Promise<void> {
+                                    mapper: (b: any) => Component, 
+                                    showLoading: boolean = false, 
+                                    loadingBody?: Component | any): Promise<void> {
         if (showLoading) {
             if (!loadingBody) throw "If showLoading is set to true, loadingBody is required";
             if (loadingBody instanceof Component) {

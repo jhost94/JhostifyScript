@@ -3,11 +3,12 @@ import {
     ATTR_START 
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Ol extends Component{
     
-    constructor() {
-        super("ol");
+    constructor(parent?: ID) {
+        super("ol", parent);
     }
 
     public reversed(attr?: string): string | undefined {
