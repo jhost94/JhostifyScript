@@ -86,3 +86,13 @@ I should advance a major version, but since it's not entirely done yet I don't w
 ### 0.11.1-3
 - Fixes building bug
 - Fixes package.json bug
+
+### 0.12.0
+- Adds dynamic refresh
+    - Children
+    - Styles
+    - Attributes
+    - Css (WIP)
+    - Content
+- It is now fully ready for async BS (hopefully)
+- Updated Page to extend Component, as it should
