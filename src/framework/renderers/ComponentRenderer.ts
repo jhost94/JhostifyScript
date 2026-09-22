@@ -108,33 +108,50 @@ export default class ComponentRenderer {
         }
         inC.children().forEach(c => {
             Renderer.renderAt(c.get(), el);
+            c.getOnRender().forEach(a => a());
             if (c.hasChildren()) {
                 c.children().forEach(c0 => ComponentRenderer.render(c0, c));
             }
         });
     }
 
-    public static renderExternalComponent(component: Component, toRender: "all" | "content"): void {
+    public static renderExternalComponent(component: Component, toRender: "all" | "content" | "attributes" | "events" | "css" | "children"): void {
         switch(toRender) {
-            case "all": 
+            case "all":
                 this.renderExternalComponentAll(component);
                 break;
             case "content":
                 this.renderExternalComponentContent(component);
                 break;
+            case "attributes":
+            case "events":
+                this.renderExternalComponentAttributesEvents(component);
+                break;
+            case "css":
+                this.renderExternalComponentCss(component);
+                break;
         }
     }
 
-    public static renderExternalComponentAll(component: Component): void {
+    private static renderExternalComponentAll(component: Component): void {
         const c = Context.getComponentBuilder().build(component);
-        this.renderComponent(c, component.getParent(), true);
+        this.renderComponent(c, component.getParent(), false);
     }
 
-    public static renderExternalComponentContent(component: Component): void {
-        // TODO: Use context. was breaking because on build this code is run before initialization. TODO: fix that
-        // const ele = Context.elementBuilder().getElementById(component.getId());
-        console.log("Rendering", component, "content");
-        const ele = document.getElementById(component.getId());
+    private static renderExternalComponentContent(component: Component): void {
+        const ele = Context.elementBuilder().getElementById(component.getId());
+        if (ele) ele.textContent = component.content() ?? null;
+    }
+
+    private static renderExternalComponentAttributesEvents(component: Component): void {
+        const ele = Context.elementBuilder().getElementById(component.getId());
+        if (ele) {
+            component.build(ele);
+        }
+    }
+
+    private static renderExternalComponentCss(component: Component): void {
+        const ele = Context.elementBuilder().getElementById(component.getId());
         if (ele) ele.textContent = component.content() ?? null;
     }
 
@@ -150,9 +167,17 @@ export default class ComponentRenderer {
         }
 
         this.buildEvents(component.getOnEvents(), component.get() as HTMLElement);
+        component.getOnRender().forEach(a => a());
 
         if (component.hasChildren()) {
             component.children().forEach(c => ComponentRenderer.render(c, component));
+        }
+
+        for(let i = 0; i < component.getAfterRender().length; i++){
+            const action = component.getAfterRender().pop();
+            if (!!action) {
+                Context.system().waitFor(0, action);
+            }
         }
     }
 

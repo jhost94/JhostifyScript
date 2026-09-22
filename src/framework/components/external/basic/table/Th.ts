@@ -3,11 +3,12 @@ import {
     ATTR_ROWSPAN,
     ATTR_SCOPE
 } from "../../../../constants/Attributes";
+import ID from "../../../../meta/ID";
 import Component from "../../Component";
 
 export default class Th extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("th", parent);
     }
 

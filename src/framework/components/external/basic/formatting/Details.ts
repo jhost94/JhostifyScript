@@ -1,10 +1,11 @@
 import { EVENT_ON_TOGGLE } from "../../../../constants/OnEvents";
 import { ATTR_OPEN } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Details extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("details", parent);
     }
 
@@ -13,6 +14,6 @@ export default class Details extends Component{
     }
     
     public onToggle(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_TOGGLE, action);
+        this.setEvent(EVENT_ON_TOGGLE, action);
     }
 }

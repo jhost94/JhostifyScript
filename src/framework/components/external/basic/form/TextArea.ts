@@ -13,10 +13,11 @@ import {
     ATTR_WRAP
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class TextArea extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("textarea", parent);
     }
 

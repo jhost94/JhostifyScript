@@ -3,10 +3,11 @@ import {
     ATTR_DATE_TIME
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Ins extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("ins", parent);
     }
 

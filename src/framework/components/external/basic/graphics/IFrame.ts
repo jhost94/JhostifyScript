@@ -10,10 +10,11 @@ import {
     ATTR_WIDTH
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class IFrame extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("iframe", parent);
     }
 
@@ -42,6 +43,6 @@ export default class IFrame extends Component{
     }
 
     public onLoad(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_LOAD, action);
+        this.setEvent(EVENT_ON_LOAD, action);
     }
 }

@@ -1,9 +1,10 @@
 import { ATTR_CITE } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class BlockQuote extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("blockquote", parent);
     }
 

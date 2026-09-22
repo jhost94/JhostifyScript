@@ -3,10 +3,11 @@ import {
     ATTR_LABEL 
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
-export default class OptGroup extends Component{
+export default class OptGroup extends Component {
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("optgroup", parent);
     }
 

@@ -1,9 +1,10 @@
 import { ATTR_SPAN } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Col extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("col", parent);
     }
 

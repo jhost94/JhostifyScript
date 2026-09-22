@@ -1,7 +1,7 @@
 export default class ObservableValue<T = any> {
-    private observers = new Set<OberverSubscription<T>>();
+    protected observers = new Set<OberverSubscription<T>>();
 
-    constructor(private value: T) {
+    constructor(protected value: T) {
 
     }
 
@@ -26,7 +26,7 @@ export default class ObservableValue<T = any> {
         };
     }
 
-    private notify() {
+    public notify() {
         for(const oberver of this.observers) {
             oberver(this.value);
         }

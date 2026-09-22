@@ -14,10 +14,11 @@ import {
     ATTR_TARGET
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Form extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("form", parent);
     }
 
@@ -58,10 +59,10 @@ export default class Form extends Component{
     }
 
     public onReset(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_RESET, action);
+        this.setEvent(EVENT_ON_RESET, action);
     }
 
     public onSubmit(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_SUBMIT, action);
+        this.setEvent(EVENT_ON_SUBMIT, action);
     }
 }

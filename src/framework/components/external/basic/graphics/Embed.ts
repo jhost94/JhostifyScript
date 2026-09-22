@@ -10,10 +10,11 @@ import {
     ATTR_WIDTH
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Embed extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("embed", parent);
     }
 
@@ -34,14 +35,14 @@ export default class Embed extends Component{
     }
 
     public onAbort(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_ABORT, action);
+        this.setEvent(EVENT_ON_ABORT, action);
     }
 
     public onCanPlay(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_CAN_PLAY, action);
+        this.setEvent(EVENT_ON_CAN_PLAY, action);
     }
 
     public onError(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_ERROR, action);
+        this.setEvent(EVENT_ON_ERROR, action);
     }
 }

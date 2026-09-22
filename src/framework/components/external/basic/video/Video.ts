@@ -34,10 +34,11 @@ import {
     ATTR_WIDTH
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Video extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("video", parent);
     }
 
@@ -78,90 +79,90 @@ export default class Video extends Component{
     }
 
     public onAbort(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_ABORT, action);
+        this.setEvent(EVENT_ON_ABORT, action);
     }
 
     public onCanPlay(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_CAN_PLAY, action);
+        this.setEvent(EVENT_ON_CAN_PLAY, action);
     }
     
     public onCanPlayThrough(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_CAN_PLAY_THROUGH, action);
+        this.setEvent(EVENT_ON_CAN_PLAY_THROUGH, action);
     }
 
     public onDurationChange(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_DURATION_CHANGE, action);
+        this.setEvent(EVENT_ON_DURATION_CHANGE, action);
     }
 
     public onEmptied(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_EMPTIED, action);
+        this.setEvent(EVENT_ON_EMPTIED, action);
     }
 
     public onEnded(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_ENDED, action);
+        this.setEvent(EVENT_ON_ENDED, action);
     }
 
     public onError(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_ERROR, action);
+        this.setEvent(EVENT_ON_ERROR, action);
     }
 
     public onLoadedData(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_LOADED_DATA, action);
+        this.setEvent(EVENT_ON_LOADED_DATA, action);
     }
 
     public onLoadedMetaData(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_LOADED_METADA_DATA, action);
+        this.setEvent(EVENT_ON_LOADED_METADA_DATA, action);
     }
 
     public onLoadStart(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_LOAD_START, action);
+        this.setEvent(EVENT_ON_LOAD_START, action);
     }
 
     public onPause(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_PAUSE, action);
+        this.setEvent(EVENT_ON_PAUSE, action);
     }
 
     public onPlay(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_PLAY, action);
+        this.setEvent(EVENT_ON_PLAY, action);
     }
 
     public onPlaying(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_PLAYING, action);
+        this.setEvent(EVENT_ON_PLAYING, action);
     }
 
     public onProgress(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_PROGRESS, action);
+        this.setEvent(EVENT_ON_PROGRESS, action);
     }
 
     public onRateChange(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_RATE_CHANGE, action);
+        this.setEvent(EVENT_ON_RATE_CHANGE, action);
     }
 
     public onSeeked(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_SEEKED, action);
+        this.setEvent(EVENT_ON_SEEKED, action);
     }
 
     public onSeeking(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_SEEKING, action);
+        this.setEvent(EVENT_ON_SEEKING, action);
     }
 
     public onStalled(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_STALLED, action);
+        this.setEvent(EVENT_ON_STALLED, action);
     }
 
     public onSuspend(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_SUSPEND, action);
+        this.setEvent(EVENT_ON_SUSPEND, action);
     }
 
     public onTimeUpdate(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_TIME_UPDATE, action);
+        this.setEvent(EVENT_ON_TIME_UPDATE, action);
     }
 
     public onVolumeChange(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_VOLUME_CHANGE, action);
+        this.setEvent(EVENT_ON_VOLUME_CHANGE, action);
     }
 
     public onWaiting(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_WAITING, action);
+        this.setEvent(EVENT_ON_WAITING, action);
     }
 }

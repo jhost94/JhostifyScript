@@ -3,10 +3,11 @@ import {
     ATTR_START 
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Ol extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("ol", parent);
     }
 

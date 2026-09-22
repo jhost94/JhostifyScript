@@ -9,11 +9,12 @@ import {
     ATTR_TYPE,
     ATTR_VALUE
 } from "../../../../constants/Attributes";
+import ID from "../../../../meta/ID";
 import Component from "../../Component";
 
 export default class Button extends Component {
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("button", parent);
     }
 

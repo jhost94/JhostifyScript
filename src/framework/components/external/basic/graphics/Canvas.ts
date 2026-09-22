@@ -1,9 +1,10 @@
 import { ATTR_HEIGHT, ATTR_WIDTH } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Canvas extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("canvas", parent);
     }
 

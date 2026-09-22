@@ -1,6 +1,6 @@
+import InternalCss from "../components/internal/InternalCss.js";
 import Page from "../page/external/Page.js";
 import InternalPage from "../page/internal/InternalPage.js";
-import InternalCss from "../components/internal/InternalCss.js";
 import ElementVendor from "../requirements/ElementVendor.js";
 import ComponentBuilder from "./ComponentBuilder.js";
 
@@ -10,7 +10,7 @@ class PageBuilder {
     public build(page: Page): InternalPage {
         const element: Element = page.build(this.elementBuilder.createElement(page.getName()));
         let cssParsed = page.getCssParsed();
-        const components = page.getComponents()
+        const components = page.children().get()
             .map(c => {
                 const ic = this.componentBuilder.build(c);
                 cssParsed += ic.getCss().getCss(true);
@@ -18,7 +18,16 @@ class PageBuilder {
             });
         const css = this.elementBuilder.createElement("style");
         (css as HTMLElement).innerText = cssParsed;
-        return new InternalPage(element, page.getName(), components, page.getId(), page.getOnRender(), new InternalCss(css));
+        return new InternalPage(element, 
+                                page.getName(), 
+                                page.getId(), 
+                                new InternalCss(css),
+                                components, 
+                                page.css(), 
+                                page.getOnEvents(), 
+                                page.getOnRender(), 
+                                page.getBeforeRender(), 
+                                page.getAfterRender());
     }
 }
 

@@ -1,39 +1,29 @@
-import ID from "../../meta/ID";
+import { OnEventType } from "../../components/external/OnEvent";
 import InternalComponent from "../../components/internal/InternalComponent";
 import InternalCss from "../../components/internal/InternalCss";
+import Css from "../../components/style/css/Css";
 
 /**
  * This is going to be an internal only class, outside of the user's responsabilites, this is going to be created internally
  */
-export default class InternalPage implements ID{
+export default class InternalPage extends InternalComponent {
     constructor(
-        private element: Element, 
-        private name: string, 
-        private components: InternalComponent[], 
-        private id: string, 
-        private doOnRender: (() => void)[] = [],
-        private css?: InternalCss
+        element: Element, 
+        name: string, 
+        id: string, 
+        private pageCss: InternalCss,
+        components: InternalComponent[] = [], 
+        css: Css, 
+        onEvents: Map<OnEventType, (e: any) => void>,
+        doOnRender: (() => void)[] = [],
+        doBeforeRender: (() => void)[] = [],
+        doAfterRender: (() => void)[] = [],
     ) {
-        element.id = id; //TODO: check if id exists or just override completely?
+        super(element, name, id, components, css, onEvents, doOnRender, doBeforeRender, doAfterRender);
     }
 
-    public get(): Element {
-        return this.element;
+    public getPageCss(): InternalCss {
+        return this.pageCss;
     }
 
-    public getComponents(): InternalComponent[] {
-        return this.components;
-    }
-
-    public getOnRender(): (() => void)[] {
-        return this.doOnRender;
-    }
-
-    public getId(): string {
-        return this.id;
-    }
-
-    public getCss(): InternalCss | undefined {
-        return this.css;
-    }
 }

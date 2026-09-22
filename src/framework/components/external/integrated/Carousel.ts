@@ -3,6 +3,7 @@ import Span from "../basic/formatting/Span";
 import Component from "../Component";
 import Css from "../../style/css/Css";
 import CssHelper from "../../style/css/CssHelper";
+import ID from "../../../meta/ID";
 
 export default class Carousel extends Component {
     public static readonly CAROUSEL_CSS_CLASS: string = "jhostify-carousel";
@@ -14,40 +15,46 @@ export default class Carousel extends Component {
     public static readonly CAROUSEL_SLIDE_CSS_CLASS: string = "jhostify-carousel-slide";
     public static readonly CAROUSEL_ACTIVE_CSS_CLASS: string = "jhostify-carousel-active";
 
-    private controller: CarouselControler;
+    private controller?: CarouselControler;
 
-    constructor(items: CarouselItem[] = [], parent?: Component, private options?: CarouselOptions) {
+    constructor(items: CarouselItem[] | Promise<CarouselItem[]> = [], parent?: ID, private options?: CarouselOptions) {
         super(Div.TAG, parent);
-
-        this.cssClass(this.carouselCssClass());
-        const components = this.createItemsDots(items);
         
-        const track = new Div();
-        const arrowL = new Div();
-        const arrowR = new Div();
-        const dots = new Div();
-        this.controller = new CarouselControler(track, components, this.carouselDotsCssClass(), this.carouselAvtiveCssClass());
+        this.cssClass(this.carouselCssClass());
 
-        track.cssClass(this.carouselTrackCssClass());
-        track.children(components.items);
-
-        dots.cssClass(this.carouselDotsCssClass());
-        dots.children(components.dots);
-
-        arrowL.content(this.getOption("leftArrow"));
-        arrowL.cssClass(`${this.carouselArrowCssClass()} ${this.carouselLeftCssClass()}`);
-        arrowL.onClick(() => this.controller.moveSlide(-1));
-
-        arrowR.content(this.getOption("rightArrow"));
-        arrowR.cssClass(`${this.carouselArrowCssClass()} ${this.carouselRightCssClass()}`);
-        arrowR.onClick(() => this.controller.moveSlide(1));
-
-        this.children().push(track);
-        this.children().push(arrowL);
-        this.children().push(arrowR);
-        this.children().push(dots);
+        if (items instanceof Promise) {
+            items.then(components => this.setup(components, "async"));
+            items.catch(e => console.error("Error rendering Carousel[" + this.getId() + "]: ", e));
+        } else {
+            this.setup(items, "sync");
+        }
 
         this.setCss();
+    }
+
+    private setup(items: CarouselItem[], type?: string): void {
+        const track = new Div(this);
+        const dots = new Div(this);
+        const arrowL = new Div(this);
+        const arrowR = new Div(this);
+        const components = this.createItemsDots(items, track, dots);
+        this.controller = new CarouselControler(track, components, this.carouselDotsCssClass(), this.carouselAvtiveCssClass());
+        
+        track.cssClass(this.carouselTrackCssClass());
+        track.children(components.items);
+        
+        dots.cssClass(this.carouselDotsCssClass());
+        dots.children(components.dots);
+        
+        arrowL.content(this.getOption("leftArrow"));
+        arrowL.cssClass(`${this.carouselArrowCssClass()} ${this.carouselLeftCssClass()}`);
+        arrowL.onClick(() => this.controller!.moveSlide(-1));
+        
+        arrowR.content(this.getOption("rightArrow"));
+        arrowR.cssClass(`${this.carouselArrowCssClass()} ${this.carouselRightCssClass()}`);
+        arrowR.onClick(() => this.controller!.moveSlide(1));
+        
+        this.children([track, arrowL, arrowR, dots]);
     }
 
     private setCss() {
@@ -132,16 +139,16 @@ export default class Carousel extends Component {
         this.css().add(selector.style({background: this.getOption("arrowHoverBackgroundColor")}))
     }
 
-    private createItemsDots(items: CarouselItem[]): ItemsDots {
+    private createItemsDots(items: CarouselItem[], itemParent: Component, dotParent: Component): ItemsDots {
         const is: Div[] = [];
         const ds: Span[] = [];
         
         items.forEach(item => {
-            const i = new Div();
+            const i = new Div(itemParent);
             i.content(item.content);
             i.cssClass(this.carouselSlideCssClass());
 
-            const d = new Span();
+            const d = new Span(dotParent);
 
             is.push(i);
             ds.push(d);
@@ -206,16 +213,13 @@ class CarouselControler {
     private intervalId: number;
     
     constructor(private track: Div, private components: ItemsDots, private cssDotsClass: string, private activeClass: string) {
-        // Auto-slide (optional)
         this.intervalId = this.autoMoveSlide();
         components.dots.forEach((d, i) => d.onClick(() => this.goToSlide(i)));
     }
 
     private updateCarousel() {
         clearInterval(this.intervalId);
-        // this.track.style(`transform = "translateX(-${this.index * 100}%)";`);
-        // TODO: this uses native HTML 
-        document.getElementById(this.track.getId())!.style.transform = `translateX(-${this.index * 100}%)`;
+        this.track.style({transform: `translateX(-${this.index * 100}%)`});
 
         document.querySelectorAll(`.${this.cssDotsClass} span`).forEach((dot, i) => {
             dot.classList.toggle(this.activeClass, i === this.index);

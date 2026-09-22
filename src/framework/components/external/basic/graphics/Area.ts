@@ -10,10 +10,11 @@ import {
     ATTR_TARGET
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Area extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("area", parent);
     }
 

@@ -14,10 +14,11 @@ import {
     ATTR_WIDTH
 } from "../../../../constants/Attributes";
 import Component from "../../Component";
+import ID from "../../../../meta/ID";
 
 export default class Img extends Component{
     
-    constructor(parent?: Component) {
+    constructor(parent?: ID) {
         super("img", parent);
     }
 
@@ -54,14 +55,14 @@ export default class Img extends Component{
     }
 
     public onAbort(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_ABORT, action);
+        this.setEvent(EVENT_ON_ABORT, action);
     }
 
     public onError(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_ERROR, action);
+        this.setEvent(EVENT_ON_ERROR, action);
     }
 
     public onLoad(action: (e: any) => void): void {
-        this._onEvents.set(EVENT_ON_LOAD, action);
+        this.setEvent(EVENT_ON_LOAD, action);
     }
 }
